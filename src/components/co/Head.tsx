@@ -211,8 +211,8 @@ export function Head({ selected }: { selected: RalColor }) {
                 Рассчитать стоимость
               </a>
               <div className="mt-4 space-y-1 font-mono text-[11px] uppercase leading-relaxed tracking-[0.14em] text-fog">
-                <p>{COMPANY.addressShort}</p>
-                <p>{COMPANY.metro} · {COMPANY.hours}</p>
+                <p>{COMPANY.address}</p>
+                <p>{COMPANY.hours}</p>
                 <a href={COMPANY.phoneHref} className="block text-concrete">{COMPANY.phone}</a>
               </div>
             </nav>
@@ -231,8 +231,7 @@ export function Head({ selected }: { selected: RalColor }) {
         <div className="border-b border-steel/60">
           <div className="mx-auto flex h-9 max-w-[1400px] items-center gap-4 px-6 font-mono text-[10px] uppercase tracking-[0.18em] text-fog">
             <span className="shrink-0 text-heat">Pcpolimer</span>
-            <span className="shrink-0">{COMPANY.addressShort}</span>
-            <span className="shrink-0">{COMPANY.metro}</span>
+            <span className="shrink-0">Московская область</span>
             <span className="shrink-0 text-concrete">{COMPANY.hours}</span>
             <a href={COMPANY.phoneHref} className="ml-auto shrink-0 text-concrete transition-colors hover:text-heat">
               {COMPANY.phone}

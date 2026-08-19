@@ -6,7 +6,7 @@ import { MaskLines, Reveal } from "../../lib/fx";
 function MiniMap() {
   return (
     <div className="relative overflow-hidden border-2 border-ink bg-card-l">
-      <svg viewBox="0 0 640 420" className="block w-full" role="img" aria-label="Схема проезда: Речная улица, 8, 5 минут от метро Митино">
+      <svg viewBox="0 0 640 420" className="block w-full" role="img" aria-label="Схема проезда: Московская область, Красногорск, Речная улица, 8">
         <rect width="640" height="420" fill="#e7e7e2" />
         {/* река */}
         <path d="M -20 300 C 140 250, 220 340, 380 300 S 620 240, 700 280 L 700 460 L -20 460 Z" fill="#c8d4d8" />
@@ -24,15 +24,6 @@ function MiniMap() {
         <text x="70" y="140" fontFamily="JetBrains Mono, monospace" fontSize="13" fill="#555963" transform="rotate(-2 70 140)">
           РЕЧНАЯ УЛИЦА
         </text>
-        {/* маршрут от метро */}
-        <path d="M 150 355 C 210 300, 240 250, 330 190" fill="none" stroke="#ff6a2b" strokeWidth="4" strokeDasharray="10 10" className="dash-line" />
-        {/* метро */}
-        <g>
-          <rect x="96" y="338" width="112" height="34" fill="#1a1b1f" />
-          <text x="152" y="360" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="13" fontWeight="700" fill="#f1f1ea">
-            М МИТИНО
-          </text>
-        </g>
         {/* маркер */}
         <g className="hook-swing" style={{ transformOrigin: "330px 150px", animationDuration: "4s" }}>
           <path d="M 330 186 L 312 150 A 22 22 0 1 1 348 150 Z" fill="#ff6a2b" stroke="#1a1b1f" strokeWidth="3" />
@@ -40,10 +31,10 @@ function MiniMap() {
         </g>
         <rect x="362" y="120" width="196" height="44" fill="#1a1b1f" />
         <text x="378" y="140" fontFamily="JetBrains Mono, monospace" fontSize="13" fontWeight="700" fill="#f1f1ea">
-          РЕЧНАЯ, 8 · СТР. 18
+          РЕЧНАЯ, 8
         </text>
         <text x="378" y="156" fontFamily="JetBrains Mono, monospace" fontSize="10" fill="#9aa1ad">
-          ВХОД СО ДВОРА · 2 ЭТАЖ
+          ПОРОШКОВАЯ ПОКРАСКА
         </text>
         {/* компас */}
         <g transform="translate(596, 46)">
@@ -92,10 +83,8 @@ export function Contacts() {
             <Reveal delay={100}>
               <div className="grid gap-px border-2 border-ink bg-ink sm:grid-cols-2">
                 {[
-                  ["адрес", COMPANY.addressShort + " · 2 этаж", "Московская область"],
-                  ["метро", "Митино", "5 минут пешком"],
+                  ["адрес", COMPANY.addressShort, "Красногорск · Московская область"],
                   ["режим", "ежедневно", "до 21:00"],
-                  ["приёмка", "детали до 2 м", "своим ходом и грузом"],
                 ].map(([l, v, d]) => (
                   <div key={l} className="bg-card-l p-4">
                     <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-ink-soft">{l}</p>
@@ -108,7 +97,7 @@ export function Contacts() {
 
             <Reveal delay={180}>
               <p className="border-l-4 border-heat bg-card-l p-4 text-[13px] leading-relaxed text-ink-soft">
-                Полный адрес: {COMPANY.address}. Заезжайте под выгрузку со двора — пандус и кран-балка на месте.
+                Полный адрес: {COMPANY.address}. Работаем ежедневно до 21:00 — привозите деталь, заберёте окрашенной.
               </p>
             </Reveal>
           </div>
@@ -209,8 +198,7 @@ export function Foot() {
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-fog-2">цех</p>
           <ul className="mt-3 space-y-2 text-[13px]">
-            <li>{COMPANY.addressShort}, 2 этаж</li>
-            <li>{COMPANY.metro}</li>
+            <li>{COMPANY.address}</li>
             <li>{COMPANY.hours}</li>
           </ul>
         </div>
