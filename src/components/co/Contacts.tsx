@@ -71,7 +71,7 @@ export function Contacts() {
     <section id="kontakty" className="relative bg-concrete text-ink">
       <div className="bg-grid-light pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="relative mx-auto max-w-[1400px] px-4 py-20 sm:px-6 lg:py-24">
-        <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-heat-2">05 / контакты</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-heat-2">06 / контакты</p>
         <MaskLines
           className="mt-3 font-display text-[clamp(2rem,4.6vw,3.6rem)] font-black uppercase leading-[0.94]"
           lines={[<>Привозите деталь —</>, <span key="k" className="text-heat-2">заберёте окрашенной</span>]}

@@ -7,7 +7,8 @@ const NAV = [
   { href: "#prays", label: "Прайс", n: "02" },
   { href: "#tehnologia", label: "Технология", n: "03" },
   { href: "#otk", label: "ОТК", n: "04" },
-  { href: "#kontakty", label: "Контакты", n: "05" },
+  { href: "#raboty", label: "Работы", n: "05" },
+  { href: "#kontakty", label: "Контакты", n: "06" },
 ];
 
 /* ---------- конвейер с крюками ---------- */

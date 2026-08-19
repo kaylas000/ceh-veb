@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Head } from "./components/co/Head";
 import { Ral } from "./components/co/Ral";
 import { Services } from "./components/co/Services";
-import { Process, Trust } from "./components/co/Process";
+import { Process, Trust, Gallery } from "./components/co/Process";
 import { Contacts, CehDossier, Foot } from "./components/co/Contacts";
 import { RAL } from "./data/company";
 
@@ -20,6 +20,7 @@ export default function App() {
         <Services selected={selected} />
         <Process />
         <Trust />
+        <Gallery />
         <Contacts />
         <CehDossier />
       </main>

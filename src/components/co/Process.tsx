@@ -99,7 +99,7 @@ export function Process() {
   );
 }
 
-/* ---------- ОТК: рейтинг, отзывы, галерея ---------- */
+/* ---------- ОТК: рейтинг и отзывы ---------- */
 
 export function Trust() {
   const [cntRef, cntIn] = useInView<HTMLDivElement>(0.3);
@@ -111,16 +111,26 @@ export function Trust() {
     <section id="otk" className="relative bg-coal text-concrete">
       <div className="bg-grid-dark pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="relative mx-auto max-w-[1400px] px-4 py-20 sm:px-6 lg:py-24">
-        <div className="grid gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-16">
-          {/* рейтинг */}
+        <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-heat">04 / отдел технического контроля</p>
             <MaskLines
               className="mt-3 font-display text-[clamp(2rem,4.6vw,3.4rem)] font-black uppercase leading-[0.94]"
               lines={[<>Брак не</>, <span key="o" className="text-heat">покидает цех</span>]}
             />
+          </div>
+          <Reveal delay={150}>
+            <p className="max-w-sm text-[14px] leading-relaxed text-fog">
+              Каждая деталь проходит приёмку по чек-листу: толщина слоя, адгезия, внешний вид.
+              Не прошло — переделываем за свой счёт.
+            </p>
+          </Reveal>
+        </div>
 
-            <div ref={cntRef} className="mt-8 border-2 border-steel bg-coal-2 p-6">
+        <div className="mt-12 grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
+          {/* рейтинг */}
+          <div>
+            <div ref={cntRef} className="border-2 border-steel bg-coal-2 p-6">
               <div className="flex items-end gap-4">
                 <p className="font-display text-[clamp(3.6rem,8vw,5.5rem)] font-black leading-[0.85] text-concrete">
                   {COMPANY.rating}
@@ -152,8 +162,15 @@ export function Trust() {
               </a>
             </div>
 
-            {/* отзывы-бирки */}
-            <div className="mt-10 space-y-5">
+          </div>
+
+          {/* отзывы */}
+          <div>
+            <div className="mb-5 flex items-center justify-between gap-3">
+              <h3 className="font-display text-xl font-black uppercase leading-none sm:text-2xl">Что пишут заказчики</h3>
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-fog-2">бирки приёмки</span>
+            </div>
+            <div className="space-y-5">
               {REVIEWS.map((r, i) => (
                 <Reveal key={r.id} delay={i * 110}>
                   <figure
@@ -173,38 +190,70 @@ export function Trust() {
             </div>
           </div>
 
-          {/* галерея */}
-          <div>
-            <div className="flex items-end justify-between gap-4">
-              <h3 className="font-display text-2xl font-black uppercase leading-none sm:text-3xl">Свежие работы с линии</h3>
-              <p className="shrink-0 font-mono text-[10px] uppercase tracking-[0.2em] text-fog-2">съёмка ОТК · смена 2</p>
-            </div>
-            <div className="mt-6 gap-3 space-y-3 md:columns-3 md:gap-4 md:space-y-4">
-              {GALLERY.map((g, i) => (
-                <Reveal key={g.caption + i} delay={(i % 3) * 90}>
-                  <figure className="group relative break-inside-avoid overflow-hidden border-2 border-steel">
-                    <div className={`overflow-hidden ${g.tall ? "aspect-[3/4]" : "aspect-[4/3]"}`}>
-                      <img
-                        src={g.img}
-                        alt={g.caption}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.07]"
-                      />
-                    </div>
-                    <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-gradient-to-t from-coal via-coal/70 to-transparent px-3 pb-2.5 pt-8 opacity-100 transition-opacity duration-300 sm:opacity-0 sm:group-hover:opacity-100">
-                      <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-concrete">{g.caption}</span>
-                      <span className="shrink-0 bg-heat px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-coal">{g.ral}</span>
-                    </figcaption>
-                  </figure>
-                </Reveal>
-              ))}
-            </div>
-            <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.18em] text-fog-2">
-              ещё {COMPANY.photosCount}+ фото — в профиле на Яндекс Картах
-            </p>
-          </div>
         </div>
       </div>
+    </section>
+  );
+}
+
+/* ---------- Галерея: свежие работы с линии ---------- */
+
+export function Gallery() {
+  return (
+    <section id="raboty" className="relative bg-concrete text-ink">
+      <div className="bg-grid-light pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div className="relative mx-auto max-w-[1400px] px-4 py-20 sm:px-6 lg:py-24">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-heat-2">05 / галерея работ</p>
+            <MaskLines
+              className="mt-3 font-display text-[clamp(2rem,4.6vw,3.4rem)] font-black uppercase leading-[0.94]"
+              lines={[<>Свежие работы</>, <span key="g" className="text-heat-2">с линии</span>]}
+            />
+          </div>
+          <Reveal delay={150}>
+            <p className="shrink-0 font-mono text-[10px] uppercase tracking-[0.2em] text-ink-soft">
+              съёмка ОТК · смена 2 · без ретуши
+            </p>
+          </Reveal>
+        </div>
+
+        <div className="mt-10 gap-3 space-y-3 sm:columns-2 sm:gap-4 sm:space-y-4 lg:columns-3">
+          {GALLERY.map((g, i) => (
+            <Reveal key={g.caption + i} delay={(i % 3) * 90}>
+              <figure className="group relative break-inside-avoid overflow-hidden border-2 border-ink bg-card-l transition-shadow duration-300 hover:shadow-[8px_8px_0_rgba(26,27,31,0.85)]">
+                <div className={`overflow-hidden ${g.tall ? "aspect-[3/4]" : "aspect-[4/3]"}`}>
+                  <img
+                    src={g.img}
+                    alt={g.caption}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.07]"
+                  />
+                </div>
+                <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-gradient-to-t from-coal via-coal/70 to-transparent px-3 pb-2.5 pt-8 opacity-100 transition-opacity duration-300 sm:opacity-0 sm:group-hover:opacity-100">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-concrete">{g.caption}</span>
+                  <span className="shrink-0 bg-heat px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-coal">{g.ral}</span>
+                </figcaption>
+              </figure>
+            </Reveal>
+          ))}
+        </div>
+
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-2 border-ink bg-card-l px-4 py-3">
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-soft">
+            ещё {COMPANY.photosCount}+ фото — в профиле на Яндекс Картах
+          </p>
+          <a
+            href={COMPANY.yandexMapsUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="font-display text-xs font-bold uppercase tracking-[0.12em] text-heat-2 transition-colors hover:text-ink"
+          >
+            Смотреть все ↗
+          </a>
+        </div>
+      </div>
+      <div className="hazard h-1.5" aria-hidden="true" />
     </section>
   );
 }
