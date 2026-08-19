@@ -1,4 +1,4 @@
-import { RAL, IMG, type RalColor } from "../../data/company";
+import { RAL, type RalColor } from "../../data/company";
 import { MaskLines, Reveal, useInView } from "../../lib/fx";
 
 export function Ral({
@@ -53,17 +53,7 @@ export function Ral({
               </div>
             </Reveal>
 
-            <Reveal delay={300}>
-              <figure className="relative mt-7 hidden overflow-hidden border-2 border-ink lg:block">
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img src={IMG.ralWall} alt="Веер выкрасов RAL в цехе" className="kenburns-img absolute inset-0 h-full w-full object-cover" loading="lazy" />
-                </div>
-                <figcaption className="flex items-center justify-between border-t-2 border-ink bg-card-l px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-soft">
-                  <span>веер выкрасов · цех</span>
-                  <span className="text-heat-2">150+ фото работ</span>
-                </figcaption>
-              </figure>
-            </Reveal>
+
           </div>
 
           {/* сетка выкрасов */}
