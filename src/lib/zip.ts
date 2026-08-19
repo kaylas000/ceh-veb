@@ -62,7 +62,11 @@ export async function downloadBuildZip(filename = "ceh-pcpolimer-site.zip"): Pro
     return path || "index.html";
   };
 
-  files.push({ name: "index.html", data: await fetchAsBytes(location.href) });
+  /* index.html: делаем пути к ассетам относительными, чтобы распакованный
+     сайт работал и в корне домена, и в любой подпапке */
+  const htmlRaw = new TextDecoder().decode(await fetchAsBytes(location.href));
+  const htmlFixed = htmlRaw.replace(/(src|href)="\/(assets\/)/g, '$1="$2');
+  files.push({ name: "index.html", data: new TextEncoder().encode(htmlFixed) });
 
   const css = Array.from(document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"][href]'));
   const js = Array.from(document.querySelectorAll<HTMLScriptElement>("script[src]"));
