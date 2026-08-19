@@ -271,7 +271,7 @@ export function Head({ selected }: { selected: RalColor }) {
       {/* паспорт заказа */}
       <div className="relative z-10 mx-auto max-w-[1400px] px-4 pb-10 pt-[68px] sm:px-6 sm:pt-[80px] lg:pb-20 lg:pt-[136px]">
         <div className="grid items-start gap-8 lg:grid-cols-[1.25fr_1fr] lg:gap-14">
-          <div>
+          <div className="min-w-0">
             <Reveal>
               <p className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-fog sm:text-[11px] sm:tracking-[0.22em]">
                 <span className="border border-steel-2 px-2 py-0.5">Наряд № 2026-0218</span>
@@ -281,7 +281,7 @@ export function Head({ selected }: { selected: RalColor }) {
 
             <h1 className="mt-4 sm:mt-6">
               <MaskLines
-                className="font-display text-[clamp(1.85rem,7.2vw,5.6rem)] font-black uppercase leading-[0.94] tracking-tight"
+                className="font-display text-[clamp(1.62rem,7.2vw,5.6rem)] font-black uppercase leading-[0.94] tracking-tight break-words"
                 lines={[
                   <>Порошковая</>,
                   <span key="p" className="text-heat">покраска</span>,
@@ -302,13 +302,13 @@ export function Head({ selected }: { selected: RalColor }) {
               <div className="mt-5 flex flex-col items-stretch gap-2.5 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
                 <a
                   href="#kalkulator"
-                  className="border-2 border-heat bg-heat px-6 py-3.5 text-center font-display text-sm font-bold uppercase tracking-[0.12em] text-coal transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_rgba(255,106,43,0.4)]"
+                  className="border-2 border-heat bg-heat px-6 py-3 text-center font-display text-sm font-bold uppercase tracking-[0.12em] text-coal transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_rgba(255,106,43,0.4)] sm:py-3.5"
                 >
                   Рассчитать стоимость
                 </a>
                 <a
                   href="#palitra"
-                  className="border-2 border-steel-2 px-6 py-3.5 text-center font-display text-sm font-bold uppercase tracking-[0.12em] text-concrete transition-all duration-200 hover:-translate-y-0.5 hover:border-concrete hover:bg-concrete hover:text-coal"
+                  className="border-2 border-steel-2 px-6 py-3 text-center font-display text-sm font-bold uppercase tracking-[0.12em] text-concrete transition-all duration-200 hover:-translate-y-0.5 hover:border-concrete hover:bg-concrete hover:text-coal sm:py-3.5"
                 >
                   Палитра RAL
                 </a>
@@ -321,7 +321,7 @@ export function Head({ selected }: { selected: RalColor }) {
             </Reveal>
 
             <Reveal delay={540}>
-              <dl className="mt-10 grid max-w-xl grid-cols-2 gap-px border-2 border-steel bg-steel sm:grid-cols-4">
+              <dl className="mt-7 grid max-w-xl grid-cols-2 gap-px border-2 border-steel bg-steel sm:mt-10 sm:grid-cols-4">
                 {[
                   ["200 °C", "камера полимеризации"],
                   ["60–120", "мкм слой"],
@@ -337,11 +337,11 @@ export function Head({ selected }: { selected: RalColor }) {
             </Reveal>
           </div>
 
-          <Reveal delay={250} className="lg:mt-4">
+          <Reveal delay={250} className="min-w-0 lg:mt-4">
             <OvenPanel selected={selected} />
-            <p className="mt-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.18em] text-fog-2">
-              <span>цвет на линии — ваш выбор из палитры</span>
-              <a href="#palitra" className="text-heat transition-colors hover:text-amber">сменить ↓</a>
+            <p className="mt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.18em] text-fog-2">
+              <span className="min-w-0">цвет на линии — ваш выбор из палитры</span>
+              <a href="#palitra" className="shrink-0 text-heat transition-colors hover:text-amber">сменить ↓</a>
             </p>
           </Reveal>
         </div>
