@@ -3,6 +3,34 @@
    Забирает index.html + подключённые css/js — этого достаточно,
    т.к. шрифты и картинки подтягиваются по внешним URL. */
 
+import { useRef, useState } from "react";
+
+export type ZipState = "idle" | "busy" | "done";
+
+/* хук для кнопок «Скачать архив» */
+export function useZipDownload(filename = "ceh-pcpolimer-site.zip") {
+  const [state, setState] = useState<ZipState>("idle");
+  const timer = useRef<number | null>(null);
+  const run = async () => {
+    if (state === "busy") return;
+    setState("busy");
+    try {
+      await downloadBuildZip(filename);
+      setState("done");
+    } catch (e) {
+      console.error(e);
+      setState("idle");
+    }
+    if (timer.current) window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setState("idle"), 6000);
+  };
+  return { state, run };
+}
+
+export function zipLabel(state: ZipState): string {
+  return state === "busy" ? "Упаковка…" : state === "done" ? "Скачано ✓" : "Скачать сайт (ZIP)";
+}
+
 const CRC_TABLE = (() => {
   const t = new Uint32Array(256);
   for (let n = 0; n < 256; n++) {

@@ -134,23 +134,24 @@ export function ProjectsHall() {
                   <SiteMock />
                 </div>
                 <div className="mt-5 flex flex-wrap gap-2.5">
-                  <a
-                    href="#/pcpolimer"
-                    className="border-2 border-heat bg-heat px-5 py-2.5 font-display text-sm font-bold uppercase tracking-[0.12em] text-coal transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_rgba(206,44,24,0.5)]"
-                  >
-                    Открыть живой сайт →
-                  </a>
                   <button
                     onClick={handleZip}
                     disabled={zipState === "busy"}
                     className={`border-2 px-5 py-2.5 font-display text-sm font-bold uppercase tracking-[0.12em] transition-all duration-200 ${
                       zipState === "done"
                         ? "border-green bg-green text-coal"
-                        : "border-paper/35 text-paper hover:-translate-y-0.5 hover:bg-paper hover:text-ink"
+                        : "border-yellow bg-yellow text-ink hover:-translate-y-0.5 hover:shadow-[5px_5px_0_rgba(224,169,28,0.5)]"
                     } ${zipState === "busy" ? "cursor-wait opacity-70" : ""}`}
+                    title="Скачать готовый сайт: файл ceh-pcpolimer-site.zip"
                   >
-                    {zipState === "busy" ? "Упаковываю…" : zipState === "done" ? "✓ ZIP отдан" : "Скачать архив ZIP"}
+                    ↓ {zipState === "busy" ? "Упаковываю…" : zipState === "done" ? "✓ ZIP отдан" : "Скачать архив (ZIP)"}
                   </button>
+                  <a
+                    href="#/pcpolimer"
+                    className="border-2 border-paper/35 px-5 py-2.5 font-display text-sm font-bold uppercase tracking-[0.12em] text-paper transition-colors duration-200 hover:bg-paper hover:text-ink"
+                  >
+                    Открыть живой сайт →
+                  </a>
                   <a
                     href="#validator"
                     className="border-2 border-paper/35 px-5 py-2.5 font-display text-sm font-bold uppercase tracking-[0.12em] text-paper transition-colors duration-200 hover:bg-paper hover:text-ink"

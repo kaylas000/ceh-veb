@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { COMPANY, RAL, type RalColor } from "../../data/company";
 import { MaskLines, Reveal, Stars, useCountUp, useInView, useReducedMotion } from "../../lib/fx";
+import { useZipDownload, zipLabel } from "../../lib/zip";
 
 const NAV = [
   { href: "#palitra", label: "Палитра", n: "01" },
@@ -142,6 +143,7 @@ export function Head({ selected }: { selected: RalColor }) {
   const prm = useReducedMotion();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const zip = useZipDownload();
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 48);
     onScroll();
@@ -155,7 +157,7 @@ export function Head({ selected }: { selected: RalColor }) {
       <div className="heat-glow pointer-events-none absolute inset-0" aria-hidden="true" />
 
       {/* ---------- МОБИЛЬНАЯ ШАПКА: один ряд + выезжающее меню ---------- */}
-      <div className="fixed inset-x-0 top-[30px] z-50 lg:hidden">
+      <div className="fixed inset-x-0 top-[34px] z-50 lg:hidden">
         <div className="border-b border-steel/70 bg-coal/95 backdrop-blur-sm">
           <div className="flex h-14 items-center gap-2.5 px-3.5">
             <a href="#pasport" className="flex min-w-0 items-center gap-2" onClick={() => setMenuOpen(false)}>
@@ -215,6 +217,15 @@ export function Head({ selected }: { selected: RalColor }) {
               >
                 Рассчитать стоимость
               </a>
+              <button
+                onClick={() => {
+                  zip.run();
+                  setMenuOpen(false);
+                }}
+                className="mt-2 block w-full border-2 border-amber px-4 py-3.5 text-center font-display text-base font-bold uppercase tracking-[0.12em] text-amber"
+              >
+                {zipLabel(zip.state)}
+              </button>
               <div className="mt-4 space-y-1 font-mono text-[11px] uppercase leading-relaxed tracking-[0.14em] text-fog">
                 <p>{COMPANY.address}</p>
                 <p>{COMPANY.hours}</p>
@@ -228,7 +239,7 @@ export function Head({ selected }: { selected: RalColor }) {
 
       {/* ---------- ДЕСКТОПНАЯ ШАПКА: служебная строка + навигация ---------- */}
       <div
-        className={`fixed inset-x-0 top-[30px] z-40 hidden border-b border-steel/70 bg-coal/95 shadow-[0_2px_16px_rgba(0,0,0,0.35)] backdrop-blur-sm lg:block ${
+        className={`fixed inset-x-0 top-[34px] z-40 hidden border-b border-steel/70 bg-coal/95 shadow-[0_2px_16px_rgba(0,0,0,0.35)] backdrop-blur-sm lg:block ${
           scrolled && !prm ? "-translate-y-9" : ""
         }`}
         style={{ transition: "transform 0.5s cubic-bezier(0.65, 0, 0.15, 1)" }}
@@ -276,6 +287,14 @@ export function Head({ selected }: { selected: RalColor }) {
             >
               Рассчитать
             </a>
+            <button
+              onClick={zip.run}
+              disabled={zip.state === "busy"}
+              className="ml-1 shrink-0 border-2 border-amber px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-amber transition-colors duration-200 hover:bg-amber hover:text-coal disabled:cursor-wait disabled:opacity-60"
+              title="Скачать готовый сайт архивом ZIP"
+            >
+              {zip.state === "busy" ? "Упаковка…" : zip.state === "done" ? "✓ Скачано" : "↓ ZIP"}
+            </button>
           </div>
         </nav>
       </div>
