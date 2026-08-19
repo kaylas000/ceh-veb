@@ -179,7 +179,7 @@ export function Trust() {
               <h3 className="font-display text-2xl font-black uppercase leading-none sm:text-3xl">Свежие работы с линии</h3>
               <p className="shrink-0 font-mono text-[10px] uppercase tracking-[0.2em] text-fog-2">съёмка ОТК · смена 2</p>
             </div>
-            <div className="mt-6 columns-2 gap-3 space-y-3 md:columns-3 md:gap-4 md:space-y-4">
+            <div className="mt-6 gap-3 space-y-3 md:columns-3 md:gap-4 md:space-y-4">
               {GALLERY.map((g, i) => (
                 <Reveal key={g.caption + i} delay={(i % 3) * 90}>
                   <figure className="group relative break-inside-avoid overflow-hidden border-2 border-steel">
