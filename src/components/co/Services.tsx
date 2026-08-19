@@ -58,7 +58,7 @@ function Calculator({ selected }: { selected: RalColor }) {
               <button
                 key={s.id}
                 onClick={() => setSvcId(s.id)}
-                className={`border px-2.5 py-2 text-left font-mono text-[11px] leading-tight transition-colors duration-200 ${
+                className={`min-w-0 break-words border px-2.5 py-2 text-left font-mono text-[11px] leading-tight transition-colors duration-200 ${
                   svcId === s.id
                     ? "border-heat bg-heat/15 text-concrete"
                     : "border-steel text-fog hover:border-steel-2 hover:text-concrete"
