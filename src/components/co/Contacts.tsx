@@ -198,8 +198,8 @@ export function Foot() {
       <div className="mx-auto grid max-w-[1400px] gap-8 px-4 py-12 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <div className="flex items-center gap-2.5">
-            <span className="grid h-8 w-8 place-items-center bg-heat font-display text-base font-bold text-coal">P</span>
-            <span className="font-display text-sm tracking-[0.22em]">PCPOLIMER · ПОРОШКОВАЯ ПОКРАСКА</span>
+            <span className="grid h-8 w-8 place-items-center bg-heat font-display text-[11px] font-bold text-coal">PC</span>
+            <span className="font-display text-sm tracking-[0.22em]">POLIMER · ПОРОШКОВАЯ ПОКРАСКА</span>
           </div>
           <p className="mt-4 max-w-sm text-[13px] leading-relaxed text-fog">
             Цех полимерных покрытий в Красногорске: пескоструй, электростатическое напыление,

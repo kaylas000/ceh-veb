@@ -158,8 +158,8 @@ export function Head({ selected }: { selected: RalColor }) {
         <div className="border-b border-steel/70 bg-coal/95 backdrop-blur-sm">
           <div className="flex h-14 items-center gap-2.5 px-3.5">
             <a href="#pasport" className="flex min-w-0 items-center gap-2" onClick={() => setMenuOpen(false)}>
-              <span className="grid h-8 w-8 shrink-0 place-items-center bg-heat font-display text-base font-bold leading-none text-coal">P</span>
-              <span className="truncate font-display text-[12px] tracking-[0.16em] text-concrete">PCPOLIMER</span>
+              <span className="grid h-8 w-8 shrink-0 place-items-center bg-heat font-display text-[11px] font-bold leading-none text-coal">PC</span>
+              <span className="truncate font-display text-[12px] tracking-[0.16em] text-concrete">POLIMER</span>
             </a>
             <a
               href={COMPANY.phoneHref}
@@ -243,8 +243,8 @@ export function Head({ selected }: { selected: RalColor }) {
         <nav>
           <div className="mx-auto flex h-12 max-w-[1400px] items-center gap-1 px-6">
             <a href="#pasport" className="mr-4 flex shrink-0 items-center gap-2">
-              <span className="grid h-7 w-7 place-items-center bg-heat font-display text-sm font-bold leading-none text-coal">P</span>
-              <span className="font-display text-[13px] tracking-[0.2em] text-concrete">PCPOLIMER</span>
+              <span className="grid h-7 w-7 place-items-center bg-heat font-display text-[10px] font-bold leading-none text-coal">PC</span>
+              <span className="font-display text-[13px] tracking-[0.2em] text-concrete">POLIMER</span>
             </a>
             <div className="flex flex-1 items-center gap-1">
               {NAV.map((n) => (
