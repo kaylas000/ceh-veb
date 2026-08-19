@@ -15,7 +15,8 @@ export const COMPANY = {
   ratingsCount: 38,
   reviewsCount: 28,
   photosCount: 150,
-  yandexMapsUrl: "https://yandex.ru/maps/?text=Красногорск,%20Речная%20улица,%208",
+  yandexMapsUrl:
+    "https://yandex.ru/maps/org/poroshkovaya_pokraska/20941961867/reviews/?ll=37.343614%2C55.830230&z=14.8",
 };
 
 export type RalColor = {
