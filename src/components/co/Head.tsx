@@ -218,7 +218,8 @@ export function Head({ selected }: { selected: RalColor }) {
               <div className="mt-4 space-y-1 font-mono text-[11px] uppercase leading-relaxed tracking-[0.14em] text-fog">
                 <p>{COMPANY.address}</p>
                 <p>{COMPANY.hours}</p>
-                <a href={COMPANY.phoneHref} className="block text-concrete">{COMPANY.phone}</a>
+                <a href={COMPANY.phoneHref} className="block font-bold text-concrete">{COMPANY.phone}</a>
+                <a href={COMPANY.phone2Href} className="block text-concrete">{COMPANY.phone2}</a>
               </div>
             </nav>
           </div>
@@ -238,9 +239,15 @@ export function Head({ selected }: { selected: RalColor }) {
             <span className="shrink-0 text-heat">Pcpolimer</span>
             <span className="shrink-0 text-concrete">{COMPANY.address}</span>
             <span className="hidden shrink-0 xl:inline">{COMPANY.hours}</span>
-            <a href={COMPANY.phoneHref} className="ml-auto shrink-0 text-concrete transition-colors hover:text-heat">
-              {COMPANY.phone}
-            </a>
+            <span className="ml-auto flex shrink-0 items-center gap-3">
+              <a href={COMPANY.phoneHref} className="text-concrete transition-colors hover:text-heat">
+                {COMPANY.phone}
+              </a>
+              <span className="hidden text-steel-2 sm:inline" aria-hidden="true">·</span>
+              <a href={COMPANY.phone2Href} className="hidden text-concrete transition-colors hover:text-heat sm:inline">
+                {COMPANY.phone2}
+              </a>
+            </span>
           </div>
         </div>
 

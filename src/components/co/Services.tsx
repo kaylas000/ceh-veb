@@ -135,11 +135,17 @@ function Calculator({ selected }: { selected: RalColor }) {
           </p>
           <a
             href={COMPANY.phoneHref}
-            className="mt-4 block border-2 border-heat bg-heat px-4 py-3 text-center font-display text-sm font-bold uppercase tracking-[0.12em] text-coal transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_rgba(255,106,43,0.4)]"
+            className="mt-4 block border-2 border-heat bg-heat px-4 py-3 text-center font-display text-sm font-bold uppercase tracking-[0.08em] text-coal transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_rgba(255,106,43,0.4)]"
           >
-            Уточнить по телефону
+            Уточнить · {COMPANY.phone}
           </a>
           <p className="mt-2.5 text-center font-mono text-[10px] text-fog-2">
+            второй номер:{" "}
+            <a href={COMPANY.phone2Href} className="text-fog underline decoration-steel-2 underline-offset-2 transition-colors hover:text-heat">
+              {COMPANY.phone2}
+            </a>
+          </p>
+          <p className="mt-1.5 text-center font-mono text-[10px] text-fog-2">
             итог зависит от сложности изделия и объёма партии
           </p>
         </div>
@@ -164,9 +170,13 @@ export function Services({ selected }: { selected: RalColor }) {
           <Reveal delay={150}>
             <p className="max-w-sm text-[14px] leading-relaxed text-fog">
               Двенадцать позиций без мелкого шрифта. Покрытие стойко к коррозии, влаге, реагентам и
-              не выцветает. Точную смету считаем по чертежу или фото — по телефону{" "}
+              не выцветает. Точную смету считаем по чертежу или фото — по телефонам{" "}
               <a href={COMPANY.phoneHref} className="text-concrete underline decoration-heat underline-offset-4">
                 {COMPANY.phone}
+              </a>{" "}
+              и{" "}
+              <a href={COMPANY.phone2Href} className="text-concrete underline decoration-heat underline-offset-4">
+                {COMPANY.phone2}
               </a>.
             </p>
           </Reveal>

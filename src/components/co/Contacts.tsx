@@ -71,13 +71,27 @@ export function Contacts() {
         <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_1.3fr] lg:gap-12">
           <div className="flex flex-col gap-5">
             <Reveal>
-              <a href={COMPANY.phoneHref} className="group block border-2 border-ink bg-ink p-6 text-concrete shadow-[8px_8px_0_rgba(26,27,31,0.25)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[10px_10px_0_var(--color-heat)]">
-                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-fog">диспетчер цеха · ежедневно</p>
-                <p className="mt-2 font-display text-[clamp(1.5rem,3.4vw,2.4rem)] font-black leading-none tracking-tight text-concrete transition-colors group-hover:text-heat">
-                  {COMPANY.phone}
-                </p>
-                <p className="mt-2 font-mono text-[11px] text-fog">смета по фото детали — за час в рабочее время</p>
-              </a>
+              <div className="border-2 border-ink bg-ink p-6 text-concrete shadow-[8px_8px_0_rgba(26,27,31,0.25)]">
+                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-fog">диспетчер цеха · ежедневно до 21:00</p>
+                <div className="mt-3 flex flex-col gap-2.5">
+                  {[
+                    { n: COMPANY.phone, h: COMPANY.phoneHref, tag: "основной" },
+                    { n: COMPANY.phone2, h: COMPANY.phone2Href, tag: "второй" },
+                  ].map((p) => (
+                    <a
+                      key={p.n}
+                      href={p.h}
+                      className="group flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border border-steel bg-coal-2 px-4 py-3 transition-colors duration-200 hover:border-heat hover:bg-heat/10"
+                    >
+                      <span className="font-display text-[clamp(1.25rem,2.6vw,1.9rem)] font-black leading-none tracking-tight text-concrete transition-colors group-hover:text-heat">
+                        {p.n}
+                      </span>
+                      <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-fog-2 group-hover:text-heat">{p.tag} ↗</span>
+                    </a>
+                  ))}
+                </div>
+                <p className="mt-3 font-mono text-[11px] text-fog">смета по фото детали — за час в рабочее время</p>
+              </div>
             </Reveal>
 
             <Reveal delay={100}>
@@ -106,7 +120,7 @@ export function Contacts() {
             <MiniMap />
             <p className="mt-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.18em] text-ink-soft">
               <span>схема проезда · не масштаб</span>
-              <span>парковка для Газели — есть</span>
+              <span>{COMPANY.addressShort}</span>
             </p>
           </Reveal>
         </div>
@@ -206,6 +220,9 @@ export function Foot() {
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-fog-2">связь</p>
           <a href={COMPANY.phoneHref} className="mt-3 block font-display text-lg font-bold text-concrete transition-colors hover:text-heat">
             {COMPANY.phone}
+          </a>
+          <a href={COMPANY.phone2Href} className="mt-1 block font-display text-base text-fog transition-colors hover:text-heat">
+            {COMPANY.phone2}
           </a>
           <a href={COMPANY.yandexMapsUrl} target="_blank" rel="noreferrer" className="mt-2 inline-block font-mono text-[11px] uppercase tracking-wider text-fog underline decoration-heat underline-offset-4 transition-colors hover:text-concrete">
             профиль на Яндекс Картах ↗
