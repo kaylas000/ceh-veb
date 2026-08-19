@@ -81,8 +81,8 @@ function OvenPanel({ selected }: { selected: RalColor }) {
       <div className="scanline relative grid gap-4 overflow-hidden p-5 sm:grid-cols-[150px_1fr]">
         <div className="heat-breathe pointer-events-none absolute inset-0 bg-[radial-gradient(70%_60%_at_50%_100%,rgba(255,106,43,0.16),transparent_70%)]" />
         {/* шкала */}
-        <div className="relative mx-auto">
-          <svg width="150" height="112" viewBox="0 0 200 132">
+        <div className="relative mx-auto w-[132px] sm:w-[150px]">
+          <svg viewBox="0 0 200 132" className="h-auto w-full">
             {[0, 0.25, 0.5, 0.75, 1].map((t) => {
               const a = Math.PI * (1 + t);
               const x1 = 100 + Math.cos(a) * 70;
@@ -140,6 +140,7 @@ function OvenPanel({ selected }: { selected: RalColor }) {
 export function Head({ selected }: { selected: RalColor }) {
   const prm = useReducedMotion();
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 48);
     onScroll();
@@ -152,20 +153,86 @@ export function Head({ selected }: { selected: RalColor }) {
       <div className="bg-grid-dark pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="heat-glow pointer-events-none absolute inset-0" aria-hidden="true" />
 
-      {/* закреплённый блок: служебная строка + навигация */}
+      {/* ---------- МОБИЛЬНАЯ ШАПКА: один ряд + выезжающее меню ---------- */}
+      <div className="fixed inset-x-0 top-0 z-50 lg:hidden">
+        <div className="border-b border-steel/70 bg-coal/95 backdrop-blur-sm">
+          <div className="flex h-14 items-center gap-2.5 px-3.5">
+            <a href="#pasport" className="flex min-w-0 items-center gap-2" onClick={() => setMenuOpen(false)}>
+              <span className="grid h-8 w-8 shrink-0 place-items-center bg-heat font-display text-base font-bold leading-none text-coal">P</span>
+              <span className="truncate font-display text-[12px] tracking-[0.16em] text-concrete">PCPOLIMER</span>
+            </a>
+            <a
+              href={COMPANY.phoneHref}
+              className="ml-auto grid h-9 w-9 shrink-0 place-items-center border border-steel-2 text-heat transition-colors hover:bg-heat hover:text-coal"
+              aria-label={`Позвонить: ${COMPANY.phone}`}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M4.5 4.5c0 8.3 6.7 15 15 15l1.8-3.6-4-2-1.9 1.9c-3-1.2-5-3.2-6.2-6.2l1.9-1.9-2-4z" strokeLinejoin="round" />
+              </svg>
+            </a>
+            <button
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-expanded={menuOpen}
+              aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}
+              className="grid h-9 w-9 shrink-0 place-items-center border border-steel-2 transition-colors hover:border-concrete"
+            >
+              <span className="flex flex-col gap-[5px]">
+                <span className={`block h-0.5 w-5 bg-concrete transition-transform duration-300 ${menuOpen ? "translate-y-[3.5px] rotate-45" : ""}`} />
+                <span className={`block h-0.5 w-5 bg-concrete transition-transform duration-300 ${menuOpen ? "-translate-y-[3.5px] -rotate-45" : ""}`} />
+              </span>
+            </button>
+          </div>
+        </div>
+
+        {/* выезжающее меню */}
+        <div
+          className="grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+          style={{ gridTemplateRows: menuOpen ? "1fr" : "0fr" }}
+        >
+          <div className="overflow-hidden">
+            <nav className="border-b-2 border-steel bg-coal-2/95 px-4 pb-5 pt-1 shadow-[0_18px_30px_rgba(0,0,0,0.45)] backdrop-blur-sm">
+              {NAV.map((n) => (
+                <a
+                  key={n.href}
+                  href={n.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center justify-between border-b border-steel/50 py-3.5 font-display text-lg font-bold uppercase tracking-wide text-concrete transition-colors active:text-heat"
+                >
+                  {n.label}
+                  <span className="font-mono text-[11px] text-heat">{n.n} →</span>
+                </a>
+              ))}
+              <a
+                href="#kalkulator"
+                onClick={() => setMenuOpen(false)}
+                className="mt-4 block border-2 border-heat bg-heat px-4 py-3.5 text-center font-display text-base font-bold uppercase tracking-[0.12em] text-coal"
+              >
+                Рассчитать стоимость
+              </a>
+              <div className="mt-4 space-y-1 font-mono text-[11px] uppercase leading-relaxed tracking-[0.14em] text-fog">
+                <p>{COMPANY.addressShort}</p>
+                <p>{COMPANY.metro} · {COMPANY.hours}</p>
+                <a href={COMPANY.phoneHref} className="block text-concrete">{COMPANY.phone}</a>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      {/* ---------- ДЕСКТОПНАЯ ШАПКА: служебная строка + навигация ---------- */}
       <div
-        className={`fixed inset-x-0 top-0 z-40 border-b border-steel/70 bg-coal/95 shadow-[0_2px_16px_rgba(0,0,0,0.35)] backdrop-blur-sm ${
+        className={`fixed inset-x-0 top-0 z-40 hidden border-b border-steel/70 bg-coal/95 shadow-[0_2px_16px_rgba(0,0,0,0.35)] backdrop-blur-sm lg:block ${
           scrolled && !prm ? "-translate-y-9" : ""
         }`}
         style={{ transition: "transform 0.5s cubic-bezier(0.65, 0, 0.15, 1)" }}
       >
         {/* верхняя техническая строка */}
         <div className="border-b border-steel/60">
-          <div className="mx-auto flex h-9 max-w-[1400px] items-center gap-4 overflow-x-auto px-4 font-mono text-[10px] uppercase tracking-[0.18em] text-fog sm:px-6">
+          <div className="mx-auto flex h-9 max-w-[1400px] items-center gap-4 px-6 font-mono text-[10px] uppercase tracking-[0.18em] text-fog">
             <span className="shrink-0 text-heat">Pcpolimer</span>
-            <span className="hidden shrink-0 md:inline">{COMPANY.addressShort}</span>
-            <span className="hidden shrink-0 sm:inline">{COMPANY.metro}</span>
-            <span className="hidden shrink-0 text-concrete sm:inline">{COMPANY.hours}</span>
+            <span className="shrink-0">{COMPANY.addressShort}</span>
+            <span className="shrink-0">{COMPANY.metro}</span>
+            <span className="shrink-0 text-concrete">{COMPANY.hours}</span>
             <a href={COMPANY.phoneHref} className="ml-auto shrink-0 text-concrete transition-colors hover:text-heat">
               {COMPANY.phone}
             </a>
@@ -174,12 +241,12 @@ export function Head({ selected }: { selected: RalColor }) {
 
         {/* навигация */}
         <nav>
-          <div className="mx-auto flex h-12 max-w-[1400px] items-center gap-1 px-4 sm:px-6">
+          <div className="mx-auto flex h-12 max-w-[1400px] items-center gap-1 px-6">
             <a href="#pasport" className="mr-4 flex shrink-0 items-center gap-2">
               <span className="grid h-7 w-7 place-items-center bg-heat font-display text-sm font-bold leading-none text-coal">P</span>
-              <span className="hidden font-display text-[13px] tracking-[0.2em] text-concrete md:block">PCPOLIMER</span>
+              <span className="font-display text-[13px] tracking-[0.2em] text-concrete">PCPOLIMER</span>
             </a>
-            <div className="term-scroll flex flex-1 items-center gap-1 overflow-x-auto">
+            <div className="flex flex-1 items-center gap-1">
               {NAV.map((n) => (
                 <a
                   key={n.href}
@@ -193,7 +260,7 @@ export function Head({ selected }: { selected: RalColor }) {
             </div>
             <a
               href="#kalkulator"
-              className="press-ready ml-2 hidden shrink-0 border-2 border-heat bg-heat px-3.5 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-coal transition-colors duration-200 hover:bg-transparent hover:text-heat sm:block"
+              className="press-ready ml-2 shrink-0 border-2 border-heat bg-heat px-3.5 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-coal transition-colors duration-200 hover:bg-transparent hover:text-heat"
             >
               Рассчитать
             </a>
@@ -202,7 +269,7 @@ export function Head({ selected }: { selected: RalColor }) {
       </div>
 
       {/* паспорт заказа */}
-      <div className="relative z-10 mx-auto max-w-[1400px] px-4 pb-16 pt-[116px] sm:px-6 lg:pb-20 lg:pt-[136px]">
+      <div className="relative z-10 mx-auto max-w-[1400px] px-4 pb-14 pt-[72px] sm:px-6 sm:pt-[80px] lg:pb-20 lg:pt-[136px]">
         <div className="grid items-start gap-10 lg:grid-cols-[1.25fr_1fr] lg:gap-14">
           <div>
             <Reveal>
@@ -214,7 +281,7 @@ export function Head({ selected }: { selected: RalColor }) {
 
             <h1 className="mt-6">
               <MaskLines
-                className="font-display text-[clamp(2.15rem,7.2vw,5.6rem)] font-black uppercase leading-[0.92] tracking-tight"
+                className="font-display text-[clamp(1.85rem,7.2vw,5.6rem)] font-black uppercase leading-[0.94] tracking-tight"
                 lines={[
                   <>Порошковая</>,
                   <span key="p" className="text-heat">покраска</span>,
@@ -232,20 +299,20 @@ export function Head({ selected }: { selected: RalColor }) {
             </Reveal>
 
             <Reveal delay={460}>
-              <div className="mt-7 flex flex-wrap items-center gap-3">
+              <div className="mt-7 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                 <a
                   href="#kalkulator"
-                  className="border-2 border-heat bg-heat px-6 py-3 font-display text-sm font-bold uppercase tracking-[0.12em] text-coal transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_rgba(255,106,43,0.4)]"
+                  className="border-2 border-heat bg-heat px-6 py-3.5 text-center font-display text-sm font-bold uppercase tracking-[0.12em] text-coal transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_rgba(255,106,43,0.4)]"
                 >
                   Рассчитать стоимость
                 </a>
                 <a
                   href="#palitra"
-                  className="border-2 border-steel-2 px-6 py-3 font-display text-sm font-bold uppercase tracking-[0.12em] text-concrete transition-all duration-200 hover:-translate-y-0.5 hover:border-concrete hover:bg-concrete hover:text-coal"
+                  className="border-2 border-steel-2 px-6 py-3.5 text-center font-display text-sm font-bold uppercase tracking-[0.12em] text-concrete transition-all duration-200 hover:-translate-y-0.5 hover:border-concrete hover:bg-concrete hover:text-coal"
                 >
                   Палитра RAL
                 </a>
-                <span className="flex items-center gap-2 border border-steel bg-coal-2/70 px-3 py-2.5">
+                <span className="flex items-center justify-center gap-2 border border-steel bg-coal-2/70 px-3 py-2.5 sm:justify-start">
                   <Stars value={COMPANY.rating} className="text-amber" />
                   <span className="font-mono text-xs font-bold text-concrete">{COMPANY.rating}</span>
                   <span className="font-mono text-[10px] text-fog">{COMPANY.ratingsCount} оценок</span>
@@ -261,9 +328,9 @@ export function Head({ selected }: { selected: RalColor }) {
                   ["1000+", "цветов RAL"],
                   ["от 100 ₽", "цена погонного метра"],
                 ].map(([v, l]) => (
-                  <div key={l} className="bg-coal-2 px-3.5 py-3">
-                    <dt className="font-display text-lg font-bold leading-none text-concrete">{v}</dt>
-                    <dd className="mt-1.5 font-mono text-[9px] uppercase leading-tight tracking-[0.14em] text-fog-2">{l}</dd>
+                  <div key={l} className="min-w-0 bg-coal-2 px-3 py-2.5 sm:px-3.5 sm:py-3">
+                    <dt className="font-display text-base font-bold leading-none text-concrete sm:text-lg">{v}</dt>
+                    <dd className="mt-1.5 font-mono text-[8px] uppercase leading-tight tracking-[0.12em] text-fog-2 sm:text-[9px] sm:tracking-[0.14em]">{l}</dd>
                   </div>
                 ))}
               </dl>
