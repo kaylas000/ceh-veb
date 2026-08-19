@@ -240,11 +240,16 @@ export function Gallery() {
         </div>
 
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-2 border-ink bg-card-l px-4 py-3">
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-soft">
-            ещё {COMPANY.photosCount}+ фото — в профиле на Яндекс Картах
-          </p>
           <a
-            href={COMPANY.yandexMapsUrl}
+            href={COMPANY.yandexGalleryUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-soft underline decoration-heat decoration-2 underline-offset-4 transition-colors hover:text-heat-2"
+          >
+            ещё {COMPANY.photosCount}+ фото — в профиле на Яндекс Картах
+          </a>
+          <a
+            href={COMPANY.yandexGalleryUrl}
             target="_blank"
             rel="noreferrer"
             className="font-display text-xs font-bold uppercase tracking-[0.12em] text-heat-2 transition-colors hover:text-ink"

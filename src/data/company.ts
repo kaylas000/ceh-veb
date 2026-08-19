@@ -17,6 +17,8 @@ export const COMPANY = {
   photosCount: 150,
   yandexMapsUrl:
     "https://yandex.ru/maps/org/poroshkovaya_pokraska/20941961867/reviews/?ll=37.343614%2C55.830230&z=14.8",
+  yandexGalleryUrl:
+    "https://yandex.ru/maps/org/poroshkovaya_pokraska/20941961867/gallery/?ll=37.343614%2C55.830230&z=14",
 };
 
 export type RalColor = {
