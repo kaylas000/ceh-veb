@@ -183,6 +183,11 @@ export function Head({ selected }: { selected: RalColor }) {
               </span>
             </button>
           </div>
+          <div className="border-t border-steel/50 bg-coal/95 px-3.5 py-1.5">
+            <p className="truncate font-mono text-[9px] uppercase tracking-[0.16em] text-fog">
+              <span className="text-heat">цех:</span> {COMPANY.address} · {COMPANY.hours}
+            </p>
+          </div>
         </div>
 
         {/* выезжающее меню */}
@@ -231,8 +236,8 @@ export function Head({ selected }: { selected: RalColor }) {
         <div className="border-b border-steel/60">
           <div className="mx-auto flex h-9 max-w-[1400px] items-center gap-4 px-6 font-mono text-[10px] uppercase tracking-[0.18em] text-fog">
             <span className="shrink-0 text-heat">Pcpolimer</span>
-            <span className="shrink-0">Московская область</span>
-            <span className="shrink-0 text-concrete">{COMPANY.hours}</span>
+            <span className="shrink-0 text-concrete">{COMPANY.address}</span>
+            <span className="hidden shrink-0 xl:inline">{COMPANY.hours}</span>
             <a href={COMPANY.phoneHref} className="ml-auto shrink-0 text-concrete transition-colors hover:text-heat">
               {COMPANY.phone}
             </a>
@@ -269,7 +274,7 @@ export function Head({ selected }: { selected: RalColor }) {
       </div>
 
       {/* паспорт заказа */}
-      <div className="relative z-10 mx-auto max-w-[1400px] px-4 pb-10 pt-[68px] sm:px-6 sm:pt-[80px] lg:pb-20 lg:pt-[136px]">
+      <div className="relative z-10 mx-auto max-w-[1400px] px-4 pb-10 pt-[96px] sm:px-6 sm:pt-[100px] lg:pb-20 lg:pt-[136px]">
         <div className="grid items-start gap-8 lg:grid-cols-[1.25fr_1fr] lg:gap-14">
           <div className="min-w-0">
             <Reveal>
