@@ -78,10 +78,10 @@ function OvenPanel({ selected }: { selected: RalColor }) {
         </span>
       </div>
 
-      <div className="scanline relative grid gap-4 overflow-hidden p-5 sm:grid-cols-[150px_1fr]">
+      <div className="scanline relative grid gap-3 overflow-hidden p-4 sm:grid-cols-[150px_1fr] sm:gap-4 sm:p-5">
         <div className="heat-breathe pointer-events-none absolute inset-0 bg-[radial-gradient(70%_60%_at_50%_100%,rgba(255,106,43,0.16),transparent_70%)]" />
         {/* шкала */}
-        <div className="relative mx-auto w-[132px] sm:w-[150px]">
+        <div className="relative mx-auto w-[118px] sm:w-[150px]">
           <svg viewBox="0 0 200 132" className="h-auto w-full">
             {[0, 0.25, 0.5, 0.75, 1].map((t) => {
               const a = Math.PI * (1 + t);
@@ -269,17 +269,17 @@ export function Head({ selected }: { selected: RalColor }) {
       </div>
 
       {/* паспорт заказа */}
-      <div className="relative z-10 mx-auto max-w-[1400px] px-4 pb-14 pt-[72px] sm:px-6 sm:pt-[80px] lg:pb-20 lg:pt-[136px]">
-        <div className="grid items-start gap-10 lg:grid-cols-[1.25fr_1fr] lg:gap-14">
+      <div className="relative z-10 mx-auto max-w-[1400px] px-4 pb-10 pt-[68px] sm:px-6 sm:pt-[80px] lg:pb-20 lg:pt-[136px]">
+        <div className="grid items-start gap-8 lg:grid-cols-[1.25fr_1fr] lg:gap-14">
           <div>
             <Reveal>
-              <p className="flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-fog">
+              <p className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-fog sm:text-[11px] sm:tracking-[0.22em]">
                 <span className="border border-steel-2 px-2 py-0.5">Наряд № 2026-0218</span>
-                <span>цех полимерных покрытий · Красногорск</span>
+                <span className="hidden min-[360px]:inline">цех полимерных покрытий · Красногорск</span>
               </p>
             </Reveal>
 
-            <h1 className="mt-6">
+            <h1 className="mt-4 sm:mt-6">
               <MaskLines
                 className="font-display text-[clamp(1.85rem,7.2vw,5.6rem)] font-black uppercase leading-[0.94] tracking-tight"
                 lines={[
@@ -292,14 +292,14 @@ export function Head({ selected }: { selected: RalColor }) {
             </h1>
 
             <Reveal delay={380}>
-              <p className="mt-6 max-w-xl text-base leading-relaxed text-fog sm:text-lg">
+              <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-fog sm:mt-6 sm:text-lg">
                 Полимерное покрытие в <span className="font-semibold text-concrete">любой цвет каталога RAL</span> — от
                 профиля до ворот. Печь до 200&nbsp;°C, слой 60–120&nbsp;мкм, приёмка деталей ежедневно.
               </p>
             </Reveal>
 
             <Reveal delay={460}>
-              <div className="mt-7 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              <div className="mt-5 flex flex-col items-stretch gap-2.5 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
                 <a
                   href="#kalkulator"
                   className="border-2 border-heat bg-heat px-6 py-3.5 text-center font-display text-sm font-bold uppercase tracking-[0.12em] text-coal transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_rgba(255,106,43,0.4)]"

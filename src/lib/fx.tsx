@@ -39,11 +39,26 @@ export function useInView<T extends Element>(
   useEffect(() => {
     const el = elRef.current;
     if (!el) return;
+    /* страховка: если IO молчит, а элемент реально во вьюпорте — показываем.
+       Ниже fold не трогаем, чтобы не ломать скролл-появления. */
+    const inViewport = () => {
+      const r = el.getBoundingClientRect();
+      return r.top < window.innerHeight * 0.95 && r.bottom > 0;
+    };
+    const fallback = window.setInterval(() => {
+      if (inViewport()) {
+        setInView(true);
+        window.clearInterval(fallback);
+      }
+    }, 400);
+    const fallbackStop = window.setTimeout(() => window.clearInterval(fallback), 4000);
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
             setInView(true);
+            window.clearInterval(fallback);
+            window.clearTimeout(fallbackStop);
             if (once) io.disconnect();
           } else if (!once) {
             setInView(false);
@@ -53,7 +68,11 @@ export function useInView<T extends Element>(
       { threshold },
     );
     io.observe(el);
-    return () => io.disconnect();
+    return () => {
+      window.clearInterval(fallback);
+      window.clearTimeout(fallbackStop);
+      io.disconnect();
+    };
   }, [threshold, once]);
   return [cb, inView];
 }
