@@ -11,7 +11,7 @@ const PASSPORT: Array<[string, string]> = [
 
 export function Plate() {
   return (
-    <section id="pasport" className="relative overflow-hidden bg-paper pt-[58px]">
+    <section id="pasport" className="relative overflow-hidden bg-paper">
       <div className="bg-blueprint pointer-events-none absolute inset-0" aria-hidden="true" />
 
       {/* служебная строка */}

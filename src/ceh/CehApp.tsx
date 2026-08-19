@@ -10,6 +10,7 @@ import { CineLine } from "../components/CineLine";
 import { ProjectsHall } from "../components/ProjectsHall";
 import { ValidatorLab } from "../components/ValidatorLab";
 import { Dossier } from "../components/Dossier";
+import { LiveProjectStrip } from "../components/LiveProjectStrip";
 import { initSmooth } from "../lib/smooth";
 
 export function CehApp() {
@@ -21,6 +22,7 @@ export function CehApp() {
     <div className="bg-paper font-body text-ink">
       <Header />
       <main>
+        <LiveProjectStrip />
         <Plate />
         <Marquee
           items={[
