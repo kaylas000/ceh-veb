@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { MaskTitle, Reveal, Stamp } from "../lib/motion";
+import { downloadBuildZip } from "../lib/zip";
 
 /* CSS-мокап первого экрана боевого проекта */
 function SiteMock() {
@@ -73,6 +74,23 @@ const YIELDS = [
 
 export function ProjectsHall() {
   const [dlOpen, setDlOpen] = useState(false);
+  const [zipState, setZipState] = useState<"idle" | "busy" | "done">("idle");
+  const zipTimer = useRef<number | null>(null);
+
+  const handleZip = async () => {
+    if (zipState === "busy") return;
+    setZipState("busy");
+    try {
+      await downloadBuildZip("ceh-pcpolimer-site.zip");
+      setZipState("done");
+    } catch (e) {
+      console.error(e);
+      setZipState("idle");
+    }
+    if (zipTimer.current) window.clearTimeout(zipTimer.current);
+    zipTimer.current = window.setTimeout(() => setZipState("idle"), 6000);
+  };
+
   return (
     <section id="proekty" className="relative bg-ink text-paper">
       <div className="bg-blueprint-dark pointer-events-none absolute inset-0" aria-hidden="true" />
@@ -122,6 +140,17 @@ export function ProjectsHall() {
                   >
                     Открыть живой сайт →
                   </a>
+                  <button
+                    onClick={handleZip}
+                    disabled={zipState === "busy"}
+                    className={`border-2 px-5 py-2.5 font-display text-sm font-bold uppercase tracking-[0.12em] transition-all duration-200 ${
+                      zipState === "done"
+                        ? "border-green bg-green text-coal"
+                        : "border-paper/35 text-paper hover:-translate-y-0.5 hover:bg-paper hover:text-ink"
+                    } ${zipState === "busy" ? "cursor-wait opacity-70" : ""}`}
+                  >
+                    {zipState === "busy" ? "Упаковываю…" : zipState === "done" ? "✓ ZIP отдан" : "Скачать архив ZIP"}
+                  </button>
                   <a
                     href="#validator"
                     className="border-2 border-paper/35 px-5 py-2.5 font-display text-sm font-bold uppercase tracking-[0.12em] text-paper transition-colors duration-200 hover:bg-paper hover:text-ink"
@@ -133,12 +162,18 @@ export function ProjectsHall() {
                     aria-expanded={dlOpen}
                     className="border-2 border-paper/35 px-5 py-2.5 font-display text-sm font-bold uppercase tracking-[0.12em] text-paper transition-colors duration-200 hover:bg-paper hover:text-ink"
                   >
-                    {dlOpen ? "Свернуть" : "Скачать сборку"}
+                    {dlOpen ? "Свернуть" : "Как собрать"}
                   </button>
                 </div>
+                {zipState === "done" && (
+                  <p className="mt-3 border border-green/40 bg-green/10 px-4 py-2.5 font-mono text-[11px] leading-relaxed text-green">
+                    ✓ файл ceh-pcpolimer-site.zip у вас: внутри index.html + папка assets/. Распакуйте и залейте на
+                    GitHub Pages / Netlify / Vercel — сайт заработает сразу.
+                  </p>
+                )}
                 {dlOpen && (
                   <div className="mt-4 border border-line-dark bg-[#14120c] p-4 font-mono text-[11px] leading-relaxed text-paper/75">
-                    <p className="text-yellow"># готовый сайт — чистая статика в папке dist/</p>
+                    <p className="text-yellow"># готовый сайт — чистая статика в папке dist/ (теперь она попадает и в репозиторий)</p>
                     <p className="mt-1.5">npm install</p>
                     <p>npm run build <span className="text-muted-2"># → dist/index.html + dist/assets/</span></p>
                     <p className="mt-1.5 text-muted-2">
