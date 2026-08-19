@@ -381,6 +381,177 @@ const hist3 = `Секции: Пространства, Тарифы, Сообщ�
 Палитра: #1d3a5f, #d64533, #f6f1e7
 Оси: плакатные развороты · скрэмбл · капс 10vw`;
 
+/* ---------------- projects/pcpolimer (боевой проект) ---------------- */
+
+const ref07 = `id: REF-07
+source: https://pcpolimer.example
+style: [industrial, poster, ledger]
+techniques:
+  - наряд-заказ и живая печь вместо hero
+  - акцент — рабочая палитра RAL, не градиент
+  - прайс как наряд-строки + калькулятор
+  - sticky-станции в технологии
+motion: [mask-reveal, sticky-scene, conveyor-marquee, ken-burns, counter-tick]
+palette: ['#17181C', '#FF6A2B', '#E7E7E2', '#FFB35C']
+takeaway: «Открывай промышленную тему её артефактом — нарядом и печью, акцент бери из палитры отрасли.»
+screenshot: pending`;
+
+const pcSeed = `# SEED.md — бросок №51
+
+roulette.mjs · seed 20260218-51 · повтор осей с броском №50: нет
+
+Композиция: наряд-паспорт с левой плитой
+Движение: sticky-станции + конвейер-лента
+Типографика: Tektur-капс + моно-метки`;
+
+const pcDirection = `# DIRECTION — «Pcpolimer: порошковая покраска»
+
+Проект: pcpolimer · Бросок SEED: №51
+
+## Раздача SEED
+- Композиция: наряд-паспорт с левой плитой
+- Движение: sticky-станции + конвейер-лента
+- Типографика: Tektur-капс + моно-метки
+
+## Источники направления
+1. references/industrial/REF-07.meta.yaml
+   > takeaway: «Открывай промышленную тему её артефактом — нарядом и печью, акцент бери из палитры отрасли.»
+2. references/editorial/REF-02.meta.yaml
+   > takeaway: «Заменяй сетку карточек плотным индексом: имя проекта крупнее превью.»
+3. references/poster-type/REF-05.meta.yaml
+   > takeaway: «Набирай заголовок как плакат: размер до 10vw, перенос по смыслу, а не по ширине.»
+
+## Палитра (из REF-07)
+#17181C · #FF6A2B · #E7E7E2 · #FFB35C
+
+## Шрифты (assets/fonts/PAIRS.md)
+Display: Tektur — капс, коды, шкалы.
+Body: Golos Text — набор и подписи.
+
+## Характер движения
+Рецепты: motion/recipes/sticky-scene/recipe.yaml, motion/recipes/mask-reveal/recipe.yaml, motion/recipes/conveyor-marquee/recipe.yaml.
+Easing — только из motion/easing-curves.json: ceh-brake, ceh-drag.
+
+## ЧЕМ ЭТО НЕ
+- НЕ «лендинг с центрированным hero и тремя карточками» (B-03, B-04).
+- НЕ «тёмная тема с неоновым градиентом» (B-05, B-06).
+- НЕ «стеклянные панели с блюром» (B-07).`;
+
+const pcStructure = `# STRUCTURE — pcpolimer
+
+## Наряд
+Паспорт заказа, печь, счётчики. Асимметричная композиция: наряд слева, печь справа.
+Источник: skills/industrial-passport/SKILL.md, REF-07.
+
+## Палитра
+Выкрасы RAL, выбор цвета. Источник: REF-07.
+
+## Прайс
+Наряд-строки + калькулятор. Источник: REF-02.
+
+## Технология
+Sticky-станции. Источник: REF-05, skills/scroll-story/SKILL.md.
+
+## Галерея
+Masonry с RAL-тегами. Источник: skills/crop/SKILL.md.`;
+
+const pcSources = `# SOURCES — pcpolimer
+
+| Решение | Файл-источник |
+|---|---|
+| Композиция «наряд-паспорт с левой плитой» | skills/industrial-passport/SKILL.md |
+| Капс Tektur, перенос по смыслу | skills/poster-type/SKILL.md |
+| Sticky-станции технологии | motion/recipes/sticky-scene/recipe.yaml |
+| Заголовки: маска-reveal | motion/recipes/mask-reveal/recipe.yaml |
+| RAL-лента и конвейер | motion/recipes/conveyor-marquee/recipe.yaml |
+| Зерно поверх сборки | assets/textures/grain.md |
+| Пара шрифтов (Tektur + Golos Text) | assets/fonts/PAIRS.md |
+| Палитра и наряд-строки | references/industrial/REF-07.meta.yaml |
+| Индекс прайса | references/editorial/REF-02.meta.yaml |
+| Плакатный капс | references/poster-type/REF-05.meta.yaml |`;
+
+const pcReview = `# REVIEW — pcpolimer
+
+Вердикт: ПРИНЯТО
+
+## Проверки
+- К-02: каждая ключевая секция имеет строку в SOURCES.md — выполнено.
+- К-05: easing ceh-brake и ceh-drag из easing-curves.json — выполнено.
+- B-03, B-04: центрированного hero и ряда одинаковых карточек нет — выполнено.
+- Q-04: заголовок 9vw на наряде — выполнено.
+
+## Правки
+Нет. Принято, ворота G4 закрыты.
+
+Артдиректор: агент-артдиректор · бросок №51`;
+
+const pcHtml = `<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Pcpolimer — порошковая покраска металла</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<main>
+  <section class="order">
+    <p class="doc">Наряд № 2026-0218 · цех полимерных покрытий</p>
+    <h1 class="poster">Порошковая<br>покраска<br>металла</h1>
+    <p class="note">Полимерное покрытие в любой цвет каталога RAL. Печь до 200 °C, слой 60–120 мкм.</p>
+  </section>
+  <section class="tech">
+    <div class="tech-pin">
+      <p class="station">Станция 1 / Подготовка</p>
+      <p class="station">Станция 2 / Напыление</p>
+      <p class="station">Станция 3 / Полимеризация</p>
+    </div>
+    <ol class="steps">
+      <li>Пескоструй до чистой поверхности</li>
+      <li>Электростатическое напыление</li>
+      <li>Камера 200 °C, 15 минут</li>
+    </ol>
+  </section>
+  <footer class="colophon">
+    <p>Источники: REF-07 pcpolimer · REF-02 pentagram.com · REF-05 readymag.com</p>
+  </footer>
+</main>
+</body>
+</html>`;
+
+const pcCss = `/* pcpolimer · бросок 51 · кривые только из motion/easing-curves.json */
+:root {
+  --coal: #17181c;
+  --heat: #ff6a2b;
+  --concrete: #e7e7e2;
+  --amber: #ffb35c;
+  --brake: cubic-bezier(0.16, 1, 0.3, 1);   /* ceh-brake */
+  --drag: cubic-bezier(0.65, 0, 0.15, 1);   /* ceh-drag */
+}
+body { margin: 0; background: var(--coal); color: var(--concrete); font-family: "Golos Text", sans-serif; }
+.poster {
+  font-family: "Tektur", "Golos Text", sans-serif;
+  font-size: 9vw;
+  line-height: 0.92;
+  margin: 0;
+  text-transform: uppercase;
+}
+.order { display: grid; grid-template-columns: 7fr 4fr; gap: 2rem; padding: 8vh 4vw; }
+.note { grid-column: 9 / 12; align-self: end; max-width: 26ch; }
+.tech { display: grid; grid-template-columns: 1fr 1fr; }
+.tech-pin { position: sticky; top: 0; height: 100vh; }
+.station {
+  opacity: 0.25;
+  transform: translateY(12px);
+  transition: opacity 0.6s var(--brake), transform 0.6s var(--brake);
+}
+.grain {
+  position: fixed; inset: 0;
+  opacity: 0.05; pointer-events: none;
+  background-image: url("../assets/textures/grain.png");
+}
+.colophon { padding: 4vh 4vw; border-top: 2px solid var(--concrete); }`;
+
 /* ---------------- сборка FS ---------------- */
 
 export const FS: FS = {
@@ -420,6 +591,19 @@ export const FS: FS = {
   "fixtures/slop-site/SOURCES.md": slopSources,
   "fixtures/slop-site/site/index.html": slopHtml,
   "fixtures/slop-site/site/styles.css": slopCss,
+  /* ---------- projects/pcpolimer (боевой проект) ---------- */
+  "skills/industrial-passport/SKILL.md":
+    "---\nname: industrial-passport\nwhen: промышленная тема, первый экран — артефакт профессии\n---\nПравила см. в SKILL-INDEX и на странице «Архив».",
+  "motion/recipes/conveyor-marquee/recipe.yaml":
+    "name: conveyor-marquee\nfeel: лента тянет содержимое, как конвейер\ntiming:\n  duration: 26s/цикл\n  easing: ceh-drive\n  stagger: равномерный\nuse_when: RAL-ленты, бегущие индексы\ndont_combine_with: [параллакс ленты]\nmax_per_page: 2\nsnippet: snippet.js\ndemo: demo.html",
+  "references/industrial/REF-07.meta.yaml": ref07,
+  "projects/pcpolimer/SEED.md": pcSeed,
+  "projects/pcpolimer/DIRECTION.md": pcDirection,
+  "projects/pcpolimer/STRUCTURE.md": pcStructure,
+  "projects/pcpolimer/SOURCES.md": pcSources,
+  "projects/pcpolimer/REVIEW.md": pcReview,
+  "projects/pcpolimer/site/index.html": pcHtml,
+  "projects/pcpolimer/site/styles.css": pcCss,
 };
 
 export const FIXTURES = [
@@ -434,6 +618,12 @@ export const FIXTURES = [
     label: "fixtures/slop-site",
     kind: "Негативный тест" as const,
     desc: "Нарочито шаблонный сайт. Обязан упасть с ≥5 нарушениями: система не пропускает слоп.",
+  },
+  {
+    root: "projects/pcpolimer",
+    label: "projects/pcpolimer",
+    kind: "Боевой проект" as const,
+    desc: "Первый реальный сайт студии. Прошёл G1–G4 и валидатор: 10/10, exit 0.",
   },
 ];
 

@@ -49,12 +49,19 @@ export function Header() {
             </a>
           ))}
         </nav>
-        <div className="hidden shrink-0 items-center gap-2 border border-line-dark px-2.5 py-1.5 md:flex">
+        <div className="hidden shrink-0 items-center gap-2 border border-line-dark px-2.5 py-1.5 xl:flex">
           <span className="led-dot h-2 w-2 rounded-full bg-green shadow-[0_0_8px_rgba(46,125,79,0.9)]" />
           <span className="font-mono text-[10px] uppercase tracking-widest text-paper/80">
             G4: зелёно · exit 0
           </span>
         </div>
+        <a
+          href="#/pcpolimer"
+          className="shrink-0 border-2 border-red bg-red px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-paper transition-all duration-200 hover:bg-transparent hover:text-red"
+          title="Боевой проект студии — сайт порошковой покраски"
+        >
+          PCPOLIMER →
+        </a>
       </div>
     </header>
   );

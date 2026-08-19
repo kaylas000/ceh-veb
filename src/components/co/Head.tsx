@@ -155,7 +155,7 @@ export function Head({ selected }: { selected: RalColor }) {
       <div className="heat-glow pointer-events-none absolute inset-0" aria-hidden="true" />
 
       {/* ---------- МОБИЛЬНАЯ ШАПКА: один ряд + выезжающее меню ---------- */}
-      <div className="fixed inset-x-0 top-0 z-50 lg:hidden">
+      <div className="fixed inset-x-0 top-[30px] z-50 lg:hidden">
         <div className="border-b border-steel/70 bg-coal/95 backdrop-blur-sm">
           <div className="flex h-14 items-center gap-2.5 px-3.5">
             <a href="#pasport" className="flex min-w-0 items-center gap-2" onClick={() => setMenuOpen(false)}>
@@ -228,7 +228,7 @@ export function Head({ selected }: { selected: RalColor }) {
 
       {/* ---------- ДЕСКТОПНАЯ ШАПКА: служебная строка + навигация ---------- */}
       <div
-        className={`fixed inset-x-0 top-0 z-40 hidden border-b border-steel/70 bg-coal/95 shadow-[0_2px_16px_rgba(0,0,0,0.35)] backdrop-blur-sm lg:block ${
+        className={`fixed inset-x-0 top-[30px] z-40 hidden border-b border-steel/70 bg-coal/95 shadow-[0_2px_16px_rgba(0,0,0,0.35)] backdrop-blur-sm lg:block ${
           scrolled && !prm ? "-translate-y-9" : ""
         }`}
         style={{ transition: "transform 0.5s cubic-bezier(0.65, 0, 0.15, 1)" }}

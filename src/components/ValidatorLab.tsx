@@ -39,7 +39,10 @@ export function ValidatorLab() {
   const prm = useReducedMotion();
   const demo = useMemo(() => validate(FS, "projects/demo"), []);
   const slop = useMemo(() => validate(FS, "fixtures/slop-site"), []);
-  const reports: Record<string, Report> = { [FIXTURES[0].root]: demo, [FIXTURES[1].root]: slop };
+  const reports: Record<string, Report> = useMemo(
+    () => Object.fromEntries(FIXTURES.map((f) => [f.root, validate(FS, f.root)])),
+    [],
+  );
 
   const [fixture, setFixture] = useState(FIXTURES[0].root);
   const [lines, setLines] = useState<Line[]>([]);
