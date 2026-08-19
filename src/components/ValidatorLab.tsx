@@ -103,7 +103,7 @@ export function ValidatorLab() {
       <div className="relative mx-auto max-w-[1400px] px-4 py-20 sm:px-6 lg:py-24">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-red">07 / приёмочный стенд</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-red">08 / приёмочный стенд</p>
             <MaskTitle
               className="mt-3 font-display text-[clamp(2.2rem,5vw,4rem)] uppercase leading-[0.95]"
               lines={[<>Валидатор</>, <span key="v" className="text-paper/55">не пропускает слоп</span>]}

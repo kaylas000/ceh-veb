@@ -6,7 +6,7 @@ export function Dossier() {
     <section id="dose" className="relative bg-paper">
       <div className="bg-blueprint pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="relative mx-auto max-w-[1400px] px-4 py-20 sm:px-6 lg:py-24">
-        <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-red">08 / личный состав</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-red">09 / личный состав</p>
         <MaskTitle
           className="mt-3 font-display text-[clamp(2.2rem,5vw,4rem)] uppercase leading-[0.95] text-ink"
           lines={[<>Кто стоит у станка</>]}

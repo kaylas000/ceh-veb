@@ -1,4 +1,5 @@
 import { FILE_TREE } from "../data/content";
+import { scrollToId } from "../lib/smooth";
 
 const NAV = [
   { href: "#pasport", label: "Паспорт" },
@@ -7,6 +8,7 @@ const NAV = [
   { href: "#dvizhenie", label: "Движение" },
   { href: "#reglament", label: "Регламент" },
   { href: "#vorota", label: "Ворота" },
+  { href: "#liniya", label: "Монтаж" },
   { href: "#validator", label: "Валидатор" },
   { href: "#dose", label: "Досье" },
 ];
@@ -15,7 +17,14 @@ export function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b-2 border-ink bg-ink text-paper">
       <div className="mx-auto flex h-[58px] max-w-[1400px] items-center gap-4 px-4 sm:px-6">
-        <a href="#pasport" className="flex items-center gap-2.5 shrink-0">
+        <a
+          href="#pasport"
+          onClick={(e) => {
+            e.preventDefault();
+            scrollToId("#pasport");
+          }}
+          className="flex items-center gap-2.5 shrink-0"
+        >
           <span className="grid h-8 w-8 place-items-center bg-red font-display text-lg leading-none text-paper">
             Ц
           </span>
@@ -29,6 +38,10 @@ export function Header() {
             <a
               key={n.href}
               href={n.href}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToId(n.href);
+              }}
               className="group px-2 py-1 font-mono text-[11px] uppercase tracking-wider text-paper/70 transition-colors duration-200 hover:bg-paper hover:text-ink"
             >
               <span className="mr-1 text-red group-hover:text-red">{String(i + 1).padStart(2, "0")}</span>

@@ -23,7 +23,9 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* плавный ход обеспечивает Lenis (src/lib/smooth.ts);
+     при prefers-reduced-motion он не включается */
+  scroll-behavior: auto;
 }
 
 body {
@@ -219,6 +221,52 @@ body {
 .stamp-el.rv-in {
   opacity: 1;
   transform: scale(1) rotate(var(--stamp-rot, -8deg));
+}
+
+/* ---------- cinematic: stamp slam / shake / splats ---------- */
+
+@keyframes stamp-slam {
+  0% { opacity: 0; transform: scale(2.5) rotate(-16deg); }
+  55% { opacity: 1; transform: scale(0.94) rotate(-6deg); }
+  100% { opacity: 1; transform: scale(1) rotate(-8deg); }
+}
+
+.stamp-slam {
+  animation: stamp-slam 0.34s cubic-bezier(0.3, 0, 1, 1) both; /* ceh-drive: жёсткий удар */
+}
+
+@keyframes stage-shake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-6px, 3px); }
+  40% { transform: translate(5px, -4px); }
+  60% { transform: translate(-4px, 2px); }
+  80% { transform: translate(2px, -1px); }
+}
+
+.stage-shake {
+  animation: stage-shake 0.38s linear both;
+}
+
+@keyframes splat-fly {
+  0% { opacity: 0.95; transform: translate(0, 0) scale(0.4); }
+  100% { opacity: 0; transform: translate(var(--sx, 40px), var(--sy, -30px)) scale(1.1); }
+}
+
+.splat {
+  animation: splat-fly 0.62s cubic-bezier(0.16, 1, 0.3, 1) forwards; /* ceh-brake */
+}
+
+.press-ready {
+  animation: press-pulse 1.8s cubic-bezier(0.65, 0, 0.15, 1) infinite;
+}
+
+/* постобработка: мягкая виньетка поверх всей «плёнки» сайта */
+.pp-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background: radial-gradient(115% 92% at 50% 42%, transparent 62%, rgba(10, 9, 6, 0.24) 100%);
 }
 
 /* ---------- components ---------- */

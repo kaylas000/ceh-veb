@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Header, Footer, NoiseLayer, Marquee } from "./components/Chrome";
 import { Plate } from "./components/Plate";
 import { Conveyor } from "./components/Conveyor";
@@ -5,8 +6,10 @@ import { Archive } from "./components/Archive";
 import { MotionLab } from "./components/MotionLab";
 import { Regulations } from "./components/Regulations";
 import { Gates } from "./components/Gates";
+import { CineLine } from "./components/CineLine";
 import { ValidatorLab } from "./components/ValidatorLab";
 import { Dossier } from "./components/Dossier";
+import { initSmooth } from "./lib/smooth";
 
 const CODES_TAPE = [
   "К-04: приём без источника — слоп",
@@ -32,10 +35,26 @@ const TECHNIQUES_TAPE = [
   "кен-бёрнс 18s",
 ];
 
+const CINE_TAPE = [
+  "master timeline 0→1",
+  "pin + scrub · демпфирование 0.11",
+  "150 кадров · процедурная плёнка",
+  "trail вместо clearRect = motion blur",
+  "lenis: плавный ход ленты",
+  "state machine: idle → charge → strike",
+  "виртуализация: рендер только во вьюпорте",
+  "vignette + grain = постобработка",
+];
+
 export default function App() {
+  useEffect(() => {
+    initSmooth();
+  }, []);
+
   return (
     <div className="min-h-screen bg-paper text-ink">
       <NoiseLayer />
+      <div className="pp-vignette" aria-hidden="true" />
       <Header />
       <main>
         <Plate />
@@ -46,6 +65,8 @@ export default function App() {
         <MotionLab />
         <Regulations />
         <Gates />
+        <Marquee items={CINE_TAPE} dark speed={28} />
+        <CineLine />
         <ValidatorLab />
         <Dossier />
       </main>
