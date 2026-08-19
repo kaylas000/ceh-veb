@@ -136,7 +136,7 @@ export function Trust() {
                   [reviews, "отзывов"],
                   [photos, "фото работ"],
                 ].map(([v, l]) => (
-                  <div key={l as string} className="bg-coal px-3 py-3.5 text-center">
+                  <div key={l as string} className="min-w-0 bg-coal px-2 py-3.5 text-center sm:px-3">
                     <dd className="font-display text-3xl font-black leading-none text-heat">{v}+</dd>
                     <dt className="mt-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-fog">{l}</dt>
                   </div>

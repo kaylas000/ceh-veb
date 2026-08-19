@@ -70,7 +70,7 @@ function OvenPanel({ selected }: { selected: RalColor }) {
   return (
     <div ref={ref} className="relative border-2 border-steel bg-coal-2 shadow-[10px_10px_0_rgba(0,0,0,0.35)]">
       {/* шапка печи */}
-      <div className="flex items-center justify-between border-b-2 border-steel px-4 py-2.5">
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b-2 border-steel px-4 py-2.5">
         <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-fog">Печь полимеризации · камера 2</span>
         <span className={`flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest ${ready ? "text-ok" : "text-amber"}`}>
           <span className={`led-dot h-2 w-2 rounded-full ${ready ? "bg-ok shadow-[0_0_8px_rgba(76,154,99,0.9)]" : "bg-amber shadow-[0_0_8px_rgba(255,179,92,0.9)]"}`} />
@@ -119,11 +119,11 @@ function OvenPanel({ selected }: { selected: RalColor }) {
             <p className="text-[9px] uppercase tracking-[0.2em] text-fog-2">слой</p>
             <p className="mt-1 text-lg font-bold text-concrete">80 мкм</p>
           </div>
-          <div className="col-span-2 border border-steel bg-coal px-3 py-2.5">
+          <div className="col-span-2 min-w-0 border border-steel bg-coal px-3 py-2.5">
             <p className="text-[9px] uppercase tracking-[0.2em] text-fog-2">в камере сейчас</p>
-            <p className="mt-1 flex items-center gap-2.5 text-sm font-bold text-concrete">
+            <p className="mt-1 flex min-w-0 items-center gap-2.5 text-sm font-bold text-concrete">
               <span className="h-4 w-4 shrink-0 border border-steel-2" style={{ background: selected.hex }} />
-              {selected.code} · {selected.name}
+              <span className="min-w-0 break-words">{selected.code} · {selected.name}</span>
             </p>
           </div>
         </div>
@@ -163,9 +163,9 @@ export function Head({ selected }: { selected: RalColor }) {
         <div className="border-b border-steel/60">
           <div className="mx-auto flex h-9 max-w-[1400px] items-center gap-4 overflow-x-auto px-4 font-mono text-[10px] uppercase tracking-[0.18em] text-fog sm:px-6">
             <span className="shrink-0 text-heat">Pcpolimer</span>
-            <span className="hidden shrink-0 sm:inline">{COMPANY.addressShort}</span>
-            <span className="shrink-0">{COMPANY.metro}</span>
-            <span className="shrink-0 text-concrete">{COMPANY.hours}</span>
+            <span className="hidden shrink-0 md:inline">{COMPANY.addressShort}</span>
+            <span className="hidden shrink-0 sm:inline">{COMPANY.metro}</span>
+            <span className="hidden shrink-0 text-concrete sm:inline">{COMPANY.hours}</span>
             <a href={COMPANY.phoneHref} className="ml-auto shrink-0 text-concrete transition-colors hover:text-heat">
               {COMPANY.phone}
             </a>
@@ -214,7 +214,7 @@ export function Head({ selected }: { selected: RalColor }) {
 
             <h1 className="mt-6">
               <MaskLines
-                className="font-display text-[clamp(2.6rem,7.2vw,5.6rem)] font-black uppercase leading-[0.92] tracking-tight"
+                className="font-display text-[clamp(2.15rem,7.2vw,5.6rem)] font-black uppercase leading-[0.92] tracking-tight"
                 lines={[
                   <>Порошковая</>,
                   <span key="p" className="text-heat">покраска</span>,
