@@ -56,8 +56,7 @@ export function Header({ onIntro }: { onIntro?: () => void }) {
           className="press-ready ml-auto flex shrink-0 items-center gap-2 border-2 border-red bg-red px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-paper transition-all duration-200 hover:bg-transparent hover:text-red md:ml-0"
           title="Заказать сайт — написать в MAX"
         >
-          <IconMax className="h-3.5 w-3.5" />
-          <span>Заказать</span>
+          <span>Заказать сайт</span>
         </a>
       </div>
     </header>
@@ -203,21 +202,7 @@ export function SectionHead({
 
 /* ---------- заказ сайта: иконки и кнопки ---------- */
 
-export function IconMax({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="2.6" aria-hidden="true">
-      <path d="M4 19V6l8 9 8-9v13" strokeLinecap="square" strokeLinejoin="miter" />
-    </svg>
-  );
-}
 
-export function IconTg({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
-      <path d="M21.9 4.3 18.7 19.4c-.24 1.05-.86 1.3-1.74.81l-4.9-3.6-2.36 2.27c-.26.26-.48.48-.98.48l.35-4.96 9-8.14c.4-.35-.08-.54-.6-.2L6.3 13.1l-4.8-1.5c-1.05-.33-1.07-1.05.22-1.55L20.5 2.6c.87-.32 1.63.2 1.4 1.7z" />
-    </svg>
-  );
-}
 
 export function OrderButtons({
   tone = "light",
@@ -228,35 +213,37 @@ export function OrderButtons({
   size?: "sm" | "md" | "lg";
   className?: string;
 }) {
-  const pad = size === "lg" ? "px-7 py-4 text-sm" : size === "sm" ? "px-3.5 py-2 text-[11px]" : "px-5 py-3 text-[12px]";
-  const base = `inline-flex items-center justify-center gap-2.5 border-2 font-display font-bold uppercase tracking-[0.12em] transition-all duration-200 hover:-translate-y-0.5 ${pad}`;
+  const pad = size === "lg" ? "px-7 py-3.5" : size === "sm" ? "px-3.5 py-2" : "px-5 py-2.5";
+  const base = `inline-flex flex-col items-center justify-center border-2 transition-all duration-200 hover:-translate-y-0.5 ${pad}`;
   return (
     <div className={`flex flex-wrap gap-3 ${className}`}>
       <a
         href={ORDER_MAX_URL}
         target="_blank"
         rel="noreferrer"
+        title="Разработка сайта под ключ — написать в MAX"
         className={`${base} ${
           tone === "dark"
             ? "border-yellow bg-yellow text-ink hover:shadow-[6px_6px_0_rgba(224,169,28,0.45)]"
             : "border-red bg-red text-paper hover:shadow-[6px_6px_0_rgba(206,44,24,0.4)]"
         }`}
       >
-        <IconMax />
-        Заказать сайт · MAX
+        <span className={`font-display font-bold uppercase tracking-[0.12em] ${size === "lg" ? "text-sm" : "text-[12px]"}`}>Заказать сайт</span>
+        <span className="mt-1 font-mono text-[9px] uppercase tracking-[0.16em] opacity-80">написать в MAX</span>
       </a>
       <a
         href={ORDER_TG_URL}
         target="_blank"
         rel="noreferrer"
+        title="Разработка сайта под ключ — написать в Telegram"
         className={`${base} ${
           tone === "dark"
             ? "border-paper/50 text-paper hover:border-paper hover:bg-paper hover:text-ink"
             : "border-ink text-ink hover:bg-ink hover:text-paper"
         }`}
       >
-        <IconTg />
-        Telegram
+        <span className={`font-display font-bold uppercase tracking-[0.12em] ${size === "lg" ? "text-sm" : "text-[12px]"}`}>Заказать сайт</span>
+        <span className="mt-1 font-mono text-[9px] uppercase tracking-[0.16em] opacity-80">написать в Telegram</span>
       </a>
     </div>
   );
@@ -317,19 +304,21 @@ export function MobileOrderBar() {
           href={ORDER_MAX_URL}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-center gap-2 border-2 border-red bg-red py-3 font-display text-[12px] font-bold uppercase tracking-[0.1em] text-paper active:translate-y-px"
+          title="Заказать сайт — написать в MAX"
+          className="flex flex-col items-center justify-center border-2 border-red bg-red py-2.5 text-paper active:translate-y-px"
         >
-          <IconMax className="h-4 w-4" />
-          Заказать · MAX
+          <span className="font-display text-[11px] font-bold uppercase tracking-[0.1em]">Заказать сайт</span>
+          <span className="mt-0.5 font-mono text-[8px] uppercase tracking-[0.14em] opacity-80">в MAX</span>
         </a>
         <a
           href={ORDER_TG_URL}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-center gap-2 border-2 border-paper/40 py-3 font-display text-[12px] font-bold uppercase tracking-[0.1em] text-paper active:translate-y-px"
+          title="Заказать сайт — написать в Telegram"
+          className="flex flex-col items-center justify-center border-2 border-paper/40 py-2.5 text-paper active:translate-y-px"
         >
-          <IconTg className="h-4 w-4" />
-          Telegram
+          <span className="font-display text-[11px] font-bold uppercase tracking-[0.1em]">Заказать сайт</span>
+          <span className="mt-0.5 font-mono text-[8px] uppercase tracking-[0.14em] opacity-80">в Telegram</span>
         </a>
       </div>
     </div>
