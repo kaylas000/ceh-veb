@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Header, Footer, NoiseLayer, Marquee } from "./sections/Chrome";
 import { Plate } from "./sections/Plate";
 import { Library } from "./sections/Library";
@@ -5,10 +6,30 @@ import { Motion } from "./sections/Motion";
 import { Rules } from "./sections/Rules";
 import { Workflow } from "./sections/Workflow";
 import { Control } from "./sections/Control";
+import { CineLine } from "./sections/CineLine";
 import { ValidatorSection } from "./sections/ValidatorSection";
 import { Projects } from "./sections/Projects";
+import { initSmooth, destroySmooth, scrollToId } from "./lib/smooth";
 
 export default function App() {
+  useEffect(() => {
+    initSmooth();
+    /* перехват якорных ссылок — плавный ход через Lenis */
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as HTMLElement).closest('a[href^="#"]');
+      if (!a) return;
+      const href = a.getAttribute("href");
+      if (!href || href.length < 2) return;
+      e.preventDefault();
+      scrollToId(href);
+    };
+    document.addEventListener("click", onClick);
+    return () => {
+      document.removeEventListener("click", onClick);
+      destroySmooth();
+    };
+  }, []);
+
   return (
     <div className="bg-paper font-body text-ink">
       <NoiseLayer />
@@ -30,6 +51,7 @@ export default function App() {
         <Rules />
         <Workflow />
         <Control />
+        <CineLine />
         <ValidatorSection />
         <Projects />
       </main>

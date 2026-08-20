@@ -173,6 +173,19 @@ button {
   100% { opacity: 1; transform: scale(1) rotate(var(--stamp-rot, -8deg)); }
 }
 
+@keyframes shake-strike {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(2px, -2px); }
+  40% { transform: translate(-2px, 2px); }
+  60% { transform: translate(2px, 1px); }
+  80% { transform: translate(-1px, -1px); }
+  100% { transform: translate(0, 0); }
+}
+
+.shake-once {
+  animation: shake-strike 0.4s var(--ease-drag);
+}
+
 @keyframes cart-run {
   0% { transform: translateX(-12%); }
   100% { transform: translateX(112%); }
@@ -311,6 +324,7 @@ button {
   .dash-line,
   .noise-layer,
   .cart-run,
+  .shake-once,
   .scanline::after {
     animation: none !important;
   }

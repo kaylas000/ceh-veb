@@ -303,7 +303,11 @@ export function Motion() {
           <RecipeCard r={RECIPES[6]} />
           <RecipeCard r={RECIPES[7]} demo={<OvenDemo />} />
           <RecipeCard r={RECIPES[8]} demo={<HooksDemo />} />
+          <RecipeCard r={RECIPES[9]} />
         </div>
+        <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-paper/45">
+          живой стенд M-10 — раздел 06 «Сборочная линия»: скролл крутит плёнку, линейка перематывает
+        </p>
       </div>
     </section>
   );
