@@ -8,6 +8,7 @@ import { Workflow } from "./sections/Workflow";
 import { Control } from "./sections/Control";
 import { CineLine } from "./sections/CineLine";
 import { SpacingControl } from "./sections/SpacingControl";
+import { MobilePerfect } from "./sections/MobilePerfect";
 import { ValidatorSection } from "./sections/ValidatorSection";
 import { Projects } from "./sections/Projects";
 import { IntroOverlay } from "./components/IntroOverlay";
@@ -88,6 +89,16 @@ export default function App() {
         <Control />
         <CineLine />
         <SpacingControl />
+        <MobilePerfect />
+        <Marquee
+          items={[
+            "тап-зона ≥44px",
+            "инпуты ≥16px — без iOS-зума",
+            "viewport-fit=cover",
+            "sweep: 22 вьюпорта",
+            "перф-бюджет: LCP 2.5с",
+          ]}
+        />
         <ValidatorSection />
         <Projects />
       </main>

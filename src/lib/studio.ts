@@ -6,6 +6,7 @@
 /* ------------------------------------------------------------------ */
 
 import { CONSTITUTION, BANNED, QUOTAS, GATES, REFERENCES, SKILLS, PAIRS, TEXTURES, ROLES } from "../data/library";
+import { DEVICES, SWEEP_VIEWPORTS } from "../data/mobile";
 import { EASING_CURVES, RECIPES } from "../data/recipes";
 import { FS } from "../data/fs";
 import { SPACING_SCALE, SEMANTIC_TOKENS, FLUID_TOKENS } from "../data/spacing";
@@ -577,6 +578,240 @@ ${FLUID_TOKENS.map((t) => `- \`${t.token}\`: ${t.css} — ${t.role}`).join("\n")
   return out;
 }
 
+/* ---------- Mobile-Perfect: файлы для архива студии ---------- */
+
+function mobileFiles(): ZipEntry[] {
+  const out: ZipEntry[] = [];
+
+  out.push({
+    name: "config/device-matrix.json",
+    content: JSON.stringify(DEVICES, null, 2) + "\n",
+  });
+
+  out.push({
+    name: "css-architecture/fluid-system.css",
+    content: `/* Fluid-типографика: плавно 320→1440px, без скачков на медиа-запросах */
+:root {
+  --fs-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --fs-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+  --fs-base: clamp(1rem, 0.925rem + 0.375vw, 1.125rem);
+  --fs-lg: clamp(1.125rem, 1rem + 0.625vw, 1.375rem);
+  --fs-xl: clamp(1.25rem, 1.05rem + 1vw, 1.75rem);
+  --fs-2xl: clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
+  --fs-3xl: clamp(1.875rem, 1.4rem + 2.375vw, 3rem);
+  --fs-4xl: clamp(2.25rem, 1.6rem + 3.25vw, 4rem);
+  --fs-hero: clamp(2.5rem, 1.5rem + 5vw, 5.5rem);
+}
+
+/* гарды против горизонтального скролла */
+img, video, iframe, svg, canvas { max-width: 100%; height: auto; display: block; }
+p, span, a, li { overflow-wrap: break-word; word-break: break-word; hyphens: auto; }
+table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* <16px = iOS зумит страницу при фокусе */
+input, select, textarea { font-size: max(16px, 1rem); }
+`,
+  });
+
+  out.push({
+    name: "css-architecture/safe-area.css",
+    content: `/* notch / Dynamic Island / home indicator.
+   Обязательно: <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"> */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+.header-fixed { padding-top: calc(var(--safe-top) + 1rem); }
+.bottom-nav { padding-bottom: calc(var(--safe-bottom) + 0.5rem); min-height: calc(56px + var(--safe-bottom)); }
+.sticky-cta { bottom: calc(1rem + var(--safe-bottom)); }
+.content-wrapper { padding-left: max(1rem, var(--safe-left)); padding-right: max(1rem, var(--safe-right)); }
+`,
+  });
+
+  out.push({
+    name: "css-architecture/touch-targets.css",
+    content: `/* Apple HIG: 44pt, Material: 48dp. Берём 44px минимум + 8px между зонами */
+:root {
+  --touch-target-min: 44px;
+  --touch-target-spacing-min: 8px;
+}
+button, a, [role="button"], input[type="checkbox"], input[type="radio"] {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+}
+/* невидимое расширение хитбокса для мелких иконок */
+.icon-button { position: relative; width: 24px; height: 24px; }
+.icon-button::before {
+  content: "";
+  position: absolute; top: 50%; left: 50%;
+  width: var(--touch-target-min); height: var(--touch-target-min);
+  transform: translate(-50%, -50%);
+}
+.button-group > * + * { margin-left: var(--touch-target-spacing-min); }
+`,
+  });
+
+  out.push({
+    name: "validators/TouchTargetValidator.js",
+    content: `/* Тап-зоны ≥44px + дистанция ≥8px. Запуск: в браузере или через Playwright evaluate. */
+const INTERACTIVE = "button, a[href], input, select, textarea, [role='button'], [tabindex]";
+export class TouchTargetValidator {
+  constructor(opts = {}) { this.min = opts.minSize || 44; }
+  validate() {
+    const violations = [];
+    let total = 0;
+    for (const el of document.querySelectorAll(INTERACTIVE)) {
+      const cs = getComputedStyle(el);
+      if (cs.display === "none" || cs.visibility === "hidden") continue;
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) continue;
+      total++;
+      if (r.width < this.min || r.height < this.min)
+        violations.push({ selector: el.tagName.toLowerCase() + (el.id ? "#" + el.id : ""), size: Math.round(r.width) + "x" + Math.round(r.height) });
+    }
+    return { total, violations, isValid: violations.length === 0 };
+  }
+}
+`,
+  });
+
+  out.push({
+    name: "validators/HorizontalScrollDetector.js",
+    content: `/* Ловит горизонтальный скролл и находит виновников. */
+export class HorizontalScrollDetector {
+  detect() {
+    const docW = document.documentElement.clientWidth;
+    const scrollW = document.documentElement.scrollWidth;
+    if (scrollW <= docW) return { hasIssue: false };
+    const culprits = [];
+    for (const el of document.querySelectorAll("body *")) {
+      const r = el.getBoundingClientRect();
+      if (r.width && (r.right > docW + 1 || r.left < -1))
+        culprits.push({ selector: el.tagName.toLowerCase() + (el.id ? "#" + el.id : ""), overflow: Math.round(Math.max(r.right - docW, -r.left)) });
+    }
+    culprits.sort((a, b) => b.overflow - a.overflow);
+    return { hasIssue: true, overflowPx: scrollW - docW, culprits: culprits.slice(0, 10) };
+  }
+}
+`,
+  });
+
+  out.push({
+    name: "testing/device-sweep/viewport-list.js",
+    content: `export const VIEWPORT_SWEEP_LIST = ${JSON.stringify(SWEEP_VIEWPORTS, null, 2)};\n`,
+  });
+
+  out.push({
+    name: "components/MobileFormField.jsx",
+    content: `/* Поле с mobile-UX: 16px (анти-зум iOS), inputmode, autocomplete, тап-зона 48px */
+import React from "react";
+const MODE = { email: "email", tel: "tel", number: "numeric", url: "url", search: "search" };
+export function MobileFormField({ type = "text", label, name, ...rest }) {
+  return (
+    <div style={{ marginBottom: 16 }}>
+      <label htmlFor={name} style={{ display: "block", marginBottom: 8 }}>{label}</label>
+      <input
+        id={name} name={name} type={type}
+        inputMode={MODE[type] || "text"} autoComplete={rest.autoComplete || name}
+        style={{ fontSize: 16, minHeight: 48, padding: "12px 16px", width: "100%", boxSizing: "border-box" }}
+        {...rest}
+      />
+    </div>
+  );
+}
+`,
+  });
+
+  out.push({
+    name: "components/SafeAreaWrapper.jsx",
+    content: `/* Автоматически учитывает notch/home-indicator для fixed-элементов */
+import React from "react";
+const SIDES = { top: "--safe-top", bottom: "--safe-bottom", left: "--safe-left", right: "--safe-right" };
+export function SafeAreaWrapper({ children, sides = ["top", "bottom"], as: T = "div", style = {}, ...rest }) {
+  const s = { ...style };
+  sides.forEach((side) => { s["padding" + side[0].toUpperCase() + side.slice(1)] = "var(" + SIDES[side] + ")"; });
+  return <T style={s} {...rest}>{children}</T>;
+}
+`,
+  });
+
+  out.push({
+    name: "ci/mobile-gate.yml",
+    content: `# Mobile Perfect Gate: sweep + тап-зоны + Lighthouse mobile + перф-бюджет.
+name: Mobile Perfect Gate
+on:
+  pull_request:
+    branches: [main, staging]
+jobs:
+  viewport-sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: npm install && npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run preview & npx wait-on http://localhost:4173
+      - run: node testing/device-sweep/run-viewport-sweep.js
+  mobile-performance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: npm install && npm run build
+      - run: npm i -g @lhci/cli
+      - run: lhci autorun --config=performance/lighthouse-mobile.config.js
+`,
+  });
+
+  out.push({
+    name: "performance/perf-budgets.json",
+    content: JSON.stringify(
+      {
+        mobile: {
+          network: "Slow 4G",
+          cpu_throttle: 4,
+          budgets: { lcp: 2500, cls: 0.1, tti: 3800, totalPageSize: 1500000, jsBundle: 300000, imageWeight: 800000, fontWeight: 150000, totalRequests: 50 },
+        },
+        mobile_slow: {
+          network: "Slow 3G",
+          cpu_throttle: 6,
+          budgets: { lcp: 4000, tti: 6000, totalPageSize: 1000000 },
+        },
+      },
+      null,
+      2,
+    ) + "\n",
+  });
+
+  out.push({
+    name: "docs/MOBILE_PLAYBOOK.md",
+    content: `# MOBILE_PLAYBOOK
+
+## Жёсткие стандарты (К-12, Q-08)
+- Горизонтального скролла нет ни на одном из 22 вьюпортов sweep-списка.
+- Тап-зоны ≥44px, дистанция между зонами ≥8px.
+- Инпуты ≥16px (иначе iOS зумит при фокусе).
+- viewport meta содержит viewport-fit=cover; safe-area через env().
+- Типографика — fluid clamp(), без скачков на брейкпоинтах.
+
+## Прогон
+1. \`node testing/device-sweep/run-viewport-sweep.js\` — sweep по 22 вьюпортам (скролл + тап-зоны + скрины).
+2. Live: \`window.__mobileDebug\` (тройной тап на устройстве) — мгновенная диагностика.
+3. CI: \`ci/mobile-gate.yml\` блокирует PR при провале.
+
+## Ручной QA (перед сдачей)
+Реальное устройство → mobile-паттерны → iOS/Android специфика → сеть и контент.
+Чек-лист — в разделе 08 страницы студии.
+`,
+  });
+
+  return out;
+}
+
 export function buildStudioFiles(): ZipEntry[] {
   const f: ZipEntry[] = [];
 
@@ -786,6 +1021,10 @@ BRIEF → roulette (SEED.md) → просмотр INDEX.md и 10–15 рефер
     name: "ROLES.md",
     content: `# Роли\n\n${ROLES.map((r) => `- **${r.t}** — ${r.d}`).join("\n")}\n`,
   });
+
+  /* Spacing Control + Anti-Slop + Mobile-Perfect */
+  f.push(...spacingFiles());
+  f.push(...mobileFiles());
 
   return f;
 }

@@ -24,6 +24,7 @@ export const CONSTITUTION: Rule[] = [
   { code: "К-09", text: "Проект не принимается без зелёного validate.mjs и REVIEW.md с вердиктом.", check: "V-04, V-08", method: "валидатор" },
   { code: "К-10", text: "Возврат с ворот — точечные правки по пунктам REVIEW, не перезапуск проекта.", check: "регламент", method: "арт-директор" },
   { code: "К-11", text: "Удачное из проекта возвращается в архив: приём → references/, скил → skills/, рецепт → motion/.", check: "приёмка", method: "куратор" },
+  { code: "К-12", text: "Мобильная адаптация — архитектурный принцип: нет горизонтального скролла с 320px, тап-зоны ≥44px, инпуты ≥16px, safe-area учтена.", check: "mobile-аудит + sweep 22 вьюпорта", method: "скрипт + арт-директор" },
 ];
 
 /* ---------- BANNED ---------- */
@@ -70,6 +71,7 @@ export const QUOTAS: Quota[] = [
   { code: "Q-05", value: "≥1", text: "текстура из assets/textures/" },
   { code: "Q-06", value: "100%", text: "шрифтов из PAIRS.md" },
   { code: "Q-07", value: "≤2", text: "акцентных цвета на проект" },
+  { code: "Q-08", value: "≥44px", text: "тап-зоны на мобильных (HIG/Material)" },
 ];
 
 /* ---------- ВОРОТА G1–G4 ---------- */

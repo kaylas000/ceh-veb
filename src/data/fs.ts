@@ -183,6 +183,7 @@ const demoHtml = `<!doctype html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ЦЕХ — демо-сборка, бросок 47</title>
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -347,6 +348,7 @@ const pcHtml = `<!doctype html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Порошковая покраска — Pcpolimer, Красногорск</title>
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -490,6 +492,7 @@ h1 {
 .btn { transition: all 0.3s ease-in-out; border-radius: 16px; margin: 7px auto 21px; padding: 11px 27px; }
 .card { border-radius: 16px; transition: all 0.2s ease; padding: 13px 15px; }
 .features { padding: 13px 15px; gap: 18px; }
+input { font-size: 14px; }
 .glass-card { backdrop-filter: blur(80px); background: rgba(99, 102, 241, 0.35); }
 @keyframes floaty { from { transform: translateY(0); } to { transform: translateY(-10px); } }
 .hero { animation: floaty 4s ease-in-out infinite; }`;

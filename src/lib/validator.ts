@@ -459,6 +459,41 @@ export function validate(fs: FS, root: string): Report {
     });
   }
 
+  /* V-12 — Mobile-Perfect: viewport-fit=cover и инпуты ≥16px в site/ */
+  {
+    const ev: string[] = [];
+    let bad = 0;
+    const entries = siteEntries(fs, root);
+    const htmlEntry = entries.find(([p]) => p.endsWith(".html"));
+    if (!htmlEntry) {
+      bad++;
+      ev.push("нет index.html — проверять нечего");
+    } else {
+      const vp = /name="viewport"[^>]*content="([^"]*)"/i.exec(htmlEntry[1])?.[1] ?? "";
+      if (!vp.includes("viewport-fit=cover")) {
+        bad++;
+        ev.push("viewport meta без viewport-fit=cover — safe-area не сработает");
+      }
+    }
+    for (const [p, c] of entries) {
+      if (!p.endsWith(".css")) continue;
+      const short = p.slice(root.length + 1);
+      for (const m of c.matchAll(/(?:input|select|textarea)[^{]*\{[^}]*font-size:\s*(\d+(?:\.\d+)?)px/gi)) {
+        if (parseFloat(m[1]) < 16) {
+          bad++;
+          ev.push(`${short}: input font-size ${m[1]}px < 16 (iOS-зум)`);
+        }
+      }
+    }
+    rows.push({
+      code: "V-12",
+      title: "Mobile: viewport-fit и инпуты ≥16px",
+      status: bad === 0 ? "OK" : "FAIL",
+      detail: bad === 0 ? "viewport-fit=cover на месте, инпуты ≥16px" : `нарушений: ${bad}`,
+      evidence: ev,
+    });
+  }
+
   const okCount = rows.filter((r) => r.status === "OK").length;
   const violationCodes = [...new Set(violations.map((v) => v.code))].sort();
   return {

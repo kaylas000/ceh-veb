@@ -7,6 +7,7 @@ const NAV = [
   { href: "#reglament", label: "Регламент" },
   { href: "#konveier", label: "Конвейер" },
   { href: "#vorota", label: "Ворота" },
+  { href: "#mobilnost", label: "Мобильность" },
   { href: "#validator", label: "Валидатор" },
   { href: "#proekty", label: "Проекты" },
 ];
