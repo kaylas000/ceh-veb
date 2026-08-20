@@ -52,7 +52,7 @@ export function Projects() {
         <div ref={headRef} className={headIn ? "rv-in" : ""}>
           <SectionHead
             dark
-            num="08"
+            num="09"
             kicker="цикл студии"
             lines={[<>Библиотека</>, <span key="p" className="text-paper/50">наполняется боем</span>]}
             aside={

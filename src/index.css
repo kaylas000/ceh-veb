@@ -30,6 +30,52 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ---------- Spacing Control: источник правды (spacing.tokens.json) ---------- */
+:root {
+  --spacing-0: 0px;
+  --spacing-0-5: 2px;
+  --spacing-1: 4px;
+  --spacing-1-5: 6px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+  --spacing-32: 128px;
+  --spacing-40: 160px;
+  --spacing-48: 192px;
+  --spacing-64: 256px;
+
+  /* семантика */
+  --component-gap-xs: var(--spacing-2);
+  --component-gap-sm: var(--spacing-4);
+  --component-gap-md: var(--spacing-6);
+  --component-gap-lg: var(--spacing-8);
+  --section-gap-sm: var(--spacing-16);
+  --section-gap-md: var(--spacing-24);
+  --section-gap-lg: var(--spacing-32);
+  --container-px-mobile: var(--spacing-4);
+  --container-px-desktop: var(--spacing-8);
+
+  /* fluid: clamp между 375px и 1440px */
+  --fluid-section-py: clamp(3rem, 1.9rem + 4.5vw, 8rem);
+  --fluid-container-px: clamp(1rem, 0.3rem + 2.8vw, 2.5rem);
+  --fluid-card-gap: clamp(1rem, 0.6rem + 1.6vw, 2rem);
+  --fluid-heading-gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+}
+
+/* красная рамка — компонент получил значение вне шкалы (dev-сигнал) */
+[data-spacing-invalid] {
+  outline: 2px dashed var(--color-red) !important;
+  outline-offset: 2px;
+}
+
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);

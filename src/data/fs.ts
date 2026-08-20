@@ -487,8 +487,9 @@ h1 {
   background-clip: text;
   color: transparent;
 }
-.btn { transition: all 0.3s ease-in-out; border-radius: 16px; }
-.card { border-radius: 16px; transition: all 0.2s ease; }
+.btn { transition: all 0.3s ease-in-out; border-radius: 16px; margin: 7px auto 21px; padding: 11px 27px; }
+.card { border-radius: 16px; transition: all 0.2s ease; padding: 13px 15px; }
+.features { padding: 13px 15px; gap: 18px; }
 .glass-card { backdrop-filter: blur(80px); background: rgba(99, 102, 241, 0.35); }
 @keyframes floaty { from { transform: translateY(0); } to { transform: translateY(-10px); } }
 .hero { animation: floaty 4s ease-in-out infinite; }`;

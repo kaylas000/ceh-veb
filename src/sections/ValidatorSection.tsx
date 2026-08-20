@@ -112,7 +112,7 @@ export function ValidatorSection() {
         <div ref={headRef} className={headIn ? "rv-in" : ""}>
           <SectionHead
             dark
-            num="07"
+            num="08"
             kicker="приёмочный стенд"
             lines={[<>Валидатор не</>, <span key="v" className="text-paper/50">пропускает слоп</span>]}
             aside={

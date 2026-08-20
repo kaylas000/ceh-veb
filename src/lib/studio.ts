@@ -8,6 +8,7 @@
 import { CONSTITUTION, BANNED, QUOTAS, GATES, REFERENCES, SKILLS, PAIRS, TEXTURES, ROLES } from "../data/library";
 import { EASING_CURVES, RECIPES } from "../data/recipes";
 import { FS } from "../data/fs";
+import { SPACING_SCALE, SEMANTIC_TOKENS, FLUID_TOKENS } from "../data/spacing";
 import type { ZipEntry } from "./zip";
 
 /* ---------- сниппеты рецептов (vanilla JS, без библиотек) ---------- */
@@ -356,6 +357,226 @@ function gatesFiles(): ZipEntry[] {
   }));
 }
 
+/* ---------- Spacing Control: файлы для архива студии ---------- */
+
+function spacingFiles(): ZipEntry[] {
+  const out: ZipEntry[] = [];
+
+  /* источник правды — токены */
+  out.push({
+    name: "tokens/spacing.tokens.json",
+    content:
+      JSON.stringify(
+        {
+          spacing: Object.fromEntries(SPACING_SCALE.map((s) => [s.key, { value: `${s.px}px` }])),
+          semantic: Object.fromEntries(SEMANTIC_TOKENS.map((t) => [t.token.replace(/^--/, ""), { value: `{${t.ref}}` }])),
+          fluid: Object.fromEntries(
+            FLUID_TOKENS.map((t) => [t.token.replace(/^--/, ""), { min: `${t.minPx}px`, max: `${t.maxPx}px`, minViewport: "375px", maxViewport: "1440px" }]),
+          ),
+        },
+        null,
+        2,
+      ) + "\n",
+  });
+
+  /* Stylelint: запрет произвольных значений */
+  out.push({
+    name: "linting/stylelint-spacing-plugin/no-arbitrary-spacing.js",
+    content: `/* Stylelint-правило: spacing-control/no-arbitrary-values.
+   Блокирует margin/padding/gap/позиционирование со значениями вне шкалы.
+   Подключение: plugins: ["./linting/stylelint-spacing-plugin/no-arbitrary-spacing.js"] */
+const APPROVED = [${SPACING_SCALE.map((s) => s.px).join(", ")}];
+const PROPS = ["margin","margin-top","margin-bottom","margin-left","margin-right",
+  "padding","padding-top","padding-bottom","padding-left","padding-right",
+  "gap","row-gap","column-gap","top","bottom","left","right"];
+module.exports = function (stylelint) {
+  return stylelint.createPlugin("spacing-control/no-arbitrary-values", (enabled) => (root, result) => {
+    if (!enabled) return;
+    root.walkDecls((decl) => {
+      if (!PROPS.includes(decl.prop)) return;
+      if (decl.value.includes("var(--") || ["auto","inherit","initial","unset","0"].includes(decl.value)) return;
+      decl.value.split(/\\s+/).forEach((val) => {
+        const m = val.match(/^(-?\\d+(?:\\.\\d+)?)(px|rem)$/);
+        if (!m) return;
+        const px = Math.abs(parseFloat(m[1]) * (m[2] === "rem" ? 16 : 1));
+        if (!APPROVED.includes(Math.round(px))) {
+          const nearest = APPROVED.reduce((a, b) => (Math.abs(b - px) < Math.abs(a - px) ? b : a));
+          stylelint.utils.report({
+            message: \`\${decl.prop}: \${val} вне шкалы отступов. Используйте var(--spacing-*) или \${nearest}px\`,
+            node: decl, result, ruleName: "spacing-control/no-arbitrary-values",
+          });
+        }
+      });
+    });
+  });
+};
+`,
+  });
+
+  /* примитивы */
+  out.push({
+    name: "components/primitives/Box.jsx",
+    content: `/* Box: spacing-пропсы принимают только ключи шкалы (см. tokens/spacing.tokens.json).
+   Произвольное значение -> console.error + data-spacing-invalid (красная рамка). */
+import React from "react";
+import { spacingScale, isSpacingKey } from "../spacing-props";
+const cssVar = (k) => \`var(--spacing-\${String(k).replace(".", "-")})\`;
+export const Box = React.forwardRef(({ as: T = "div", p, px, py, m, mx, my, gap, style = {}, children, ...rest }, ref) => {
+  const invalid = [p, px, py, m, mx, my, gap].some((v) => v !== undefined && !isSpacingKey(v));
+  const s = { ...style,
+    padding: p !== undefined ? cssVar(p) : undefined,
+    paddingLeft: px !== undefined ? cssVar(px) : undefined, paddingRight: px !== undefined ? cssVar(px) : undefined,
+    paddingTop: py !== undefined ? cssVar(py) : undefined, paddingBottom: py !== undefined ? cssVar(py) : undefined,
+    margin: m !== undefined ? cssVar(m) : undefined,
+    marginLeft: mx !== undefined ? cssVar(mx) : undefined, marginRight: mx !== undefined ? cssVar(mx) : undefined,
+    marginTop: my !== undefined ? cssVar(my) : undefined, marginBottom: my !== undefined ? cssVar(my) : undefined,
+    gap: gap !== undefined ? cssVar(gap) : undefined };
+  if (invalid) console.error("SPACING: значение вне шкалы. Допустимо:", Object.keys(spacingScale).join(", "));
+  return <T ref={ref} style={s} data-spacing-invalid={invalid || undefined} {...rest}>{children}</T>;
+});
+`,
+  });
+  out.push({
+    name: "components/primitives/Stack.jsx",
+    content: `/* Stack: единый gap из шкалы между детьми — вместо ручных margin. */
+import React from "react";
+import { Box } from "./Box";
+export function Stack({ direction = "vertical", gap = "4", align = "stretch", justify = "flex-start", children, ...rest }) {
+  return (
+    <Box style={{ display: "flex", flexDirection: direction === "vertical" ? "column" : "row", alignItems: align, justifyContent: justify }} gap={gap} {...rest}>
+      {children}
+    </Box>
+  );
+}
+`,
+  });
+  out.push({
+    name: "components/primitives/Spacer.jsx",
+    content: `/* Spacer: явный разделитель вместо "margin-bottom на всякий случай". */
+import React from "react";
+export function Spacer({ size = "4", axis = "vertical" }) {
+  const v = \`var(--spacing-\${String(size).replace(".", "-")})\`;
+  return <div aria-hidden data-spacer-size={size} style={{ width: axis === "vertical" ? "100%" : v, height: axis === "vertical" ? v : "100%", flexShrink: 0 }} />;
+}
+`,
+  });
+  out.push({
+    name: "components/spacing-props.js",
+    content: `/* Единый источник допустимых значений (зеркало tokens/spacing.tokens.json). */
+export const spacingScale = ${JSON.stringify(Object.fromEntries(SPACING_SCALE.map((s) => [s.key, `${s.px}px`])), null, 2)};
+export const isSpacingKey = (v) => Object.prototype.hasOwnProperty.call(spacingScale, String(v));
+`,
+  });
+
+  /* визуальный дебаггер */
+  out.push({
+    name: "devtools/SpacingOverlay.js",
+    content: `/* SpacingOverlay: подсвечивает margin(оранж)/padding(зелён)/gap(синий) поверх страницы,
+   красные метки — значения вне шкалы. Горячая клавиша Ctrl+Shift+S. window.__spacingOverlay. */
+const APPROVED = [${SPACING_SCALE.map((s) => s.px).join(", ")}];
+class SpacingOverlay {
+  constructor(){ this.on=false; this.layer=null; }
+  toggle(){ this.on ? this.disable() : this.enable(); }
+  enable(){ if(this.on) return; this.on=true;
+    this.layer=document.createElement("div");
+    this.layer.style.cssText="position:fixed;inset:0;z-index:999998;pointer-events:none;";
+    document.body.appendChild(this.layer); this.render();
+    window.addEventListener("scroll",()=>this.render(),{passive:true}); }
+  disable(){ this.on=false; this.layer?.remove(); this.layer=null; }
+  render(){ if(!this.layer) return; this.layer.innerHTML="";
+    for(const el of document.querySelectorAll("body *")){
+      const r=el.getBoundingClientRect(); if(!r.width&&!r.height) continue;
+      if(r.bottom<0||r.top>innerHeight) continue;
+      const cs=getComputedStyle(el);
+      this.box(r.left,r.top-cs.getPropertyValue?0:0,r,cs);
+    } }
+  box(l,t,r,cs){ const mk=(x,y,w,h,c,v)=>{ const d=document.createElement("div");
+      d.style.cssText=\`position:absolute;left:\${x}px;top:\${y}px;width:\${w}px;height:\${h}px;outline:1px dashed \${c};background:\${c}22\`;
+      this.layer.appendChild(d); if(!APPROVED.includes(Math.round(v))) this.tag(x,y,\`\${v}px⚠\`); };
+    const m=parseFloat(cs.marginTop)||0,p=parseFloat(cs.paddingTop)||0;
+    if(m>0)mk(l,r.top-m,r.width,m,"#ff6a2b",m);
+    if(p>0)mk(l,r.top,r.width,p,"#2e7d4f",p); }
+  tag(x,y,txt){ const s=document.createElement("span");
+    s.style.cssText="position:absolute;left:"+x+"px;top:"+y+"px;background:#ce2c18;color:#fff;font:600 9px monospace;padding:2px 4px;";
+    s.textContent=txt; this.layer.appendChild(s); }
+}
+window.__spacingOverlay=new SpacingOverlay();
+document.addEventListener("keydown",(e)=>{ if(e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==="s"){ e.preventDefault(); window.__spacingOverlay.toggle(); } });
+`,
+  });
+
+  /* CI-gate */
+  out.push({
+    name: "ci/spacing-gate.yml",
+    content: `# Spacing Control Gate: ни один PR с нарушениями отступов не уходит в прод.
+name: Spacing Control Gate
+on:
+  pull_request:
+    branches: [main, staging]
+jobs:
+  spacing-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: npm install
+      - name: Stylelint spacing check
+        run: npx stylelint "**/*.css" --config .stylelintrc-spacing.js
+  spacing-audit:
+    runs-on: ubuntu-latest
+    needs: spacing-lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: node ./audit/run-audit.js   # exit 1 при >20 нарушениях
+`,
+  });
+
+  /* Playwright visual regression */
+  out.push({
+    name: "visual-regression/spacing.spec.js",
+    content: `/* Регрессия отступов: скриншот с активным оверлеем + снапшот computed-значений. */
+import { test, expect } from "@playwright/test";
+const VIEWPORTS = [{ width: 375, height: 812, name: "mobile" }, { width: 1440, height: 900, name: "desktop" }];
+for (const vp of VIEWPORTS) {
+  test(\`spacing overlay snapshot @ \${vp.name}\`, async ({ page }) => {
+    await page.setViewportSize(vp);
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+    await page.evaluate(() => window.__spacingOverlay?.enable());
+    await expect(page).toHaveScreenshot(\`home-\${vp.name}-spacing.png\`, { maxDiffPixelRatio: 0.02 });
+  });
+}
+`,
+  });
+
+  /* гайд */
+  out.push({
+    name: "docs/SPACING_GUIDE.md",
+    content: `# SPACING_GUIDE — система контроля отступов
+
+## Шкала (единственный источник)
+${SPACING_SCALE.map((s) => `- \`--spacing-${s.key.replace(".", "-")}\` = ${s.px}px`).join("\n")}
+
+## Правила
+1. В CSS — только \`var(--spacing-*)\` или значения из шкалы. Stylelint заблокирует остальное.
+2. В React — только \`<Box p="4"> / <Stack gap="6"> / <Spacer size="2">\`. Ключи вне шкалы → ошибка.
+3. Секции и контейнеры — fluid-токены \`--fluid-*\` (clamp между 375 и 1440px).
+4. Отладка в браузере: Ctrl+Shift+S (оверлей) или \`window.__spacingOverlay.audit()\`.
+5. CI: PR с >20 нарушениями не мержится (ci/spacing-gate.yml).
+
+## Fluid-токены
+${FLUID_TOKENS.map((t) => `- \`${t.token}\`: ${t.css} — ${t.role}`).join("\n")}
+`,
+  });
+
+  return out;
+}
+
 export function buildStudioFiles(): ZipEntry[] {
   const f: ZipEntry[] = [];
 
@@ -555,6 +776,10 @@ BRIEF → roulette (SEED.md) → просмотр INDEX.md и 10–15 рефер
   for (const [path, content] of Object.entries(FS)) {
     if (path.startsWith("fixtures/")) f.push({ name: path, content });
   }
+
+  /* ---------- Spacing Control System ---------- */
+  f.push(...spacingFiles());
+
 
   /* роли — памятка куратору */
   f.push({

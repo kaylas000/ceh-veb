@@ -1,4 +1,5 @@
 import type { FS } from "../data/fs";
+import { APPROVED_PX } from "../data/spacing";
 
 /* ------------------------------------------------------------------ */
 /* validate.mjs (in-browser port) — проверки V-01…V-10                 */
@@ -423,6 +424,37 @@ export function validate(fs: FS, root: string): Report {
       status: bad === 0 ? "OK" : "FAIL",
       detail: `использовано референсов: ${cited.length}; дефектных meta: ${bad}`,
       evidence: ev,
+    });
+  }
+
+  /* V-11 — Spacing Control: отступы в site/ лежат в утверждённой шкале.
+     1px разрешён как hairline (границы/разделители), 0 — тривиально. */
+  {
+    const approved = new Set([...APPROVED_PX, 1]);
+    const SPACING_DECL = /(margin|padding|gap|top|bottom|left|right)\s*:\s*([^;}]+)/gi;
+    const ev: string[] = [];
+    let bad = 0;
+    for (const [path, content] of siteEntries(fs, root)) {
+      const short = path.slice(root.length + 1);
+      let m: RegExpExecArray | null;
+      SPACING_DECL.lastIndex = 0;
+      while ((m = SPACING_DECL.exec(content)) !== null) {
+        const pxValues = m[2].match(/(-?\d+(?:\.\d+)?)px/g) ?? [];
+        for (const pv of pxValues) {
+          const px = Math.abs(parseFloat(pv));
+          if (!approved.has(Math.round(px))) {
+            bad++;
+            if (ev.length < 6) ev.push(`${short}: ${m[1]}: ${pv} — вне шкалы`);
+          }
+        }
+      }
+    }
+    rows.push({
+      code: "V-11",
+      title: "Spacing Control: отступы в шкале",
+      status: bad === 0 ? "OK" : "FAIL",
+      detail: bad === 0 ? "все px-отступы (margin/padding/gap) из утверждённой шкалы" : `значений вне шкалы: ${bad}`,
+      evidence: bad > 6 ? [...ev, `…и ещё ${bad - 6}`] : ev,
     });
   }
 

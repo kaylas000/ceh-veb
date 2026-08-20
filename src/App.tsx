@@ -7,6 +7,7 @@ import { Rules } from "./sections/Rules";
 import { Workflow } from "./sections/Workflow";
 import { Control } from "./sections/Control";
 import { CineLine } from "./sections/CineLine";
+import { SpacingControl } from "./sections/SpacingControl";
 import { ValidatorSection } from "./sections/ValidatorSection";
 import { Projects } from "./sections/Projects";
 import { IntroOverlay } from "./components/IntroOverlay";
@@ -86,6 +87,7 @@ export default function App() {
         <Workflow />
         <Control />
         <CineLine />
+        <SpacingControl />
         <ValidatorSection />
         <Projects />
       </main>
