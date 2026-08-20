@@ -13,6 +13,7 @@ import { ValidatorSection } from "./sections/ValidatorSection";
 import { Projects } from "./sections/Projects";
 import { Intake } from "./sections/Intake";
 import { Seo } from "./sections/Seo";
+import { Variance } from "./sections/Variance";
 import { IntroOverlay } from "./components/IntroOverlay";
 import { PRESET_ORDER, type IntroPreset } from "./lib/intro";
 import { initSmooth, destroySmooth, scrollToId } from "./lib/smooth";
@@ -105,6 +106,7 @@ export default function App() {
         <Projects />
         <Intake />
         <Seo />
+        <Variance />
         <CtaBanner />
       </main>
       <Footer />

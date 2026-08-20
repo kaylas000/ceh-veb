@@ -6,6 +6,7 @@
 /* ------------------------------------------------------------------ */
 
 import { CONSTITUTION, BANNED, QUOTAS, GATES, REFERENCES, SKILLS, PAIRS, TEXTURES, ROLES } from "../data/library";
+import { ASSET_LIBRARY } from "./genome";
 import { DEVICES, SWEEP_VIEWPORTS } from "../data/mobile";
 import { EASING_CURVES, RECIPES } from "../data/recipes";
 import { FS } from "../data/fs";
@@ -1385,12 +1386,114 @@ BRIEF → roulette (SEED.md) → просмотр INDEX.md и 10–15 рефер
     content: `# Роли\n\n${ROLES.map((r) => `- **${r.t}** — ${r.d}`).join("\n")}\n`,
   });
 
-  /* Spacing Control + Anti-Slop + Mobile-Perfect + SEO-by-Default */
+  /* Spacing Control + Anti-Slop + Mobile-Perfect + SEO-by-Default + Variance */
   f.push(...spacingFiles());
   f.push(...mobileFiles());
   f.push(...buildSeoFiles());
+  f.push(...buildGenomeFiles());
 
   return f;
+}
+
+/* ---------- Design Variance Engine: файлы для архива студии ---------- */
+
+function buildGenomeFiles(): ZipEntry[] {
+  const out: ZipEntry[] = [];
+
+  out.push({
+    name: "design-variance/asset-library/manifest.json",
+    content:
+      JSON.stringify(
+        Object.fromEntries(
+          Object.entries(ASSET_LIBRARY).map(([k, pool]) => [k, { count: pool.length, options: pool.map((o) => o.id) }]),
+        ),
+        null,
+        2,
+      ) + "\n",
+  });
+
+  for (const [category, pool] of Object.entries(ASSET_LIBRARY)) {
+    for (const opt of pool) {
+      out.push({
+        name: `design-variance/asset-library/${category}/${opt.id}.json`,
+        content: JSON.stringify(opt, null, 2) + "\n",
+      });
+    }
+  }
+
+  out.push({
+    name: "design-variance/generators/StyleGenomeGenerator.js",
+    content: `/* Design Variance Engine — генератор ДНК проекта. Ноль зависимостей.
+   Seed от projectId => воспроизводимость + уникальность. */
+import { ASSET_LIBRARY, MOOD_DICTIONARY, hashSeed, seededRandom, generateColors } from "../lib/genome.js";
+
+export function generateGenome(projectId, moods = [], industry = [], exclude = []) {
+  const seed = hashSeed(projectId);
+  const rng = seededRandom(seed);
+  /* ...выбор активов взвешенно по fit-score, цветовая гармония, порядок секций */
+  /* полная реализация — в src/lib/genome.ts (порт в браузере) */
+  return { projectId, seed, moods, generatedAt: new Date().toISOString() };
+}
+`,
+  });
+
+  out.push({
+    name: "design-variance/validators/CombinationUniquenessChecker.js",
+    content: `/* Отпечаток комбинации (кнопка+иконки+иллюстрация+гармония) против реестра design_genomes.
+   >=4 совпадений = high (блокировка), >=2 = moderate (предупреждение). */
+export function checkUniqueness(genome, registry) {
+  const fp = [genome.button.id, genome.iconSet.id, genome.illustration.id, genome.colors.harmonyType];
+  const matches = registry
+    .map((e) => ({ projectId: e.projectId, count: fp.filter((v) => e.fingerprint.includes(v)).length }))
+    .filter((m) => m.count >= 2);
+  return { conflictLevel: matches.some((m) => m.count >= 4) ? "high" : matches.length ? "moderate" : "none", matches };
+}
+`,
+  });
+
+  out.push({
+    name: "design-variance/db/schema.sql",
+    content: `CREATE TABLE design_genomes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id VARCHAR(50) NOT NULL,
+    project_name VARCHAR(100),
+    button_id VARCHAR(50),
+    icon_set_id VARCHAR(50),
+    illustration_style_id VARCHAR(50),
+    color_harmony_type VARCHAR(30),
+    full_genome_json TEXT,
+    created_at DATETIME
+);
+CREATE INDEX idx_genome_lookup ON design_genomes(button_id, icon_set_id, illustration_style_id);
+`,
+  });
+
+  out.push({
+    name: "design-variance/VARIANCE_PLAYBOOK.md",
+    content: `# VARIANCE_PLAYBOOK — Design Variance Engine
+
+## Принцип
+Конечный каталог активов студии × бесконечные комбинации. Каждый проект — уникальная ДНК.
+
+## Workflow
+1. Бриф → извлечь mood-слова (MoodToTokenMapper).
+2. generateUniqueGenome(projectId, moods, industry) — до 5 попыток с авто-диверсификацией.
+3. Арт-директор выбирает из вариантов (GenomeExplorer).
+4. Утверждённый геном регистрируется в design_genomes (защита от повторов).
+5. Разработчик применяет геном через GenomeProvider (CSS-переменные).
+
+## Жёсткие правила
+- Цветовая гармония НЕ из AI-диапазона 220–260° (запрет B-05).
+- Комбинация с conflictLevel "high" не утверждается — заменить ≥2 элемента.
+- Seed воспроизводим: тот же projectId даёт ту же ДНК.
+
+## Пополнение библиотеки
+Удачное авторское решение проекта «повышается» в актив каталога (promote-to-library) —
+система растёт и становится вариативнее.
+`,
+  });
+
+  return out;
 }
 
 export const downloadStudioZip = (filename = "ceh-studio.zip") =>
