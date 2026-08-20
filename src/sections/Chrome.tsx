@@ -11,6 +11,7 @@ const NAV = [
   { href: "#vorota", label: "Ворота" },
   { href: "#mobilnost", label: "Мобильность" },
   { href: "#validator", label: "Валидатор" },
+  { href: "#seo", label: "SEO" },
   { href: "#proekty", label: "Проекты" },
   { href: "#priemka", label: "Приёмка" },
 ];
@@ -130,7 +131,7 @@ export function Footer() {
               который не даёт агенту скатиться в однообразный AI-слоп.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
-              {["Node ≥18", "0 npm-зависимостей", "exit 0/1", "V-01…V-12", "B-01…B-16", "Q-01…Q-08"].map((t) => (
+              {["Node ≥18", "0 npm-зависимостей", "exit 0/1", "V-01…V-13", "B-01…B-16", "Q-01…Q-09"].map((t) => (
                 <span key={t} className="border border-line-dark px-2 py-1 font-mono text-[9px] uppercase tracking-[0.16em] text-paper/60">
                   {t}
                 </span>

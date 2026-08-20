@@ -25,6 +25,7 @@ export const CONSTITUTION: Rule[] = [
   { code: "К-10", text: "Возврат с ворот — точечные правки по пунктам REVIEW, не перезапуск проекта.", check: "регламент", method: "арт-директор" },
   { code: "К-11", text: "Удачное из проекта возвращается в архив: приём → references/, скил → skills/, рецепт → motion/.", check: "приёмка", method: "куратор" },
   { code: "К-12", text: "Мобильная адаптация — архитектурный принцип: нет горизонтального скролла с 320px, тап-зоны ≥44px, инпуты ≥16px, safe-area учтена.", check: "mobile-аудит + sweep 22 вьюпорта", method: "скрипт + арт-директор" },
+  { code: "К-13", text: "SEO вшивается до кода: страница не создаётся без page_seo_manifest, JSON-LD по типу и ≥2 внутренних ссылок. Title 50–60, description 120–158.", check: "валидатор V-13 + seo-gate", method: "скрипт" },
 ];
 
 /* ---------- BANNED ---------- */
@@ -72,6 +73,7 @@ export const QUOTAS: Quota[] = [
   { code: "Q-06", value: "100%", text: "шрифтов из PAIRS.md" },
   { code: "Q-07", value: "≤2", text: "акцентных цвета на проект" },
   { code: "Q-08", value: "≥44px", text: "тап-зоны на мобильных (HIG/Material)" },
+  { code: "Q-09", value: "1×h1", text: "один H1 на страницу, title 50–60, description 120–158" },
 ];
 
 /* ---------- ВОРОТА G1–G4 ---------- */

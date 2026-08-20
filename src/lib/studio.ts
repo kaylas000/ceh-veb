@@ -812,6 +812,373 @@ jobs:
   return out;
 }
 
+/* ---------- SEO-by-Default: файлы для архива студии ---------- */
+
+export function buildSeoFiles(): ZipEntry[] {
+  const out: ZipEntry[] = [];
+
+  out.push({
+    name: "ai-agent-rules/SEO_AGENT_RULES.md",
+    content: `# ОБЯЗАТЕЛЬНЫЙ ПРОТОКОЛ SEO ПРИ СОЗДАНИИ СТРАНИЦ
+
+Ты — разработчик веб-студии. При создании ЛЮБОЙ страницы ты ОБЯЗАН следовать
+этому протоколу без исключений. Если SEO-данных нет — запроси их ДО кода либо
+сгенерируй черновик с явными пометками \`SEO-TODO:\`.
+
+## ПРАВИЛО 0: page_seo_manifest ДО кода
+Заполни блок (мысленно или в комментарии). Нет данных — временные заглушки + \`SEO-TODO:\`.
+
+\`\`\`yaml
+page_seo_manifest:
+  url_slug: ""            # kebab-case, транслит, ≤60 символов
+  title: ""               # 50-60 симв., keyword в начале
+  meta_description: ""    # 120-158 симв., с CTA
+  h1: ""                  # ОДИН, отличается от title
+  primary_keyword: ""
+  secondary_keywords: []
+  content_type: ""        # article|product|landing|local-business|faq
+  canonical_url: ""
+  og_image: ""            # 1200x630
+  structured_data_type: ""
+  internal_links_planned: []  # ≥2-3
+  target_word_count: 0
+\`\`\`
+
+## Жёсткие границы
+- title 50-60 симв., формула: [Keyword] — [Выгода] | [Бренд]
+- description 120-158 симв., обязательно CTA
+- title и h1 семантически близки, но НЕ идентичны
+- ровно один h1; иерархия H1→H2→H3 без пропусков
+- каждый img: alt + width/height; ниже fold — lazy, hero — eager+high
+- JSON-LD обязателен по типу страницы
+- URL: kebab-case, латиница, ≤4 сегментов, slug содержит keyword
+- ≥2-3 контекстных внутренних ссылок, описательный анкор, без orphan
+- lang=ru обязателен; мультиязычность — hreflang
+
+## HARD STOP (остановись и спроси)
+- страница без title/description
+- более одного H1
+- img без alt (кроме явно декоративных)
+- скрытый SEO-контент за "показать ещё"
+- дублирующийся контент без canonical
+- noindex / блокировка robots без подтверждения
+- redirect chain
+
+## ФОРМАТ ОТВЕТА
+1. Заполненный page_seo_manifest
+2. Код страницы с полным SEO-стеком
+3. Блок "SEO Self-Check" (title длина ✓, description ✓, h1 ✓, alt ✓, JSON-LD ✓, ссылки ✓, SEO-TODO)
+`,
+  });
+
+  out.push({
+    name: "ai-agent-rules/seo-checklist.schema.json",
+    content: JSON.stringify(
+      {
+        $schema: "http://json-schema.org/draft-07/schema#",
+        title: "Page SEO Manifest",
+        type: "object",
+        required: ["url_slug", "title", "meta_description", "h1", "primary_keyword", "content_type", "structured_data_type"],
+        properties: {
+          url_slug: { type: "string", pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$", maxLength: 60 },
+          title: { type: "string", minLength: 30, maxLength: 60 },
+          meta_description: { type: "string", minLength: 120, maxLength: 158 },
+          h1: { type: "string", minLength: 10, maxLength: 70 },
+          primary_keyword: { type: "string", minLength: 2 },
+          secondary_keywords: { type: "array", items: { type: "string" } },
+          content_type: { type: "string", enum: ["article", "product", "landing", "local-business", "faq", "category"] },
+          structured_data_type: {
+            type: "array",
+            items: { type: "string", enum: ["Article", "Product", "LocalBusiness", "FAQPage", "BreadcrumbList", "Organization", "WebSite", "Service", "Review"] },
+            minItems: 1,
+          },
+          internal_links_planned: { type: "array", minItems: 2 },
+        },
+      },
+      null,
+      2,
+    ) + "\n",
+  });
+
+  out.push({
+    name: "analyzers/MetaTagValidator.js",
+    content: `/* Валидация SEO-манифеста. Node ≥18, 0 зависимостей. */
+export function validateSEOManifest(manifest) {
+  const errors = [], warnings = [];
+  if (!manifest.title) errors.push("Title отсутствует");
+  else if (manifest.title.length < 30 || manifest.title.length > 60)
+    errors.push("Title длина " + manifest.title.length + " символов (нужно 30-60)");
+  if (!manifest.meta_description) errors.push("Meta description отсутствует");
+  else if (manifest.meta_description.length < 120 || manifest.meta_description.length > 158)
+    errors.push("Description длина " + manifest.meta_description.length + " (нужно 120-158)");
+  if (manifest.h1 && manifest.title && manifest.h1.toLowerCase().trim() === manifest.title.toLowerCase().trim())
+    warnings.push("H1 дословно дублирует Title");
+  if (!manifest.url_slug) errors.push("URL slug отсутствует");
+  else if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(manifest.url_slug)) errors.push("Slug содержит недопустимые символы");
+  if (!manifest.structured_data_type || manifest.structured_data_type.length === 0)
+    errors.push("Не указан тип Schema.org");
+  if (!manifest.internal_links_planned || manifest.internal_links_planned.length < 2)
+    warnings.push("Менее 2 внутренних ссылок — риск orphan");
+  if (!manifest.og_image) errors.push("OG Image отсутствует");
+  return { isValid: errors.length === 0, errors, warnings };
+}
+`,
+  });
+
+  out.push({
+    name: "analyzers/ContentSEOAnalyzer.js",
+    content: `/* Контент-анализатор: плотность keyword, читаемость, структура. 0 зависимостей. */
+const RU_VOWELS = /[аеёиоуыэюя]/gi;
+const syllables = (w) => (w.match(RU_VOWELS) || ["x"]).length;
+
+export class ContentSEOAnalyzer {
+  analyze(content, primaryKeyword, secondaryKeywords = []) {
+    const plain = content.replace(/<[^>]*>/g, " ").replace(/\\s+/g, " ").trim();
+    const words = plain ? plain.split(" ") : [];
+    const issues = [];
+    let score = 100;
+    if (words.length < 300) { issues.push({ type: "THIN_CONTENT", severity: "high", message: "Контент короче 300 слов" }); score -= 25; }
+    const esc = primaryKeyword.replace(/[.*+?^\${}()|[\\]\\\\]/g, "\\\\$&");
+    const matches = (plain.match(new RegExp(esc, "gi")) || []).length;
+    const density = primaryKeyword ? (matches * primaryKeyword.split(/\\s+/).length / (words.length || 1)) * 100 : 0;
+    if (!primaryKeyword || density === 0) { issues.push({ type: "MISSING_KEYWORD", severity: "critical", message: "Keyword не найден" }); score -= 30; }
+    else if (density > 3) { issues.push({ type: "KEYWORD_STUFFING", severity: "high", message: "Переспам " + density.toFixed(1) + "%" }); score -= 20; }
+    else if (density < 0.5) { issues.push({ type: "LOW_DENSITY", severity: "medium", message: "Низкая плотность" }); score -= 10; }
+    const sentences = plain.split(/[.!?]+/).filter((s) => s.trim());
+    const syl = words.reduce((s, w) => s + syllables(w), 0);
+    const readability = sentences.length && words.length
+      ? Math.max(0, Math.min(100, 206.835 - 1.3 * (words.length / sentences.length) - 60.1 * (syl / words.length)))
+      : 0;
+    if (readability < 40) { issues.push({ type: "LOW_READABILITY", severity: "medium", message: "Индекс " + readability.toFixed(0) }); score -= 10; }
+    const h2 = (content.match(/<h2/gi) || []).length;
+    if (words.length > 500 && h2 === 0) { issues.push({ type: "NO_SUBHEADINGS", severity: "medium", message: "Нет H2 в длинном тексте" }); score -= 10; }
+    secondaryKeywords.forEach((kw) => { if (kw && !plain.toLowerCase().includes(kw.toLowerCase())) { issues.push({ type: "MISSING_SECONDARY", severity: "low", message: kw }); score -= 3; } });
+    return { wordCount: words.length, density, readability, score: Math.max(0, score), issues };
+  }
+}
+`,
+  });
+
+  out.push({
+    name: "generators/structured-data/index.js",
+    content: `/* Генераторы Schema.org JSON-LD. 0 зависимостей. */
+export const articleSchema = (d) => ({ "@context": "https://schema.org", "@type": "Article", headline: d.headline, description: d.description, image: [d.image], author: { "@type": "Person", name: d.authorName }, publisher: { "@type": "Organization", name: d.publisherName, logo: { "@type": "ImageObject", url: d.publisherLogo } }, datePublished: d.datePublished, mainEntityOfPage: { "@type": "WebPage", "@id": d.url } });
+
+export const localBusinessSchema = (d) => ({ "@context": "https://schema.org", "@type": "LocalBusiness", name: d.name, description: d.description, telephone: d.telephone, url: d.url, address: { "@type": "PostalAddress", streetAddress: d.street, addressLocality: d.city, addressRegion: d.region, addressCountry: "RU" } });
+
+export const faqSchema = (items) => ({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: items.map((i) => ({ "@type": "Question", name: i.question, acceptedAnswer: { "@type": "Answer", text: i.answer } })) });
+
+export const breadcrumbSchema = (items, baseUrl) => ({ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: items.map((it, i) => ({ "@type": "ListItem", position: i + 1, name: it.label, item: baseUrl + it.url })) });
+`,
+  });
+
+  out.push({
+    name: "generators/SitemapGenerator.js",
+    content: `/* Генератор sitemap.xml из SEO-манифестов страниц. 0 зависимостей. */
+export class SitemapGenerator {
+  constructor(baseUrl) { this.baseUrl = baseUrl; }
+  _priority(type) { return { landing: 1.0, product: 0.8, category: 0.7, article: 0.6, faq: 0.4 }[type] || 0.5; }
+  _freq(type) { return { landing: "weekly", product: "weekly", category: "weekly", article: "monthly" }[type] || "monthly"; }
+  build(entries) {
+    const urls = entries.map((e) => "  <url>\\n    <loc>" + this.baseUrl + e.route + "</loc>\\n    <lastmod>" + e.lastmod + "</lastmod>\\n    <changefreq>" + this._freq(e.type) + "</changefreq>\\n    <priority>" + this._priority(e.type) + "</priority>\\n  </url>").join("\\n");
+    return '<?xml version="1.0" encoding="UTF-8"?>\\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\\n' + urls + "\\n</urlset>";
+  }
+}
+`,
+  });
+
+  out.push({
+    name: "generators/RobotsGenerator.js",
+    content: `/* Генератор robots.txt с безопасными дефолтами. 0 зависимостей. */
+export class RobotsGenerator {
+  constructor(baseUrl) { this.baseUrl = baseUrl; }
+  generate() {
+    return "User-agent: *\\nAllow: /\\nDisallow: /api/\\nDisallow: /admin/\\nDisallow: /*?*sort=\\nDisallow: /*?*filter=\\n\\nSitemap: " + this.baseUrl + "/sitemap.xml\\n";
+  }
+}
+`,
+  });
+
+  out.push({
+    name: "linting/eslint-seo-plugin/index.js",
+    content: `/* ESLint SEO-правила: require-seo-head, require-alt-text, no-duplicate-h1. */
+module.exports = {
+  rules: {
+    "require-seo-head": {
+      meta: { type: "problem", docs: { description: "Требует <SEOHead> на каждой странице" } },
+      create(context) {
+        const isPage = /\\/pages\\/.*\\.jsx?$/.test(context.getFilename()) && !/_app|_document/.test(context.getFilename());
+        if (!isPage) return {};
+        let has = false;
+        return {
+          JSXElement(node) { if (node.openingElement.name.name === "SEOHead") has = true; },
+          "Program:exit"() { if (!has) context.report({ node: context.getSourceCode().ast, message: "Страница без <SEOHead>" }); },
+        };
+      },
+    },
+    "require-alt-text": {
+      meta: { type: "problem", docs: { description: "Требует alt у img" } },
+      create(context) {
+        return {
+          JSXOpeningElement(node) {
+            if (node.name.name === "img" || node.name.name === "SEOImage") {
+              const attrs = node.attributes.map((a) => a.name && a.name.name);
+              if (!attrs.includes("alt") && !attrs.includes("isDecorative"))
+                context.report({ node, message: "img без alt" });
+            }
+          },
+        };
+      },
+    },
+    "no-duplicate-h1": {
+      meta: { type: "problem", docs: { description: "Запрещает >1 H1" } },
+      create(context) {
+        let n = 0;
+        return {
+          JSXOpeningElement(node) {
+            if (node.name.name === "h1") { n++; if (n > 1) context.report({ node, message: "Повторный H1" }); }
+          },
+        };
+      },
+    },
+  },
+};
+`,
+  });
+
+  out.push({
+    name: "components/seo/SEOHead.jsx",
+    content: `/* SEOHead — обязательные мета-теги. Без title/description/canonical/ogImage — ошибка в dev. */
+import React from "react";
+
+function validate({ title, description, canonical, ogImage }) {
+  const e = [];
+  if (!title || title.length < 30 || title.length > 60) e.push("title должен быть 30-60 символов");
+  if (!description || description.length < 120 || description.length > 158) e.push("description должен быть 120-158 символов");
+  if (!canonical) e.push("canonical обязателен");
+  if (!ogImage) e.push("og:image обязателен");
+  if (e.length) console.error("SEO ERROR:\\n" + e.join("\\n"));
+}
+
+export function SEOHead({ title, description, canonical, ogImage, ogType = "website", structuredData = [] }) {
+  if (process.env.NODE_ENV === "development") validate({ title, description, canonical, ogImage });
+  return (
+    <>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <link rel="canonical" href={canonical} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:type" content={ogType} />
+      <meta property="og:url" content={canonical} />
+      <meta name="twitter:card" content="summary_large_image" />
+      {structuredData.map((s, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />
+      ))}
+    </>
+  );
+}
+`,
+  });
+
+  out.push({
+    name: "cli/create-page.js",
+    content: `#!/usr/bin/env node
+/* CLI-генератор страниц: не пустит дальше без SEO-манифеста. Node ≥18.
+   Запуск: node cli/create-page.js --type=article --title="…" --desc="…" --h1="…" --kw="…"
+   (интерактивная версия — через inquirer; здесь минимальный форс-вариант без зависимостей) */
+import { readFileSync, writeFileSync } from "node:fs";
+
+const args = Object.fromEntries(process.argv.slice(2).map((a) => { const [k, v] = a.replace(/^--/, "").split("="); return [k, v ?? ""]; }));
+const required = ["type", "title", "desc", "h1", "kw"];
+const missing = required.filter((k) => !args[k]);
+if (missing.length) { console.error("❌ Не заполнены обязательные SEO-поля: " + missing.join(", ")); process.exit(1); }
+if (args.title.length < 30 || args.title.length > 60) { console.error("❌ Title должен быть 30-60 символов"); process.exit(1); }
+if (args.desc.length < 120 || args.desc.length > 158) { console.error("❌ Description должен быть 120-158 символов"); process.exit(1); }
+if (args.h1.toLowerCase() === args.title.toLowerCase()) { console.error("❌ H1 не должен дублировать title"); process.exit(1); }
+
+const slug = args.kw.toLowerCase().replace(/[^a-zа-яё0-9]+/gi, "-").replace(/^-+|-+$/g, "").slice(0, 60);
+const manifest = { url_slug: slug, title: args.title, meta_description: args.desc, h1: args.h1, primary_keyword: args.kw, content_type: args.type, structured_data_type: [args.type === "article" ? "Article" : "LocalBusiness"], internal_links_planned: [] };
+writeFileSync("src/pages/" + slug + ".seo-manifest.json", JSON.stringify(manifest, null, 2));
+console.log("✅ Манифест сохранён: src/pages/" + slug + ".seo-manifest.json");
+console.log("⚠️  Добавьте ≥2 внутренние ссылки в internal_links_planned");
+`,
+  });
+
+  out.push({
+    name: "ci/seo-gate.yml",
+    content: `# SEO-by-Default Gate: блокирует PR при нарушениях.
+name: SEO-by-Default Gate
+on:
+  pull_request:
+    branches: [main, staging]
+jobs:
+  seo-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: npm install
+      - run: npx eslint . --config .eslintrc-seo.js
+      - run: node ./cli/validate-all-manifests.js
+  lighthouse-seo:
+    runs-on: ubuntu-latest
+    needs: seo-lint
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install && npm run build && npm run preview & npx wait-on http://localhost:4173
+      - run: npm i -g @lhci/cli && lhci autorun --config=performance/lighthouse-seo.config.js
+`,
+  });
+
+  out.push({
+    name: "performance/lighthouse-seo.config.js",
+    content: `module.exports = {
+  ci: {
+    collect: { numberOfRuns: 2, settings: { onlyCategories: ["seo"] } },
+    assert: {
+      assertions: {
+        "categories:seo": ["error", { minScore: 0.95 }],
+        "meta-description": "error",
+        "document-title": "error",
+        "image-alt": "error",
+        "canonical": "error",
+      },
+    },
+  },
+};
+`,
+  });
+
+  out.push({
+    name: "docs/SEO_PLAYBOOK.md",
+    content: `# SEO_PLAYBOOK — SEO-by-Default
+
+## Принцип
+SEO вшивается ДО кода, а не докручивается после. Три уровня принуждения:
+1. **Агент** — SEO_AGENT_RULES.md в контексте любой кодогенерации.
+2. **Код** — SEOHead/SemanticHeading/SEOImage бросают ошибки в dev.
+3. **CI** — seo-gate.yml + Lighthouse SEO ≥ 0.95 блокируют деплой.
+
+## Поток
+1. \`node cli/create-page.js --type=article --title=… --desc=… --h1=… --kw=…\`
+2. Заполнить контент (≥300 слов, keyword в первых 100 словах).
+3. Прогнать ContentSEOAnalyzer — score ≥ 75.
+4. Сгенерировать sitemap.xml + robots.txt.
+5. CI: SEO-гейт зелёный → деплой.
+
+## Жёсткие пороги
+- Lighthouse SEO ≥ 0.95 · LCP < 2.5s · CLS < 0.1
+- title 50-60 · description 120-158 · один H1 · alt у всех img
+- ≥2 внутренние ссылки на страницу, без orphan
+`,
+  });
+
+  return out;
+}
+
 export function buildStudioFiles(): ZipEntry[] {
   const f: ZipEntry[] = [];
 
@@ -1012,22 +1379,22 @@ BRIEF → roulette (SEED.md) → просмотр INDEX.md и 10–15 рефер
     if (path.startsWith("fixtures/")) f.push({ name: path, content });
   }
 
-  /* ---------- Spacing Control System ---------- */
-  f.push(...spacingFiles());
-
-
   /* роли — памятка куратору */
   f.push({
     name: "ROLES.md",
     content: `# Роли\n\n${ROLES.map((r) => `- **${r.t}** — ${r.d}`).join("\n")}\n`,
   });
 
-  /* Spacing Control + Anti-Slop + Mobile-Perfect */
+  /* Spacing Control + Anti-Slop + Mobile-Perfect + SEO-by-Default */
   f.push(...spacingFiles());
   f.push(...mobileFiles());
+  f.push(...buildSeoFiles());
 
   return f;
 }
 
 export const downloadStudioZip = (filename = "ceh-studio.zip") =>
   import("./zip").then(({ downloadFilesZip }) => downloadFilesZip(filename, buildStudioFiles()));
+
+export const downloadSeoZip = (filename = "ceh-seo.zip") =>
+  import("./zip").then(({ downloadFilesZip }) => downloadFilesZip(filename, buildSeoFiles()));

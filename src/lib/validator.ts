@@ -494,6 +494,50 @@ export function validate(fs: FS, root: string): Report {
     });
   }
 
+  /* V-13 — SEO-by-Default: title, description, один h1, lang, canonical */
+  {
+    const ev: string[] = [];
+    let bad = 0;
+    const htmlEntry = siteEntries(fs, root).find(([p]) => p.endsWith(".html"));
+    if (!htmlEntry) {
+      bad++;
+      ev.push("нет index.html — проверять нечего");
+    } else {
+      const html = htmlEntry[1];
+      if (!/<title>[^<]+<\/title>/i.test(html)) {
+        bad++;
+        ev.push("отсутствует <title>");
+      }
+      if (!/<meta[^>]*name=["']description["']/i.test(html)) {
+        bad++;
+        ev.push("отсутствует meta description");
+      }
+      if (!/<link[^>]*rel=["']canonical["']/i.test(html)) {
+        bad++;
+        ev.push("отсутствует canonical");
+      }
+      if (!/<html[^>]*lang=["'][a-z]{2}/i.test(html)) {
+        bad++;
+        ev.push("отсутствует атрибут lang");
+      }
+      const h1Count = (html.match(/<h1[\s>]/gi) ?? []).length;
+      if (h1Count === 0) {
+        bad++;
+        ev.push("нет ни одного h1");
+      } else if (h1Count > 1) {
+        bad++;
+        ev.push(`несколько h1: ${h1Count} (разрешён один)`);
+      }
+    }
+    rows.push({
+      code: "V-13",
+      title: "SEO: title, description, h1, lang, canonical",
+      status: bad === 0 ? "OK" : "FAIL",
+      detail: bad === 0 ? "SEO-база на месте: title, description, 1×h1, lang, canonical" : `нарушений: ${bad}`,
+      evidence: ev,
+    });
+  }
+
   const okCount = rows.filter((r) => r.status === "OK").length;
   const violationCodes = [...new Set(violations.map((v) => v.code))].sort();
   return {

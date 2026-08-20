@@ -185,6 +185,8 @@ const demoHtml = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ЦЕХ — демо-сборка, бросок 47</title>
+<meta name="description" content="Демо-проект студии ЦЕХ: сборка по воротам G1–G4 из архива референсов, скилов и motion-рецептов. Валидатор V-01…V-13 зелёный.">
+<link rel="canonical" href="https://ceh.studio/projects/demo/">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -350,6 +352,8 @@ const pcHtml = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Порошковая покраска — Pcpolimer, Красногорск</title>
+<meta name="description" content="Порошковая покраска металла в любой цвет RAL: печь 200 °C, слой 60–120 мкм, ежедневно до 21:00. Расчёт по фото детали — в день обращения.">
+<link rel="canonical" href="https://pcpolimer.ru/">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
