@@ -183,7 +183,7 @@ export function Projects() {
                   <div>
                     <p className="font-mono text-xs uppercase tracking-[0.18em] text-paper/80">validate: 10/10 · exit 0</p>
                     <p className="mt-1 font-mono text-[10px] leading-relaxed text-paper/45">
-                      V-01…V-10 зелёные · 3 рецепта (Q-01) · сходство с историей 0% (V-09)
+                      V-01…V-14 зелёные · 3 рецепта (Q-01) · сходство с историей 0% (V-09)
                     </p>
                   </div>
                 </div>

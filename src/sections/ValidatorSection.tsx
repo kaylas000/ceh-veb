@@ -201,7 +201,7 @@ export function ValidatorSection() {
                 <p className="text-paper/40">
                   <span className="text-green">$</span> стенд готов. Выберите фикстуру и нажмите «Пуск».
                   <br />
-                  <span className="text-paper/35"># отчёт детерминирован: коды V-01…V-10, evidence построчно</span>
+                  <span className="text-paper/35"># отчёт детерминирован: коды V-01…V-14, evidence построчно</span>
                 </p>
               )}
               {lines.map((l, i) => (
@@ -283,7 +283,7 @@ export function ValidatorSection() {
             </ScrollWindow>
             <p className="mt-4 font-mono text-[11px] leading-relaxed text-paper/55">
               Негативный тест обязан падать с ≥5 нарушениями — фактически:{" "}
-              <span className="text-red">{10 - slop.ok} проваленных V-проверок</span> и{" "}
+              <span className="text-red">{slop.total - slop.ok} проваленных V-проверок</span> и{" "}
               <span className="text-red">{slop.violationCodes.length} кодов BANNED</span>. Главный приёмочный критерий ТЗ
               выполнен: система не пропускает слоп.
             </p>

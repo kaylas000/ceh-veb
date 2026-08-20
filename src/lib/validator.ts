@@ -1,5 +1,6 @@
 import type { FS } from "../data/fs";
 import { APPROVED_PX } from "../data/spacing";
+import { SECRET_PATTERNS } from "./qaFortress";
 
 /* ------------------------------------------------------------------ */
 /* validate.mjs (in-browser port) — проверки V-01…V-10                 */
@@ -535,6 +536,33 @@ export function validate(fs: FS, root: string): Report {
       status: bad === 0 ? "OK" : "FAIL",
       detail: bad === 0 ? "SEO-база на месте: title, description, 1×h1, lang, canonical" : `нарушений: ${bad}`,
       evidence: ev,
+    });
+  }
+
+  /* V-14 — QA Fortress: секреты и пустые ссылки в site/ */
+  {
+    const ev: string[] = [];
+    let bad = 0;
+    for (const [p, c] of siteEntries(fs, root)) {
+      const short = p.slice(root.length + 1);
+      for (const sp of SECRET_PATTERNS) {
+        if (sp.re.test(c)) {
+          bad++;
+          ev.push(`${short}: секрет «${sp.name}»`);
+        }
+      }
+      const empties = (c.match(/href="#"/g) ?? []).length;
+      if (empties > 0) {
+        bad++;
+        ev.push(`${short}: пустых ссылок href="#": ${empties}`);
+      }
+    }
+    rows.push({
+      code: "V-14",
+      title: "QA: секреты и пустые ссылки",
+      status: bad === 0 ? "OK" : "FAIL",
+      detail: bad === 0 ? "чисто: нет секретов и битых ссылок" : `нарушений: ${bad}`,
+      evidence: ev.slice(0, 6),
     });
   }
 

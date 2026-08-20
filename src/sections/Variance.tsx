@@ -211,6 +211,7 @@ export function Variance() {
                   value={projectId}
                   onChange={(e) => setProjectId(e.target.value)}
                   placeholder="ID проекта (seed)"
+                  aria-label="ID проекта (seed для генерации генома)"
                   className="w-44 border border-line-dark bg-ink p-3 font-mono text-sm text-yellow outline-none transition-colors focus:border-yellow"
                 />
                 <button

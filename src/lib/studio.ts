@@ -1386,13 +1386,239 @@ BRIEF → roulette (SEED.md) → просмотр INDEX.md и 10–15 рефер
     content: `# Роли\n\n${ROLES.map((r) => `- **${r.t}** — ${r.d}`).join("\n")}\n`,
   });
 
-  /* Spacing Control + Anti-Slop + Mobile-Perfect + SEO-by-Default + Variance */
+  /* Spacing Control + Anti-Slop + Mobile-Perfect + SEO-by-Default + Variance + QA Fortress */
   f.push(...spacingFiles());
   f.push(...mobileFiles());
   f.push(...buildSeoFiles());
   f.push(...buildGenomeFiles());
+  f.push(...buildQaFiles());
 
   return f;
+}
+
+/* ---------- QA Fortress: файлы для архива студии ---------- */
+
+function buildQaFiles(): ZipEntry[] {
+  const out: ZipEntry[] = [];
+
+  out.push({
+    name: "qa-fortress/config/eslint/.eslintrc.base.js",
+    content: `/* Жёсткий ESLint: синтаксис, импорты, сложность, безопасность */
+module.exports = {
+  root: true,
+  env: { browser: true, es2022: true, node: true },
+  extends: ["eslint:recommended", "plugin:import/recommended", "plugin:promise/recommended"],
+  parserOptions: { ecmaVersion: 2022, sourceType: "module" },
+  rules: {
+    "no-undef": "error", "no-unreachable": "error", "no-dupe-keys": "error",
+    "no-var": "error", "prefer-const": "error", "eqeqeq": ["error", "always"],
+    "no-eval": "error", "no-implied-eval": "error",
+    "import/no-unresolved": "error", "import/no-cycle": "error", "import/no-duplicates": "error",
+    "complexity": ["error", 12], "max-depth": ["error", 4], "max-nested-callbacks": ["error", 3],
+    "promise/catch-or-return": "error",
+  },
+};
+`,
+  });
+
+  out.push({
+    name: "qa-fortress/config/typescript/tsconfig.strict.json",
+    content: `{
+  "compilerOptions": {
+    "strict": true, "noImplicitAny": true, "strictNullChecks": true,
+    "noUnusedLocals": true, "noUnusedParameters": true, "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true, "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true, "noImplicitOverride": true,
+    "allowUnreachableCode": false, "skipLibCheck": false
+  }
+}
+`,
+  });
+
+  out.push({
+    name: "qa-fortress/scripts/pre-commit.sh",
+    content: `#!/bin/bash
+# Pre-commit: секреты + lint-staged + синтаксис
+echo "🔒 QA Fortress: Pre-commit"
+npx gitleaks protect --staged --verbose || { echo "❌ СЕКРЕТЫ В КОДЕ"; exit 1; }
+npx lint-staged || { echo "❌ Линтинг не пройден"; exit 1; }
+for file in $(git diff --cached --name-only --diff-filter=ACM | grep -E '\\.(js|jsx|ts|tsx)$'); do
+  node --check "$file" 2>/dev/null || { echo "❌ Синтаксис: $file"; exit 1; }
+done
+echo "✅ Pre-commit пройден"
+`,
+  });
+
+  out.push({
+    name: "qa-fortress/scripts/pre-push.sh",
+    content: `#!/bin/bash
+# Pre-push: типы + unit-тесты + мёртвый код
+echo "🚀 QA Fortress: Pre-push"
+npx tsc --noEmit || { echo "❌ Ошибки типов"; exit 1; }
+npm run test:unit -- --run || { echo "❌ Unit-тесты провалены"; exit 1; }
+npx ts-prune --error
+echo "✅ Pre-push пройден"
+`,
+  });
+
+  out.push({
+    name: "qa-fortress/validators/SecretsScanner.js",
+    content: `/* Сканер секретов: AWS/JWT/Slack/пароли/DB-строки */
+const PATTERNS = [
+  ["AWS Access Key", /AKIA[0-9A-Z]{16}/],
+  ["Private Key", /-----BEGIN (RSA |EC )?PRIVATE KEY-----/],
+  ["JWT Token", /\\beyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_.-]*/],
+  ["Slack Token", /xox[baprs]-[0-9a-zA-Z]{10,48}/],
+  ["Hardcoded Password", /password['":\\s=]+['"][^'"]{6,}['"]/i],
+  ["DB Connection", /\\b(mongodb|postgres|mysql):\\/\\/[^\\s'"]+/i],
+];
+export function scanSecrets(files) {
+  const findings = [];
+  for (const [path, content] of files) {
+    for (const [name, re] of PATTERNS)
+      if (re.test(content)) findings.push({ type: name, file: path, severity: "critical" });
+  }
+  return findings;
+}
+`,
+  });
+
+  out.push({
+    name: "qa-fortress/testing/a11y/a11y-audit.js",
+    content: `/* axe-core аудит по WCAG 2.1 AA. Запуск: node a11y-audit.js */
+import { chromium } from "playwright";
+import AxeBuilder from "@axe-core/playwright";
+const PAGES = ["/", "/about", "/services", "/contact"];
+(async () => {
+  const browser = await chromium.launch();
+  let hasCritical = false;
+  for (const path of PAGES) {
+    const page = await browser.newPage();
+    await page.goto((process.env.TEST_URL || "http://localhost:3000") + path);
+    const res = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+    const critical = res.violations.filter((v) => v.impact === "critical" || v.impact === "serious");
+    console.log(\`\${path}: \${res.violations.length} нарушений (\${critical.length} критичных)\`);
+    if (critical.length) hasCritical = true;
+    await page.close();
+  }
+  await browser.close();
+  process.exit(hasCritical ? 1 : 0);
+})();
+`,
+  });
+
+  out.push({
+    name: "qa-fortress/testing/e2e/playwright.config.js",
+    content: `import { defineConfig, devices } from "@playwright/test";
+export default defineConfig({
+  testDir: "./specs", fullyParallel: true,
+  retries: process.env.CI ? 2 : 0,
+  use: { baseURL: process.env.TEST_URL || "http://localhost:3000", trace: "retain-on-failure", screenshot: "only-on-failure" },
+  projects: [
+    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    { name: "firefox", use: { ...devices["Desktop Firefox"] } },
+    { name: "webkit", use: { ...devices["Desktop Safari"] } },
+    { name: "mobile-chrome", use: { ...devices["Pixel 7"] } },
+    { name: "mobile-safari", use: { ...devices["iPhone 14"] } },
+  ],
+});
+`,
+  });
+
+  out.push({
+    name: "qa-fortress/validators/BundleSizeValidator.js",
+    content: `/* Проверка размера бандла (gzip) против бюджета */
+import fs from "fs"; import path from "path"; import zlib from "zlib";
+export function analyzeBundle(distDir, budgets) {
+  const results = [];
+  const walk = (dir) => fs.readdirSync(dir).forEach((item) => {
+    const full = path.join(dir, item);
+    if (fs.statSync(full).isDirectory()) return walk(full);
+    if (!item.endsWith(".js")) return;
+    const gz = zlib.gzipSync(fs.readFileSync(full)).length;
+    const base = item.replace(/\\.[a-f0-9]{8,}\\./, ".");
+    const budget = Object.entries(budgets).find(([p]) => base.includes(p))?.[1];
+    results.push({ file: base, gzip: gz, budget, ok: budget ? gz <= budget : true });
+  });
+  walk(distDir);
+  return { files: results, passed: results.every((r) => r.ok) };
+}
+`,
+  });
+
+  out.push({
+    name: "qa-fortress/ci/github-actions/pr-fast-check.yml",
+    content: `name: Fast Checks
+on: [pull_request]
+jobs:
+  syntax-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20", cache: "npm" }
+      - run: npm ci
+      - run: npx eslint . --max-warnings=0
+      - run: npx stylelint "**/*.css"
+      - run: npx tsc --noEmit
+      - run: npm run test:unit -- --coverage
+`,
+  });
+
+  out.push({
+    name: "qa-fortress/ci/github-actions/production-gate.yml",
+    content: `name: Production Deployment Gate
+on:
+  push: { branches: [main] }
+jobs:
+  full-qa-suite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: npm ci && npm run build
+      - run: node scripts/run-full-audit.js
+      - run: npm audit --audit-level=high
+  deploy-approval:
+    needs: full-qa-suite
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - run: echo "✅ Production Gate пройден"
+`,
+  });
+
+  out.push({
+    name: "qa-fortress/QA_PLAYBOOK.md",
+    content: `# QA_PLAYBOOK — QA Fortress
+
+## 8 слоёв обороны (от быстрого к медленному)
+| Слой | Инструменты | Скорость | Стоимость бага |
+|---|---|---|---|
+| L0 IDE | ESLint, TS server, Stylelint | 0.1s | ×1 |
+| L1 Pre-commit | gitleaks, lint-staged, prettier | 2–5s | ×2 |
+| L2 Pre-push | tsc, vitest, ts-prune | 10–30s | ×5 |
+| L3 CI Fast | lint, build, unit+coverage 80% | 1–3 мин | ×10 |
+| L4 CI Medium | component-тесты RTL | 3–8 мин | ×25 |
+| L5 CI Slow | E2E ×5 браузеров, axe, ссылки, W3C | 10–20 мин | ×50 |
+| L6 Deploy Gate | npm audit, Snyk, лицензии, Lighthouse ≥95 | перед продом | ×75 |
+| L7 Runtime | Sentry, ErrorBoundary, алерты | 24/7 | ×100 |
+
+## Принцип
+Чем дешевле проверка — тем раньше она должна сработать.
+Опечатку ловит линтер за 0.1s, а не E2E за 15 минут.
+
+## Пороги
+- Coverage: lines 80% / functions 80% / branches 75%
+- Bundle: страница ≤1.5MB gzip, JS ≤300KB
+- A11y: 0 критичных (WCAG 2.1 AA)
+- Секреты: 0 (gitleaks)
+- PR не мержится без зелёного CI
+`,
+  });
+
+  return out;
 }
 
 /* ---------- Design Variance Engine: файлы для архива студии ---------- */
