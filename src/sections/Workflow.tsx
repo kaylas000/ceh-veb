@@ -112,7 +112,7 @@ export function Workflow() {
         </div>
 
         {/* конвейер стадий */}
-        <div className="relative mt-14">
+        <div className="relative mt-16">
           <svg className="absolute left-0 top-[22px] hidden h-[3px] w-full text-yellow/60 md:block" aria-hidden="true">
             <line x1="0" y1="1.5" x2="100%" y2="1.5" stroke="currentColor" strokeWidth="3" className="dash-line" />
           </svg>

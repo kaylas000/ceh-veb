@@ -14,7 +14,7 @@ const NAV = [
 export function Header({ onIntro }: { onIntro?: () => void }) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b-2 border-ink bg-ink text-paper">
-      <div className="mx-auto flex h-[58px] max-w-[1400px] items-center gap-3 px-4 sm:gap-5 sm:px-6">
+      <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-3 px-4 sm:gap-5 sm:px-6">
         <a href="#pasport" className="flex shrink-0 items-center gap-2.5">
           <span className="grid h-9 w-9 place-items-center bg-red font-display text-lg leading-none text-paper">Ц</span>
           <span className="font-display text-base tracking-[0.3em] text-paper">ЦЕХ</span>
@@ -112,7 +112,7 @@ const TREE = `CEH/
 export function Footer() {
   return (
     <footer className="relative border-t-2 border-ink bg-ink text-paper">
-      <div className="mx-auto max-w-[1400px] px-4 py-14 sm:px-6">
+      <div className="mx-auto max-w-[1400px] px-4 py-16 sm:px-6">
         <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr]">
           <div>
             <div className="flex items-center gap-2.5">

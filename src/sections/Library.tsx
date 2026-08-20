@@ -35,7 +35,7 @@ function RefCard({ r, i }: { r: (typeof REFERENCES)[number]; i: number }) {
             <ul className="mt-4 space-y-1.5">
               {r.techniques.map((t) => (
                 <li key={t} className="flex gap-2 text-[13px] leading-snug text-ink/85">
-                  <span className="mt-[7px] h-1.5 w-1.5 shrink-0 bg-red" aria-hidden="true" />
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-red" aria-hidden="true" />
                   {t}
                 </li>
               ))}

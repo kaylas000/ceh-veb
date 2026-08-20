@@ -431,7 +431,8 @@ export function validate(fs: FS, root: string): Report {
      1px разрешён как hairline (границы/разделители), 0 — тривиально. */
   {
     const approved = new Set([...APPROVED_PX, 1]);
-    const SPACING_DECL = /(margin|padding|gap|top|bottom|left|right)\s*:\s*([^;}]+)/gi;
+    /* только свойства ритма (margin, padding, gap и их варианты); позиционные top/left не проверяем */
+    const SPACING_DECL = /((?:margin|padding)(?:-(?:top|bottom|left|right|inline|block))?|(?:row-|column-)?gap)\s*:\s*([^;}]+)/gi;
     const ev: string[] = [];
     let bad = 0;
     for (const [path, content] of siteEntries(fs, root)) {

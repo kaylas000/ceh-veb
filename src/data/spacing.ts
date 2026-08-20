@@ -63,7 +63,9 @@ export function nearestApproved(px: number): number {
 }
 
 export function isApproved(px: number): boolean {
-  return APPROVED_PX.includes(Math.round(Math.abs(px)));
+  const v = Math.round(Math.abs(px));
+  /* 1px разрешён как hairline (границы, волосяные разделители) */
+  return v === 1 || APPROVED_PX.includes(v);
 }
 
 /* Утилита генерации fluid-clamp на лету (для новых компонентов) */

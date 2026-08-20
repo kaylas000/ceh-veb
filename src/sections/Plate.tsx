@@ -53,10 +53,10 @@ export function Plate() {
   const title = useScramble("ЦЕХ", true);
 
   return (
-    <section id="pasport" className="relative overflow-hidden bg-paper pt-[58px]">
+    <section id="pasport" className="relative overflow-hidden bg-paper pt-16">
       <div className="bg-blueprint pointer-events-none absolute inset-0" aria-hidden="true" />
 
-      <div className="relative mx-auto max-w-[1400px] px-4 pb-14 sm:px-6 lg:pb-20">
+      <div className="relative mx-auto max-w-[1400px] px-4 pb-16 sm:px-6 lg:pb-20">
         <div className="grid gap-10 pt-10 lg:grid-cols-[1.3fr_1fr] lg:gap-14 lg:pt-16">
           {/* левая плита */}
           <div className="min-w-0">

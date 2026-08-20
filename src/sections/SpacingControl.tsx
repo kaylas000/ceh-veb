@@ -26,7 +26,7 @@ function ScaleRuler() {
         <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-yellow">утверждённая шкала</p>
         <p className="font-mono text-[10px] text-paper/40">19 значений · всё остальное — нарушение</p>
       </div>
-      <div className="mt-4 space-y-[3px]">
+      <div className="mt-4 space-y-0.5">
         {SPACING_SCALE.map((s, i) => {
           const w = Math.max(2, (s.px / max) * 100);
           const active = hover === s.key;

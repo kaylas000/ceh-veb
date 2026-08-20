@@ -66,7 +66,7 @@ export function Control() {
                   <ul className="mt-4 grid gap-2 md:grid-cols-2">
                     {g.checklist.map((c, ci) => (
                       <li key={ci} className="flex gap-2.5 text-[13px] leading-snug text-ink/80">
-                        <span className="mt-[3px] grid h-4 w-4 shrink-0 place-items-center border border-ink/40 font-mono text-[9px] text-red">
+                        <span className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center border border-ink/40 font-mono text-[9px] text-red">
                           {ci + 1}
                         </span>
                         {c}
