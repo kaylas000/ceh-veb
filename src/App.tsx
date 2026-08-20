@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Header, Footer, NoiseLayer, Marquee } from "./sections/Chrome";
 import { Plate } from "./sections/Plate";
 import { Library } from "./sections/Library";
@@ -9,9 +9,42 @@ import { Control } from "./sections/Control";
 import { CineLine } from "./sections/CineLine";
 import { ValidatorSection } from "./sections/ValidatorSection";
 import { Projects } from "./sections/Projects";
+import { IntroOverlay } from "./components/IntroOverlay";
+import { PRESET_ORDER, type IntroPreset } from "./lib/intro";
 import { initSmooth, destroySmooth, scrollToId } from "./lib/smooth";
 
+const SEEN_KEY = "ceh-intro-seen";
+const IDX_KEY = "ceh-intro-preset";
+
 export default function App() {
+  const [intro, setIntro] = useState<{ preset: IntroPreset; token: number } | null>(null);
+  const presetIdx = useRef(0);
+
+  const playIntro = useCallback(() => {
+    const next = PRESET_ORDER[presetIdx.current % PRESET_ORDER.length];
+    presetIdx.current += 1;
+    try {
+      sessionStorage.setItem(SEEN_KEY, "1");
+      sessionStorage.setItem(IDX_KEY, String(presetIdx.current));
+    } catch {
+      /* приватный режим — просто показываем */
+    }
+    setIntro({ preset: next, token: Date.now() });
+  }, []);
+
+  /* первый визит в сессии: заставка; повторные — сразу студия (SK-06) */
+  useEffect(() => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let seen = false;
+    try {
+      seen = sessionStorage.getItem(SEEN_KEY) === "1";
+      presetIdx.current = Number(sessionStorage.getItem(IDX_KEY) ?? 0) || 0;
+    } catch {
+      seen = false;
+    }
+    if (!reduced && !seen) playIntro();
+  }, [playIntro]);
+
   useEffect(() => {
     initSmooth();
     /* перехват якорных ссылок — плавный ход через Lenis */
@@ -33,7 +66,7 @@ export default function App() {
   return (
     <div className="bg-paper font-body text-ink">
       <NoiseLayer />
-      <Header />
+      <Header onIntro={playIntro} />
       <main>
         <Plate />
         <Library />
@@ -45,6 +78,7 @@ export default function App() {
             "Q-01: 1–3 рецепта на страницу",
             "B-02: браузерные дефолты запрещены",
             "К-11: удачное возвращается в архив",
+            "SK-06: заставка ≤4с, skip обязателен",
           ]}
           dark
         />
@@ -56,6 +90,13 @@ export default function App() {
         <Projects />
       </main>
       <Footer />
+      {intro && (
+        <IntroOverlay
+          key={intro.token}
+          preset={intro.preset}
+          onDone={() => setIntro(null)}
+        />
+      )}
     </div>
   );
 }

@@ -11,14 +11,26 @@ const NAV = [
   { href: "#proekty", label: "Проекты" },
 ];
 
-export function Header() {
+export function Header({ onIntro }: { onIntro?: () => void }) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b-2 border-ink bg-ink text-paper">
-      <div className="mx-auto flex h-[58px] max-w-[1400px] items-center gap-5 px-4 sm:px-6">
+      <div className="mx-auto flex h-[58px] max-w-[1400px] items-center gap-3 px-4 sm:gap-5 sm:px-6">
         <a href="#pasport" className="flex shrink-0 items-center gap-2.5">
           <span className="grid h-9 w-9 place-items-center bg-red font-display text-lg leading-none text-paper">Ц</span>
           <span className="font-display text-base tracking-[0.3em] text-paper">ЦЕХ</span>
         </a>
+        {onIntro && (
+          <button
+            onClick={onIntro}
+            title="Повторить кинозаставку студии (пресеты меняются по кругу)"
+            className="flex shrink-0 items-center gap-1.5 border-2 border-red px-2.5 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-red transition-colors duration-200 hover:bg-red hover:text-paper"
+          >
+            <svg width="9" height="10" viewBox="0 0 10 12" aria-hidden="true">
+              <path d="M1 1l8 5-8 5z" fill="currentColor" />
+            </svg>
+            <span className="hidden sm:inline">Интро</span>
+          </button>
+        )}
         <nav className="term-scroll hidden flex-1 items-center gap-1 overflow-x-auto md:flex">
           {NAV.map((n) => (
             <a
@@ -32,7 +44,7 @@ export function Header() {
         </nav>
         <div className="ml-auto hidden shrink-0 items-center gap-2 border border-line-dark px-2.5 py-1.5 lg:flex">
           <span className="led-dot h-2 w-2 rounded-full bg-green shadow-[0_0_8px_rgba(46,125,79,0.9)]" />
-          <span className="font-mono text-[10px] uppercase tracking-widest text-paper/80">архив: 7 реф · 5 скилов · 9 рецептов</span>
+          <span className="font-mono text-[10px] uppercase tracking-widest text-paper/80">архив: 7 реф · 6 скилов · 11 рецептов</span>
         </div>
         <a
           href="#proekty"
