@@ -89,6 +89,11 @@ body {
   color: var(--color-paper);
 }
 
+/* длинные строки (пути, код) не рвут блоки на узких экранах */
+p, li, dd, dt, blockquote, figcaption, td, th, code {
+  overflow-wrap: break-word;
+}
+
 /* ---------- Mobile-Perfect: базовые гарды ---------- */
 
 :root {

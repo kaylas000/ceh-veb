@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   DEVICES,
   SWEEP_VIEWPORTS,
@@ -19,7 +19,18 @@ type Dev = { name: string; w: number; h: number; dpr: number; os: string; notch?
 
 function DeviceSim() {
   const [dev, setDev] = useState<Dev>(DEVICES[0]);
-  const scale = Math.min(380 / dev.h, 336 / dev.w, 0.6);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [stageW, setStageW] = useState(300);
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setStageW(el.clientWidth));
+    ro.observe(el);
+    setStageW(el.clientWidth);
+    return () => ro.disconnect();
+  }, []);
+  /* рамка не шире сцены — на мобильных в том числе */
+  const scale = Math.min(380 / dev.h, (stageW - 24) / dev.w, 0.6);
   const cols = dev.w < 560 ? 1 : dev.w < 900 ? 2 : 3;
   const compact = dev.w < 700;
 
@@ -43,7 +54,7 @@ function DeviceSim() {
       </div>
 
       {/* сцена с рамкой */}
-      <div className="mt-5 flex min-h-[420px] items-center justify-center border-2 border-paper/20 bg-[#101014] py-6">
+      <div ref={stageRef} className="mt-5 flex min-h-[420px] items-center justify-center overflow-hidden border-2 border-paper/20 bg-[#101014] py-6">
         <div
           className="relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
           style={{ width: dev.w * scale, height: dev.h * scale }}

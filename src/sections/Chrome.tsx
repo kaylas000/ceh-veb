@@ -162,14 +162,16 @@ export function SectionHead({
   aside?: ReactNode;
   dark?: boolean;
 }) {
+  /* заголовок раскрывается сам — не зависит от внешнего Reveal */
+  const [ref, inView] = useInView<HTMLDivElement>(0.2);
   return (
     <div className="flex flex-wrap items-end justify-between gap-6">
-      <div>
+      <div ref={ref} className={`min-w-0 ${inView ? "rv-in" : ""}`}>
         <p className={`font-mono text-[11px] uppercase tracking-[0.25em] ${dark ? "text-red" : "text-red"}`}>
           {num} / {kicker}
         </p>
         <div
-          className={`mt-3 font-display text-[clamp(2.1rem,5vw,3.9rem)] uppercase leading-[0.95] ${
+          className={`mt-3 font-display text-[clamp(1.9rem,5vw,3.9rem)] uppercase leading-[0.95] ${
             dark ? "text-paper" : "text-ink"
           }`}
         >

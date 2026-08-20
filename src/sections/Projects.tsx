@@ -176,7 +176,7 @@ export function Projects() {
                     ))}
                   </ul>
                 </div>
-                <div className="mt-auto flex items-center gap-5 border-t border-line-dark pt-4">
+                <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-4 border-t border-line-dark pt-4">
                   <Stamp rot={-6} color="var(--color-green)">
                     Принято · G4
                   </Stamp>
