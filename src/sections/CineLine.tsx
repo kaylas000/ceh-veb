@@ -480,10 +480,10 @@ function Scene() {
                 ref={(el) => {
                   actRefs.current[i] = el;
                 }}
-              className="absolute right-4 max-w-[19rem] sm:right-6 sm:max-w-[26rem]"
+              className="absolute inset-x-4 min-w-0 sm:inset-x-auto sm:right-6 sm:max-w-[26rem]"
               style={{ opacity: 0 }}              >
                 <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-yellow">{a.t} · {a.s}</p>
-                <p className="mt-2 max-w-md font-display text-[clamp(1.3rem,3vw,2.2rem)] uppercase leading-[1.02] text-paper">
+                <p className="mt-2 min-w-0 break-words font-display text-[clamp(1.15rem,3vw,2.2rem)] uppercase leading-[1.05] text-paper">
                   {a.d}
                 </p>
               </div>
