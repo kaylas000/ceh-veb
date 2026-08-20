@@ -127,6 +127,7 @@ function CartBelt() {
 
 export function Plate() {
   const title = useScramble("ЦЕХ", true);
+  const demo = useMemo(() => validate(FS, "projects/demo"), []);
 
   return (
     <section id="pasport" className="relative overflow-hidden bg-paper pt-16">
@@ -198,7 +199,7 @@ export function Plate() {
                 {[
                   ["тип", "студия-архив + регламент принуждения"],
                   ["систем", `${SYSTEMS.length} — от архива до QA Fortress`],
-                  ["проверок", "14 — V-01…V-14 в validate.mjs"],
+                  ["проверок", `${demo.total} — V-01…V-14 в validate.mjs`],
                   ["правил", `${CONSTITUTION.length} — конституция К-01…К-15`],
                   ["запретов", `${BANNED.length} — BANNED с grep-паттернами`],
                   ["квот", `${QUOTAS.length} — числовые допуски Q-01…Q-10`],
@@ -213,7 +214,7 @@ export function Plate() {
               </dl>
               <div className="relative flex items-center justify-between gap-4 border-t-2 border-ink px-5 py-4">
                 <p className="font-mono text-[9px] uppercase leading-relaxed tracking-[0.16em] text-muted">
-                  приёмка: demo — 14/14
+                  приёмка: demo — {demo.ok}/{demo.total}
                   <br />
                   slop — падает, ≥5 нарушений
                 </p>
@@ -243,7 +244,7 @@ export function Plate() {
             <Counter v={REFERENCES.length} l="референсов" delay={0} />
             <Counter v={SKILLS.length} l="скилов" delay={90} />
             <Counter v={RECIPES.length} l="рецептов" delay={180} />
-            <Counter v={14} l="проверок" delay={270} />
+            <Counter v={demo.total} l="проверок" delay={270} />
             <Counter v={CONSTITUTION.length} l="правил" delay={360} />
             <Counter v={QUOTAS.length} l="квот" delay={450} />
           </dl>
