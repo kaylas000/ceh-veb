@@ -136,11 +136,33 @@ export class IntroEngine {
     return 3800;
   }
 
+  /* ---------- безопасная зона: слово не залазит на верхнюю/нижнюю плашки ---------- */
+
+  /* верхняя плашка «ЦЕХ · премьера» + нижний прогресс/skip — резервируем место */
+  private get safeTop(): number {
+    return this.isMobile() ? 70 : 64;
+  }
+  private get safeBottom(): number {
+    return this.isMobile() ? 116 : 128;
+  }
+  /* доступная высота между плашками */
+  private get availH(): number {
+    return Math.max(240, this.h - this.safeTop - this.safeBottom);
+  }
+  /* центр слова — в середине безопасной зоны */
+  private wordCY(): number {
+    return this.safeTop + this.availH * 0.47;
+  }
+  /* размер слова — ограничен и по ширине, и по высоте зоны */
+  private wordFS(): number {
+    return Math.min(this.w * 0.3, this.availH * 0.55);
+  }
+
   /* ---------- данные пресетов ---------- */
 
   private buildWordmark(): void {
     const off = document.createElement("canvas");
-    const fs = Math.min(this.w * 0.3, this.h * 0.4);
+    const fs = this.wordFS();
     off.width = Math.round(this.w * 1.1);
     off.height = Math.round(fs * 1.5);
     const c = off.getContext("2d");
@@ -166,7 +188,7 @@ export class IntroEngine {
     /* россыпь → частицы (пересобираются при resize) */
     const count = Math.min(this.qualityCount(), Math.max(600, pts.length));
     const cx = this.w / 2;
-    const cy = this.h * 0.44;
+    const cy = this.wordCY();
     const R = Math.max(this.w, this.h) * 0.72;
     this.particles = [];
     for (let i = 0; i < count; i++) {
@@ -349,8 +371,9 @@ export class IntroEngine {
     if (p > 0.7) {
       const rp = easeInOutDrag(clamp01((p - 0.7) / 0.14));
       const lw = this.w * 0.34 * rp;
+      const wmH = this.wordmark ? this.wordmark.height * this.wmScale : this.h * 0.28;
       ctx.fillStyle = COLORS.red;
-      ctx.fillRect(w / 2 - lw / 2, h * 0.44 + this.h * 0.16, lw, 5);
+      ctx.fillRect(w / 2 - lw / 2, this.wordCY() + wmH / 2 + this.h * 0.045, lw, 5);
     }
   }
 
@@ -363,7 +386,7 @@ export class IntroEngine {
     const wmW = this.wordmark.width * this.wmScale;
     const wmH = this.wordmark.height * this.wmScale;
     const x0 = (w - wmW) / 2;
-    const y0 = h * 0.44 - wmH / 2;
+    const y0 = this.wordCY() - wmH / 2;
     const revealY = y0 + wmH * sweep;
 
     /* конус света */
@@ -413,13 +436,16 @@ export class IntroEngine {
     void t;
   }
 
-  /* TYP-03: кинетика шрифта */
+  /* TYP-03: кинетика шрифта — все строки в безопасной зоне между плашками */
   private drawType(ctx: CanvasRenderingContext2D, mp: number, t: number): void {
-    const { w, h } = this;
+    const { w } = this;
     const word = "ВЕБ-СТУДИЯ";
+    const topLine = this.safeTop + 36;
+    const cy = this.wordCY();
+    const subLine = this.safeTop + this.availH * 0.86;
     ctx.textBaseline = "middle";
 
-    /* строка студии: буквы влетают */
+    /* строка студии: буквы влетают (над словом) */
     const lineP = clamp01(mp / 0.34);
     ctx.font = `700 ${Math.min(w * 0.045, 34)}px "JetBrains Mono", monospace`;
     ctx.textAlign = "left";
@@ -430,18 +456,18 @@ export class IntroEngine {
       if (lp <= 0) continue;
       ctx.globalAlpha = Math.min(1, lp);
       ctx.fillStyle = COLORS.paper;
-      ctx.fillText(word[i], startX + i * cw + (1 - lp) * 46, h * 0.3);
+      ctx.fillText(word[i], startX + i * cw + (1 - lp) * 46, topLine);
     }
     ctx.globalAlpha = 1;
 
-    /* ЦЕХ — удар по центру */
+    /* ЦЕХ — удар по центру зоны */
     const hitP = clamp01((mp - 0.36) / 0.22);
     if (hitP > 0) {
       const e = easeOutBack(hitP);
-      const fs = Math.min(w * 0.3, h * 0.4);
+      const fs = this.wordFS();
       ctx.save();
-      ctx.translate(w / 2, h * 0.5);
-      ctx.scale(2.4 - 1.4 * e, 2.4 - 1.4 * e);
+      ctx.translate(w / 2, cy);
+      ctx.scale(1.7 - 0.7 * e, 1.7 - 0.7 * e);
       ctx.globalAlpha = Math.min(1, hitP * 2.5);
       ctx.font = `900 ${fs}px "Russo One", sans-serif`;
       ctx.textAlign = "center";
@@ -453,12 +479,12 @@ export class IntroEngine {
         ctx.strokeStyle = `rgba(206,44,24,${1 - hitP})`;
         ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.arc(w / 2, h * 0.5, fs * (0.4 + hitP * 1.4), 0, Math.PI * 2);
+        ctx.arc(w / 2, cy, fs * (0.35 + hitP * 1.1), 0, Math.PI * 2);
         ctx.stroke();
       }
     }
 
-    /* подпись-скрэмбл */
+    /* подпись-скрэмбл (под словом) */
     const subP = clamp01((mp - 0.62) / 0.34);
     if (subP > 0) {
       const finalText = "ДИЗАЙН · АРХИВ · ПРИНУЖДЕНИЕ";
@@ -470,7 +496,7 @@ export class IntroEngine {
       ctx.font = `700 ${Math.min(w * 0.03, 20)}px "JetBrains Mono", monospace`;
       ctx.textAlign = "center";
       ctx.fillStyle = COLORS.yellow;
-      ctx.fillText(out, w / 2, h * 0.68);
+      ctx.fillText(out, w / 2, subLine);
       void t;
     }
   }
