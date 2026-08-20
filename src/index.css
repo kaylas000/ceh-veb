@@ -90,8 +90,20 @@ body {
 }
 
 /* длинные строки (пути, код) не рвут блоки на узких экранах */
-p, li, dd, dt, blockquote, figcaption, td, th, code {
+p, li, dd, dt, blockquote, figcaption, td, th, code, pre, span, a, button, label, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
+}
+
+/* КЛЮЧЕВОЙ мобильный фикс: flex/grid-дети не распирают контейнер.
+   Без min-width:0 длинный контент или фикс. ширины выталкивают блок за экран. */
+.flex > *,
+.grid > * {
+  min-width: 0;
+}
+
+/* медиа и таблицы никогда не шире контейнера */
+img, svg, video, canvas, iframe {
+  max-width: 100%;
 }
 
 /* ---------- Mobile-Perfect: базовые гарды ---------- */

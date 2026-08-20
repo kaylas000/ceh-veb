@@ -45,6 +45,18 @@ export function auditTouchTargets(): { total: number; violations: TouchViolation
   return { total, violations };
 }
 
+/* элемент внутри контейнера с overflow (marquee, конвейер, таблицы, терминал) —
+   он намеренно ограничен, не считаем его виновником перелива страницы */
+function inOverflowContainer(el: Element): boolean {
+  let p = el.parentElement;
+  while (p && p !== document.body) {
+    const ox = window.getComputedStyle(p).overflowX;
+    if (ox === "hidden" || ox === "auto" || ox === "scroll" || ox === "clip") return true;
+    p = p.parentElement;
+  }
+  return false;
+}
+
 export function detectHorizontalScroll(): {
   hasIssue: boolean;
   overflowPx: number;
@@ -52,17 +64,23 @@ export function detectHorizontalScroll(): {
 } {
   const docW = document.documentElement.clientWidth;
   const scrollW = document.documentElement.scrollWidth;
-  if (scrollW <= docW) return { hasIssue: false, overflowPx: 0, culprits: [] };
   const culprits: ScrollCulprit[] = [];
+  /* сканируем ВСЕ видимые элементы: ловим и скролл, и обрезанный (clip) перелив */
   for (const el of Array.from(document.querySelectorAll("body *"))) {
+    const cs = window.getComputedStyle(el);
+    if (cs.position === "fixed") continue; /* noise, виньетка, шапка */
+    if (cs.display === "none" || cs.visibility === "hidden") continue;
     const r = el.getBoundingClientRect();
-    if (r.width === 0) continue;
-    if (r.right > docW + 1 || r.left < -1) {
-      culprits.push({ selector: selectorOf(el), overflow: Math.round(Math.max(r.right - docW, -r.left)) });
+    if (r.width === 0 || r.height === 0) continue;
+    if (r.bottom < 0 || r.top > window.innerHeight) continue; /* только во вьюпорте */
+    if (inOverflowContainer(el)) continue;
+    if (r.right > docW + 1) {
+      culprits.push({ selector: selectorOf(el), overflow: Math.round(r.right - docW) });
     }
   }
   culprits.sort((a, b) => b.overflow - a.overflow);
-  return { hasIssue: true, overflowPx: scrollW - docW, culprits: culprits.slice(0, 6) };
+  const hasIssue = scrollW > docW || culprits.length > 0;
+  return { hasIssue, overflowPx: Math.max(scrollW - docW, culprits[0]?.overflow ?? 0), culprits: culprits.slice(0, 6) };
 }
 
 export function auditInputFonts(): { total: number; tooSmall: number } {
