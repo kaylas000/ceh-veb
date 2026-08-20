@@ -12,6 +12,7 @@ const NAV = [
   { href: "#mobilnost", label: "Мобильность" },
   { href: "#validator", label: "Валидатор" },
   { href: "#proekty", label: "Проекты" },
+  { href: "#priemka", label: "Приёмка" },
 ];
 
 export function Header({ onIntro }: { onIntro?: () => void }) {

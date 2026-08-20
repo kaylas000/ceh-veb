@@ -26,9 +26,22 @@ function crc32(data: Uint8Array): number {
   return (c ^ 0xffffffff) >>> 0;
 }
 
+/* бинарная версия: контент уже в байтах (видео, картинки, любые файлы) */
+export async function downloadBlobZip(
+  filename: string,
+  entries: Array<{ name: string; data: Uint8Array }>,
+): Promise<number> {
+  return zipAndDownload(filename, entries);
+}
+
 export async function downloadFilesZip(filename: string, entries: ZipEntry[]): Promise<number> {
   const enc = new TextEncoder();
   const files = entries.map((e) => ({ name: e.name, data: enc.encode(e.content) }));
+  return zipAndDownload(filename, files);
+}
+
+function zipAndDownload(filename: string, files: Array<{ name: string; data: Uint8Array }>): number {
+  const enc = new TextEncoder();
 
   const now = new Date();
   const dosTime = ((now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1)) & 0xffff;
