@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { FS, FIXTURES } from "../data/fs";
 import { validate, type Report } from "../lib/validator";
 import { Reveal, Stamp, useInView, useReducedMotion } from "../lib/fx";
+import { ScrollWindow } from "../components/ScrollWindow";
 import { SectionHead } from "./Chrome";
 
 type Line = { text: string; kind: "cmd" | "info" | "ok" | "fail" | "evidence" | "sum" };
@@ -235,9 +236,11 @@ export function ValidatorSection() {
             </div>
             <div className="p-4 sm:p-5">
               <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-paper/45">{file || "—"}</p>
-              <pre className="term-scroll mt-3 max-h-[420px] overflow-auto border border-line-dark bg-[#14120c] p-4 font-mono text-[11px] leading-relaxed text-paper/80">
-                {file ? FS[file] : ""}
-              </pre>
+              <ScrollWindow axis="both" className="mt-3 max-h-[420px]">
+                <pre className="w-max min-w-full border border-line-dark bg-[#14120c] p-4 font-mono text-[11px] leading-relaxed text-paper/80">
+                  {file ? FS[file] : ""}
+                </pre>
+              </ScrollWindow>
             </div>
           </div>
         </Reveal>
@@ -248,8 +251,9 @@ export function ValidatorSection() {
             <h3 className="font-display text-[clamp(1.6rem,3.4vw,2.6rem)] uppercase leading-none text-paper">
               Протокол испытаний · ТЗ п.8
             </h3>
-            <div className="term-scroll mt-6 overflow-x-auto border-2 border-paper/25">
-              <table className="w-full min-w-[760px] border-collapse font-mono text-[12px]">
+            <ScrollWindow className="mt-6" fadeFrom="#16150f">
+              <div className="border-2 border-paper/25">
+              <table className="w-max min-w-[760px] border-collapse font-mono text-[12px]">
                 <thead>
                   <tr className="bg-paper/5 text-left">
                     <th className="border-b border-line-dark px-4 py-3 font-medium uppercase tracking-[0.2em] text-paper/45">проверка</th>
@@ -277,7 +281,8 @@ export function ValidatorSection() {
                   </tr>
                 </tbody>
               </table>
-            </div>
+              </div>
+            </ScrollWindow>
             <p className="mt-4 font-mono text-[11px] leading-relaxed text-paper/55">
               Негативный тест обязан падать с ≥5 нарушениями — фактически:{" "}
               <span className="text-red">{10 - slop.ok} проваленных V-проверок</span> и{" "}

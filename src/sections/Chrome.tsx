@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { useInView } from "../lib/fx";
+import { ScrollWindow } from "../components/ScrollWindow";
 
 const NAV = [
   { href: "#arhiv", label: "Архив" },
@@ -134,9 +135,11 @@ export function Footer() {
           </div>
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-yellow">структура поставки</p>
-            <pre className="term-scroll mt-3 overflow-x-auto border border-line-dark bg-ink-2 p-4 font-mono text-[11px] leading-relaxed text-paper/70">
-              {TREE}
-            </pre>
+            <ScrollWindow className="mt-3" fadeFrom="#1e1d16">
+              <pre className="w-max min-w-full border border-line-dark bg-ink-2 p-4 font-mono text-[11px] leading-relaxed text-paper/70">
+                {TREE}
+              </pre>
+            </ScrollWindow>
           </div>
         </div>
         <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-line-dark pt-5 font-mono text-[10px] uppercase tracking-[0.18em] text-paper/45">

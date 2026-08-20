@@ -11,6 +11,7 @@ import {
 } from "../data/mobile";
 import { runMobileAudit, type MobileAuditResult } from "../lib/mobileAudit";
 import { Reveal } from "../lib/fx";
+import { ScrollWindow } from "../components/ScrollWindow";
 import { SectionHead } from "./Chrome";
 
 type Dev = { name: string; w: number; h: number; dpr: number; os: string; notch?: boolean; reason: string };
@@ -340,14 +341,16 @@ function SafeAreaDemo() {
       </div>
       <div className="min-w-0 flex-1">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-paper/60">safe-area · notch и home indicator</p>
-        <pre className="term-scroll mt-3 overflow-x-auto border border-line-dark bg-[#14120c] p-3 font-mono text-[10px] leading-relaxed text-paper/75">
+        <ScrollWindow className="mt-3">
+          <pre className="w-max min-w-full border border-line-dark bg-[#14120c] p-3 font-mono text-[10px] leading-relaxed text-paper/75">
 {`.header-fixed {
   padding-top: calc(env(safe-area-inset-top) + 1rem);
 }
 .sticky-cta {
   bottom: calc(1rem + env(safe-area-inset-bottom));
 }`}
-        </pre>
+          </pre>
+        </ScrollWindow>
         <p className="mt-3 text-[12px] leading-relaxed text-paper/55">
           Обязательно <span className="font-mono text-[11px] text-yellow">viewport-fit=cover</span> в мета-теге — без него{" "}
           <span className="font-mono text-[11px]">env()</span> возвращает ноль, и контент прячется под Dynamic Island.

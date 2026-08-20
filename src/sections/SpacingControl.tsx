@@ -3,6 +3,7 @@ import { SPACING_SCALE, SEMANTIC_TOKENS, FLUID_TOKENS, isApproved } from "../dat
 import { SpacingOverlay, type AuditSummary } from "../lib/spacingOverlay";
 import { Box, Stack, Spacer } from "../components/primitives";
 import { Reveal, useInView, useCountUp } from "../lib/fx";
+import { ScrollWindow } from "../components/ScrollWindow";
 import { SectionHead } from "./Chrome";
 
 const overlay = new SpacingOverlay();
@@ -236,12 +237,14 @@ function CleanStand({ innerRef }: { innerRef: React.RefObject<HTMLDivElement> })
         </Stack>
       </div>
 
-      <pre className="mt-4 overflow-x-auto border border-line-dark bg-[#14120c] p-3 font-mono text-[11px] leading-relaxed text-paper/75">
+      <ScrollWindow className="mt-4">
+        <pre className="w-max min-w-full border border-line-dark bg-[#14120c] p-3 font-mono text-[11px] leading-relaxed text-paper/75">
 {`<Stack gap="6">            /* 24px — гарантированно */
   <Box p="4">…</Box>       /* 16px — из шкалы */
   <Box gap="13">…</Box>    /* ❌ console.error + data-spacing-invalid */
 </Stack>`}
-      </pre>
+        </pre>
+      </ScrollWindow>
     </div>
   );
 }
