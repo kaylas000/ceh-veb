@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useInView } from "../lib/fx";
 import { ScrollWindow } from "../components/ScrollWindow";
+import { ORDER_MAX_URL, ORDER_TG_URL } from "../data/contacts";
 
 const NAV = [
   { href: "#arhiv", label: "Архив" },
@@ -49,11 +50,14 @@ export function Header({ onIntro }: { onIntro?: () => void }) {
           <span className="font-mono text-[10px] uppercase tracking-widest text-paper/80">архив: 7 реф · 6 скилов · 11 рецептов</span>
         </div>
         <a
-          href="#proekty"
-          className="ml-auto shrink-0 border-2 border-yellow px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-yellow transition-colors duration-200 hover:bg-yellow hover:text-ink md:ml-0"
-          title="Скачать студию архивом"
+          href={ORDER_MAX_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="press-ready ml-auto flex shrink-0 items-center gap-2 border-2 border-red bg-red px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-paper transition-all duration-200 hover:bg-transparent hover:text-red md:ml-0"
+          title="Заказать сайт — написать в MAX"
         >
-          ↓ Студия
+          <IconMax className="h-3.5 w-3.5" />
+          <span>Заказать</span>
         </a>
       </div>
     </header>
@@ -115,7 +119,7 @@ export function Footer() {
   return (
     <footer className="relative border-t-2 border-ink bg-ink text-paper">
       <div className="mx-auto max-w-[1400px] px-4 py-16 sm:px-6">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr]">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1fr_1.2fr_0.8fr]">
           <div>
             <div className="flex items-center gap-2.5">
               <span className="grid h-9 w-9 place-items-center bg-red font-display text-lg leading-none text-paper">Ц</span>
@@ -126,7 +130,7 @@ export function Footer() {
               который не даёт агенту скатиться в однообразный AI-слоп.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
-              {["Node ≥18", "0 npm-зависимостей", "exit 0/1", "V-01…V-10", "B-01…B-16", "Q-01…Q-07"].map((t) => (
+              {["Node ≥18", "0 npm-зависимостей", "exit 0/1", "V-01…V-12", "B-01…B-16", "Q-01…Q-08"].map((t) => (
                 <span key={t} className="border border-line-dark px-2 py-1 font-mono text-[9px] uppercase tracking-[0.16em] text-paper/60">
                   {t}
                 </span>
@@ -140,6 +144,13 @@ export function Footer() {
                 {TREE}
               </pre>
             </ScrollWindow>
+          </div>
+          <div className="md:col-span-2 lg:col-span-1">
+            <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-yellow">заказ сайта</p>
+            <OrderButtons className="mt-4" />
+            <p className="mt-4 text-[12px] leading-relaxed text-paper/60">
+              Бриф и оценка — бесплатно. Напишите, что за задача — ответим направлением и сроками в тот же день.
+            </p>
           </div>
         </div>
         <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-line-dark pt-5 font-mono text-[10px] uppercase tracking-[0.18em] text-paper/45">
@@ -186,6 +197,141 @@ export function SectionHead({
         </div>
       </div>
       {aside}
+    </div>
+  );
+}
+
+/* ---------- заказ сайта: иконки и кнопки ---------- */
+
+export function IconMax({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="2.6" aria-hidden="true">
+      <path d="M4 19V6l8 9 8-9v13" strokeLinecap="square" strokeLinejoin="miter" />
+    </svg>
+  );
+}
+
+export function IconTg({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M21.9 4.3 18.7 19.4c-.24 1.05-.86 1.3-1.74.81l-4.9-3.6-2.36 2.27c-.26.26-.48.48-.98.48l.35-4.96 9-8.14c.4-.35-.08-.54-.6-.2L6.3 13.1l-4.8-1.5c-1.05-.33-1.07-1.05.22-1.55L20.5 2.6c.87-.32 1.63.2 1.4 1.7z" />
+    </svg>
+  );
+}
+
+export function OrderButtons({
+  tone = "light",
+  size = "md",
+  className = "",
+}: {
+  tone?: "light" | "dark";
+  size?: "sm" | "md" | "lg";
+  className?: string;
+}) {
+  const pad = size === "lg" ? "px-7 py-4 text-sm" : size === "sm" ? "px-3.5 py-2 text-[11px]" : "px-5 py-3 text-[12px]";
+  const base = `inline-flex items-center justify-center gap-2.5 border-2 font-display font-bold uppercase tracking-[0.12em] transition-all duration-200 hover:-translate-y-0.5 ${pad}`;
+  return (
+    <div className={`flex flex-wrap gap-3 ${className}`}>
+      <a
+        href={ORDER_MAX_URL}
+        target="_blank"
+        rel="noreferrer"
+        className={`${base} ${
+          tone === "dark"
+            ? "border-yellow bg-yellow text-ink hover:shadow-[6px_6px_0_rgba(224,169,28,0.45)]"
+            : "border-red bg-red text-paper hover:shadow-[6px_6px_0_rgba(206,44,24,0.4)]"
+        }`}
+      >
+        <IconMax />
+        Заказать сайт · MAX
+      </a>
+      <a
+        href={ORDER_TG_URL}
+        target="_blank"
+        rel="noreferrer"
+        className={`${base} ${
+          tone === "dark"
+            ? "border-paper/50 text-paper hover:border-paper hover:bg-paper hover:text-ink"
+            : "border-ink text-ink hover:bg-ink hover:text-paper"
+        }`}
+      >
+        <IconTg />
+        Telegram
+      </a>
+    </div>
+  );
+}
+
+/* ---------- финальный CTA-баннер ---------- */
+
+export function CtaBanner() {
+  return (
+    <section id="zakaz" className="relative overflow-hidden bg-red text-paper">
+      <div className="hazard h-2.5" aria-hidden="true" />
+      <div className="relative mx-auto max-w-[1400px] px-4 py-16 sm:px-6 lg:py-20">
+        <p className="pointer-events-none absolute -right-6 top-1/2 hidden -translate-y-1/2 select-none font-display text-[16rem] leading-none text-paper/10 lg:block" aria-hidden="true">
+          ЦЕХ
+        </p>
+        <div className="relative grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:items-center">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-paper/80">приём заявок открыт</p>
+            <h2 className="mt-3 font-display text-[clamp(1.9rem,5vw,3.6rem)] uppercase leading-[0.98]">
+              Нужен сайт, где у каждого
+              <br />
+              решения есть источник?
+            </h2>
+            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-paper/85">
+              Работаем по цеховому регламенту: раздача осей, референсы с takeaway, ворота G1–G4 и валидатор,
+              который не пропускает шаблонность. Бриф и оценка — бесплатно, ответ — в день обращения.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 font-mono text-[10px] uppercase tracking-[0.2em] text-paper/70">
+              <span>01 · бриф за 10 минут</span>
+              <span>02 · направление за 1 день</span>
+              <span>03 · сдача по G4</span>
+            </div>
+          </div>
+          <div className="border-2 border-paper/60 bg-ink/25 p-5 backdrop-blur-[2px] sm:p-6">
+            <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-paper/80">прямая связь с цехом</p>
+            <OrderButtons tone="dark" size="lg" className="mt-4" />
+            <p className="mt-4 border-t border-paper/30 pt-3 font-mono text-[10px] leading-relaxed text-paper/70">
+              MAX — быстрее · Telegram — если удобнее · приложите ссылку или скрин того, что не нравится — начнём с «чем это НЕ»
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="hazard h-2.5" aria-hidden="true" />
+    </section>
+  );
+}
+
+/* ---------- мобильная плашка заказа ---------- */
+
+export function MobileOrderBar() {
+  return (
+    <div
+      className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-line-dark bg-ink px-2.5 pt-2.5 md:hidden"
+      style={{ paddingBottom: "calc(10px + env(safe-area-inset-bottom, 0px))" }}
+    >
+      <div className="mx-auto grid max-w-[480px] grid-cols-2 gap-2.5">
+        <a
+          href={ORDER_MAX_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center justify-center gap-2 border-2 border-red bg-red py-3 font-display text-[12px] font-bold uppercase tracking-[0.1em] text-paper active:translate-y-px"
+        >
+          <IconMax className="h-4 w-4" />
+          Заказать · MAX
+        </a>
+        <a
+          href={ORDER_TG_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center justify-center gap-2 border-2 border-paper/40 py-3 font-display text-[12px] font-bold uppercase tracking-[0.1em] text-paper active:translate-y-px"
+        >
+          <IconTg className="h-4 w-4" />
+          Telegram
+        </a>
+      </div>
     </div>
   );
 }

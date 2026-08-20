@@ -106,6 +106,13 @@ img, svg, video, canvas, iframe {
   max-width: 100%;
 }
 
+/* нижняя плашка заказа на мобильном не должна накрывать футер */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 /* ---------- Mobile-Perfect: базовые гарды ---------- */
 
 :root {

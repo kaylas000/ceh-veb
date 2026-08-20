@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Reveal, useCountUp, useInView, useScramble, Stamp } from "../lib/fx";
+import { OrderButtons } from "./Chrome";
 import { REFERENCES, SKILLS } from "../data/library";
 import { RECIPES } from "../data/recipes";
 
@@ -80,23 +81,26 @@ export function Plate() {
             </Reveal>
 
             <Reveal delay={380}>
-              <div className="mt-7 flex flex-wrap items-center gap-3">
-                <a
-                  href="#proekty"
-                  className="press-ready border-2 border-red bg-red px-6 py-3 font-display text-sm font-bold uppercase tracking-[0.12em] text-paper transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_rgba(206,44,24,0.4)]"
-                >
-                  Скачать студию
-                </a>
-                <a
-                  href="#validator"
-                  className="border-2 border-ink px-6 py-3 font-display text-sm font-bold uppercase tracking-[0.12em] text-ink transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:text-paper"
-                >
-                  Прогнать валидатор
-                </a>
-                <span className="flex items-center gap-2 border border-ink/25 bg-card px-3 py-2.5">
-                  <span className="led-dot h-2 w-2 rounded-full bg-green shadow-[0_0_8px_rgba(46,125,79,0.9)]" />
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-muted">G4: зелёно · exit 0</span>
-                </span>
+              <div className="mt-7">
+                <OrderButtons size="lg" />
+                <div className="mt-3 flex flex-wrap items-center gap-3">
+                  <a
+                    href="#proekty"
+                    className="border-2 border-ink px-5 py-2.5 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-ink transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink hover:text-paper"
+                  >
+                    ↓ Скачать студию
+                  </a>
+                  <a
+                    href="#validator"
+                    className="border-2 border-ink/40 px-5 py-2.5 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-ink/70 transition-all duration-200 hover:-translate-y-0.5 hover:border-ink hover:text-ink"
+                  >
+                    Прогнать валидатор
+                  </a>
+                  <span className="flex items-center gap-2 border border-ink/25 bg-card px-3 py-2">
+                    <span className="led-dot h-2 w-2 rounded-full bg-green shadow-[0_0_8px_rgba(46,125,79,0.9)]" />
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-muted">G4: зелёно · exit 0</span>
+                  </span>
+                </div>
               </div>
             </Reveal>
 

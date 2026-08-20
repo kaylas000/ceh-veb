@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Header, Footer, NoiseLayer, Marquee } from "./sections/Chrome";
+import { Header, Footer, NoiseLayer, Marquee, CtaBanner, MobileOrderBar } from "./sections/Chrome";
 import { Plate } from "./sections/Plate";
 import { Library } from "./sections/Library";
 import { Motion } from "./sections/Motion";
@@ -101,8 +101,10 @@ export default function App() {
         />
         <ValidatorSection />
         <Projects />
+        <CtaBanner />
       </main>
       <Footer />
+      <MobileOrderBar />
       {intro && (
         <IntroOverlay
           key={intro.token}
