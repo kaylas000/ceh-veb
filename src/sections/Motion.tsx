@@ -269,7 +269,10 @@ export function Motion() {
               dark
               num="02"
               kicker="motion-цех"
-              lines={[<>Шесть сид-рецептов,</>, <span key="m" className="text-paper/50">три добытых в бою</span>]}
+              lines={[
+                <>{RECIPES.length} рецептов движения,</>,
+                <span key="m" className="text-paper/50">{RECIPES.filter((r) => r.mined).length} добытых в бою</span>
+              ]}
             />
             <Reveal delay={140}>
               <p className="mt-5 max-w-xl text-sm leading-relaxed text-paper/70">

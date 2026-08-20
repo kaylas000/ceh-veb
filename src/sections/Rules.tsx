@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { CONSTITUTION, BANNED, QUOTAS } from "../data/library";
 import { Reveal, Stamp, useInView } from "../lib/fx";
 import { SectionHead } from "./Chrome";
@@ -15,8 +16,28 @@ function MethodBadge({ m }: { m: string }) {
   );
 }
 
+/* маппинг правила → слой принуждения */
+function enforcement(code: string): string {
+  const n = parseInt(code.split("-")[1], 10);
+  if (n <= 9) return "ворота G1–G4 + validate.mjs";
+  if (n === 10) return "регламент возврата";
+  if (n === 11) return "приёмка куратора";
+  if (n === 12) return "mobile-аудит + sweep";
+  if (n === 13) return "seo-gate в CI";
+  if (n === 14) return "геном-станок + реестр";
+  return "qa fortress + ci-гейты";
+}
+
 export function Rules() {
   const [headRef, headIn] = useInView<HTMLDivElement>(0.3);
+  const [openBan, setOpenBan] = useState<string | null>(null);
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const copyPattern = (code: string, pattern: string) => {
+    navigator.clipboard?.writeText(pattern).catch(() => {});
+    setCopied(code);
+    window.setTimeout(() => setCopied(null), 1500);
+  };
 
   return (
     <section id="reglament" className="relative bg-paper">
@@ -34,14 +55,15 @@ export function Rules() {
             </div>
             <Reveal delay={120}>
               <p className="mt-5 max-w-sm text-sm leading-relaxed text-ink/70">
-                Одиннадцать нумерованных правил. Каждое проверяемо: валидатором, артдиректором или обоими сразу.
-                Нарушение без фикса — возврат на G4.
+                {CONSTITUTION.length} нумерованных правил — от «код не пишется до DIRECTION» до «ошибки ловятся на
+                самом дешёвом слое». Каждое проверяемо и привязано к конкретному механизму принуждения. Нарушение без
+                фикса — возврат на G4.
               </p>
             </Reveal>
             <Reveal delay={200}>
               <div className="mt-7 inline-block">
                 <Stamp rot={-6} color="var(--color-green)">
-                  Утверждено · v1.0
+                  Утверждено · v2.0
                 </Stamp>
               </div>
             </Reveal>
@@ -63,6 +85,9 @@ export function Rules() {
                         проверка: <span className="text-ink/70">{r.check}</span>
                       </span>
                       <MethodBadge m={r.method} />
+                      <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-steel">
+                        ⚙ {enforcement(r.code)}
+                      </span>
                     </div>
                   </div>
                 </li>
@@ -71,72 +96,116 @@ export function Rules() {
           </ol>
         </div>
 
-        {/* BANNED */}
+        {/* BANNED — интерактивный grep-терминал */}
         <div className="mt-24">
           <SectionHead
             num="03.1"
             kicker="anti-slop/BANNED.md"
-            lines={[<>Чёрный список ·</>, <span key="b" className="text-red">16 пунктов</span>]}
+            lines={[<>Чёрный список ·</>, <span key="b" className="text-red">{BANNED.length} пунктов</span>]}
             aside={
               <Reveal>
                 <p className="max-w-sm text-sm leading-relaxed text-ink/70">
-                  У каждого запрета — метод проверки: grep-паттерн или критерий артдиректора. lint-slop.mjs идёт по
-                  этому списку и возвращает file:line.
+                  У каждого запрета — метод проверки. Клик по строке раскрывает grep-паттерн; клик по паттерну
+                  копирует его в буфер. lint-slop.mjs идёт по этому списку и возвращает file:line.
                 </p>
               </Reveal>
             }
           />
-          <div className="mt-8 border-2 border-ink bg-card">
-            <div className="hidden grid-cols-[70px_1fr_150px_220px] gap-4 border-b-2 border-ink bg-ink px-4 py-2.5 font-mono text-[10px] uppercase tracking-[0.2em] text-paper/70 md:grid">
-              <span>код</span>
-              <span>запрет</span>
-              <span>метод</span>
-              <span>паттерн / критерий</span>
+          <div className="mt-8 border-2 border-ink bg-ink">
+            <div className="flex items-center justify-between border-b-2 border-line-dark px-4 py-2.5">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-paper/70">$ lint-slop.mjs --watch</span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-full bg-red" />
+                <span className="h-2.5 w-2.5 rounded-full bg-yellow" />
+                <span className="h-2.5 w-2.5 rounded-full bg-green" />
+              </span>
             </div>
-            {BANNED.map((b, i) => (
-              <Reveal key={b.code} delay={Math.min(i * 30, 180)}>
-                <div className="grid gap-2 border-b border-line px-4 py-3.5 transition-colors duration-200 last:border-b-0 hover:bg-paper md:grid-cols-[70px_1fr_150px_220px] md:gap-4">
-                  <span className="font-mono text-xs font-bold text-red">{b.code}</span>
-                  <span className="text-sm font-medium leading-snug text-ink">{b.text}</span>
-                  <span><MethodBadge m={b.method} /></span>
-                  <span className="break-words font-mono text-[11px] leading-snug text-muted">{b.pattern}</span>
-                </div>
-              </Reveal>
-            ))}
+            {BANNED.map((b, i) => {
+              const open = openBan === b.code;
+              return (
+                <Reveal key={b.code} delay={Math.min(i * 30, 180)}>
+                  <button
+                    onClick={() => setOpenBan(open ? null : b.code)}
+                    className={`block w-full border-b border-line-dark px-4 py-3.5 text-left transition-colors duration-200 last:border-b-0 ${
+                      open ? "bg-ink-2" : "hover:bg-ink-2/60"
+                    }`}
+                    aria-expanded={open}
+                  >
+                    <div className="grid items-center gap-2 md:grid-cols-[70px_1fr_150px_28px] md:gap-4">
+                      <span className="font-mono text-xs font-bold text-red">{b.code}</span>
+                      <span className="text-sm font-medium leading-snug text-paper">{b.text}</span>
+                      <span><MethodBadge m={b.method} /></span>
+                      <span className={`hidden font-mono text-paper/50 transition-transform duration-200 md:block ${open ? "rotate-90" : ""}`}>›</span>
+                    </div>
+                    {open && (
+                      <div className="mt-3 md:pl-[86px]">
+                        <span
+                          role="button"
+                          tabIndex={0}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            copyPattern(b.code, b.pattern);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.stopPropagation();
+                              copyPattern(b.code, b.pattern);
+                            }
+                          }}
+                          className="inline-block cursor-copy border border-line-dark bg-[#14120c] px-3 py-1.5 font-mono text-[11px] text-yellow transition-colors hover:border-yellow"
+                          title="клик — скопировать паттерн"
+                        >
+                          {copied === b.code ? "✓ скопировано" : `grep -E "${b.pattern}"`}
+                        </span>
+                      </div>
+                    )}
+                  </button>
+                </Reveal>
+              );
+            })}
             <div className="hazard-thin h-2" aria-hidden="true" />
           </div>
         </div>
 
-        {/* QUOTAS */}
+        {/* QUOTAS — шкалы-допуски */}
         <div className="mt-24">
-          <SectionHead num="03.2" kicker="anti-slop/QUOTAS.md" lines={[<>Квоты —</>, <span key="q" className="text-red">числовые лимиты</span>]} />
-          <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4">
-            {QUOTAS.map((q, i) => (
-              <Reveal key={q.code} delay={Math.min(i * 60, 300)}>
-                <div className="group h-full border-2 border-ink bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:bg-ink">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-red transition-colors group-hover:text-yellow">{q.code}</p>
-                  <p className="mt-2 font-display text-4xl leading-none text-ink transition-colors duration-300 group-hover:text-paper sm:text-5xl">
-                    {q.value}
-                  </p>
-                  <p className="mt-3 text-[13px] font-medium leading-snug text-ink/75 transition-colors duration-300 group-hover:text-paper/75">
-                    {q.text}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
-            <Reveal delay={360}>
-              <div className="flex h-full flex-col justify-center border-2 border-ink bg-ink p-5 text-paper">
-                <p className="font-display text-lg uppercase leading-snug">
-                  Квота — не совет.
-                  <br />
-                  <span className="text-red">Квота — допуск.</span>
-                </p>
-                <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-paper/50">
-                  проверяет validate.mjs · код V-05
-                </p>
-              </div>
-            </Reveal>
+          <SectionHead num="03.2" kicker="anti-slop/QUOTAS.md" lines={[<>Квоты —</>, <span key="q" className="text-red">числовые допуски</span>]} />
+          <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-5">
+            {QUOTAS.map((q, i) => {
+              /* условная «заполненность» шкалы для визуального ритма */
+              const fill = [60, 40, 75, 90, 50, 100, 35, 80, 70, 55][i % 10];
+              return (
+                <Reveal key={q.code} delay={Math.min(i * 50, 300)}>
+                  <div className="group relative h-full overflow-hidden border-2 border-ink bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-ink">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-red transition-colors group-hover:text-yellow">{q.code}</p>
+                    <p className="mt-2 font-display text-3xl leading-none text-ink transition-colors duration-300 group-hover:text-paper">
+                      {q.value}
+                    </p>
+                    <p className="mt-2.5 text-[12px] font-medium leading-snug text-ink/75 transition-colors duration-300 group-hover:text-paper/75">
+                      {q.text}
+                    </p>
+                    {/* шкала допуска */}
+                    <div className="mt-3 h-1.5 w-full bg-ink/10 transition-colors group-hover:bg-paper/15">
+                      <div
+                        className="h-full bg-red transition-all duration-500 group-hover:bg-yellow"
+                        style={{ width: `${fill}%` }}
+                      />
+                    </div>
+                  </div>
+                </Reveal>
+              );
+            })}
           </div>
+          <Reveal delay={360}>
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-2 border-ink bg-ink px-5 py-4 text-paper">
+              <p className="font-display text-base uppercase leading-snug">
+                Квота — не совет. <span className="text-red">Квота — допуск.</span>
+              </p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper/50">
+                проверяет validate.mjs · V-05 + V-12…V-14
+              </p>
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>

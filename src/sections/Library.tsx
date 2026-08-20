@@ -163,9 +163,10 @@ export function Library() {
             aside={
               <Reveal delay={150}>
                 <p className="max-w-sm text-sm leading-relaxed text-ink/70">
-                  Агент берёт материалы только отсюда. Приём без источника — слоп (К-04). Записи лежат в{" "}
+                  Агент берёт материалы только отсюда — приём без источника есть слоп (К-04). Архив живой: удачное из
+                  каждого проекта возвращается сюда (К-11). Записи — в{" "}
                   <span className="font-mono text-[13px]">references/</span>, <span className="font-mono text-[13px]">skills/</span>,{" "}
-                  <span className="font-mono text-[13px]">assets/</span> — ниже живой INDEX.md.
+                  <span className="font-mono text-[13px]">assets/</span>.
                 </p>
               </Reveal>
             }
@@ -194,7 +195,7 @@ export function Library() {
           {tab === "refs" && (
             <div className="space-y-5">
               <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted">
-                INDEX.md · 7 записей · куратор дольёт до 30 со скриншотами
+                INDEX.md · {REFERENCES.length} записей · <span className="text-green">{REFERENCES.filter((r) => r.id === "REF-07").length} добыта из боя</span> · куратор дольёт до 30
               </p>
               {REFERENCES.map((r, i) => (
                 <RefCard key={r.id} r={r} i={i} />
