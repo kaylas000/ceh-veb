@@ -236,7 +236,7 @@ export function ValidatorSection() {
             </div>
             <div className="p-4 sm:p-5">
               <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-paper/45">{file || "—"}</p>
-              <ScrollWindow axis="both" className="mt-3 max-h-[420px]">
+              <ScrollWindow axis="both" className="mt-3" innerClassName="max-h-[420px]">
                 <pre className="w-max min-w-full border border-line-dark bg-[#14120c] p-4 font-mono text-[11px] leading-relaxed text-paper/80">
                   {file ? FS[file] : ""}
                 </pre>
@@ -251,8 +251,7 @@ export function ValidatorSection() {
             <h3 className="font-display text-[clamp(1.6rem,3.4vw,2.6rem)] uppercase leading-none text-paper">
               Протокол испытаний · ТЗ п.8
             </h3>
-            <ScrollWindow className="mt-6" fadeFrom="#16150f">
-              <div className="border-2 border-paper/25">
+            <ScrollWindow className="mt-6 border-2 border-paper/25" fadeFrom="#16150f">
               <table className="w-max min-w-[760px] border-collapse font-mono text-[12px]">
                 <thead>
                   <tr className="bg-paper/5 text-left">
@@ -281,7 +280,6 @@ export function ValidatorSection() {
                   </tr>
                 </tbody>
               </table>
-              </div>
             </ScrollWindow>
             <p className="mt-4 font-mono text-[11px] leading-relaxed text-paper/55">
               Негативный тест обязан падать с ≥5 нарушениями — фактически:{" "}

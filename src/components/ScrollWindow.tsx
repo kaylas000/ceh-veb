@@ -5,11 +5,13 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 export function ScrollWindow({
   children,
   className = "",
+  innerClassName = "",
   axis = "x",
   fadeFrom = "#14120c",
 }: {
   children: ReactNode;
   className?: string;
+  innerClassName?: string;
   axis?: "x" | "both";
   fadeFrom?: string;
 }) {
@@ -38,7 +40,7 @@ export function ScrollWindow({
     <div className={`relative ${className}`}>
       <div
         ref={innerRef}
-        className={`term-scroll ${axis === "x" ? "overflow-x-auto" : "overflow-auto"}`}
+        className={`term-scroll ${axis === "x" ? "overflow-x-auto" : "overflow-auto"} ${innerClassName}`}
         tabIndex={0}
         role="region"
         aria-label="Область с прокруткой"
