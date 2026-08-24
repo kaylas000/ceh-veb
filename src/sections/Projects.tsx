@@ -4,7 +4,6 @@ import { downloadFilesZip } from "../lib/zip";
 import { FS } from "../data/fs";
 import { Reveal, Stamp, useInView } from "../lib/fx";
 import { SectionHead } from "./Chrome";
-import { BANK_OFFERS } from "../data/bankiData";
 
 const CYCLE = [
   { n: "1", t: "Скачай студию", d: "ЦЕХ целиком: AGENTS.md, скилы, рецепты, валидатор, шаблоны — один ZIP.", hl: true },
@@ -109,7 +108,7 @@ export function Projects() {
           </div>
         </Reveal>
 
-        {/* БОЕВОЙ ПРОЕКТ 1: Pcpolimer */}
+        {/* боевой проект */}
         <Reveal>
           <article className="mt-6 border-2 border-paper/25 bg-ink-2/70">
             <div className="grid lg:grid-cols-[1.25fr_1fr]">
@@ -161,6 +160,13 @@ export function Projects() {
                   >
                     ↓ Скачать сайт (ZIP)
                   </button>
+                  <a
+                    href="#validator"
+                    onClick={() => window.dispatchEvent(new CustomEvent("ceh:fixture", { detail: "projects/pcpolimer" }))}
+                    className="border-2 border-paper/35 px-5 py-2.5 font-display text-sm font-bold uppercase tracking-[0.12em] text-paper transition-colors duration-200 hover:bg-paper hover:text-ink"
+                  >
+                    Прогон валидатора
+                  </a>
                 </div>
               </div>
 
@@ -184,75 +190,6 @@ export function Projects() {
                     <p className="font-mono text-xs uppercase tracking-[0.18em] text-paper/80">validate: 10/10 · exit 0</p>
                     <p className="mt-1 font-mono text-[10px] leading-relaxed text-paper/45">
                       V-01…V-14 зелёные · 3 рецепта (Q-01) · сходство с историей 0% (V-09)
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-        </Reveal>
-
-        {/* БОЕВОЙ ПРОЕКТ 2: Все-Банки (Финансовая витрина) */}
-        <Reveal>
-          <article className="mt-6 border-2 border-yellow/40 bg-ink-2/80">
-            <div className="grid lg:grid-cols-[1.25fr_1fr]">
-              <div className="border-b-2 border-paper/25 p-5 sm:p-6 lg:border-b-0 lg:border-r-2">
-                <div className="flex flex-wrap items-center gap-2.5">
-                  <span className="bg-yellow px-2 py-0.5 font-mono text-[11px] font-bold tracking-wider text-ink">PRJ-02</span>
-                  <h3 className="font-display text-xl uppercase tracking-wide text-paper sm:text-2xl">
-                    Финансовая витрина · Все-Банки
-                  </h3>
-                  <span className="border border-green px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-green">
-                    принят G4 · 52 продукта
-                  </span>
-                </div>
-                <p className="mt-3 text-[13px] leading-relaxed text-paper/70">
-                  Премиальный банковский бутик: 3D кольцевая карусель карт, 52 продукта (дебет до 15% кешбэк, вклады до 20%, займы 0%), 
-                  интерактивные калькуляторы и раскладывающееся 3D-досье карточки. Извлечено из all-banki.
-                </p>
-                <div className="mt-4">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/45">база данных & фичи</p>
-                  <dl className="mt-2 space-y-1.5">
-                    {[
-                      ["3D Витрина", "кольцевая карусель с Depth of Field"],
-                      ["База карт", "52 продукта (Т-Банк, Альфа, ВТБ, МФО)"],
-                      ["Инструменты", "калькулятор кредитов, вкладов, ипотек"],
-                    ].map(([k, v]) => (
-                      <div key={k} className="flex flex-wrap items-baseline gap-x-3 border-b border-line-dark pb-1.5">
-                        <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper/45">{k}</dt>
-                        <dd className="font-display text-sm uppercase text-yellow">{v}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-                <div className="mt-5 flex flex-wrap gap-2.5">
-                  <a
-                    href="#/banki"
-                    className="border-2 border-yellow bg-yellow px-5 py-2.5 font-display text-sm font-bold uppercase tracking-[0.12em] text-ink transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_rgba(224,169,28,0.5)]"
-                  >
-                    → Открыть финансовую витрину
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-5 p-5 sm:p-6">
-                <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-yellow">архитектурные фичи витрины</p>
-                  <ul className="mt-2.5 space-y-1.5 font-mono text-[11px] text-paper/75">
-                    <li><span className="text-yellow">+ 3D Carousel</span> — кольцевое перелистывание карт</li>
-                    <li><span className="text-yellow">+ 3D Folder Dossier</span> — 3 слоя раскрытия продукта</li>
-                    <li><span className="text-yellow">+ Calculators</span> — расчет аннуитета и дохода вкладов</li>
-                    <li><span className="text-yellow">+ Video Layer</span> — hero-video.mp4 фон</li>
-                  </ul>
-                </div>
-                <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-4 border-t border-line-dark pt-4">
-                  <Stamp rot={4} color="var(--color-yellow)">
-                    Витрина · 3D
-                  </Stamp>
-                  <div>
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-paper/80">Каталог: 52 оффера</p>
-                    <p className="mt-1 font-mono text-[10px] leading-relaxed text-paper/45">
-                      Т-Банк • Альфа • ВТБ • MoneyMan • Vivus • Займер
                     </p>
                   </div>
                 </div>

@@ -20,7 +20,6 @@ import { PRESET_ORDER, type IntroPreset } from "./lib/intro";
 import { initSmooth, destroySmooth, scrollToId } from "./lib/smooth";
 import { useRoute } from "./lib/router";
 import { PcpolimerApp } from "./co/PcpolimerApp";
-import BankiApp from "./co/BankiApp";
 
 const SEEN_KEY = "ceh-intro-seen";
 const IDX_KEY = "ceh-intro-preset";
@@ -59,6 +58,7 @@ export default function App() {
   useEffect(() => {
     if (route !== "ceh") return;
     initSmooth();
+    /* перехват якорных ссылок — плавный ход через Lenis */
     const onClick = (e: MouseEvent) => {
       const a = (e.target as HTMLElement).closest('a[href^="#"]');
       if (!a) return;
@@ -74,17 +74,10 @@ export default function App() {
     };
   }, [route]);
 
-  // Route 1: Боевой проект Порошковая покраска
   if (route === "pcpolimer") {
     return <PcpolimerApp />;
   }
 
-  // Route 2: Боевой проект Финансовая витрина Все-Банки
-  if (route === "banki") {
-    return <BankiApp />;
-  }
-
-  // Default Route: Студия ЦЕХ
   return (
     <div className="bg-paper font-body text-ink">
       <NoiseLayer />
