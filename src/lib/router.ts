@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 
-/* Мини-роутер по hash: '#/pcpolimer' — боевой проект, всё остальное — ЦЕХ */
+/* Мини-роутер по hash:
+   '#/pcpolimer' — боевой проект Pcpolimer (порошковая покраска),
+   '#/banki' — боевой проект Все-Банки (финансовая витрина),
+   всё остальное — ЦЕХ (студийный портал)
+*/
 
-export type Route = "ceh" | "pcpolimer";
+export type Route = "ceh" | "pcpolimer" | "banki";
 
 function parse(hash: string): Route {
-  return hash.startsWith("#/pcpolimer") ? "pcpolimer" : "ceh";
+  if (hash.startsWith("#/pcpolimer")) return "pcpolimer";
+  if (hash.startsWith("#/banki")) return "banki";
+  return "ceh";
 }
 
 export function useRoute(): Route {

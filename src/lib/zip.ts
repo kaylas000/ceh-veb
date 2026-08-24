@@ -109,6 +109,12 @@ function zipAndDownload(filename: string, files: Array<{ name: string; data: Uin
   return files.length;
 }
 
+export function zipLabel(state: ZipState, count: number, idle: string): string {
+  if (state === "busy") return "Упаковка…";
+  if (state === "done") return `✓ Отдано (${count} файлов)`;
+  return idle;
+}
+
 /* хук для кнопок «Скачать» */
 export function useZipDownload(action: () => Promise<number>) {
   const [state, setState] = useState<ZipState>("idle");

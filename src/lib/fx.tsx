@@ -199,3 +199,13 @@ export function Stamp({
     </span>
   );
 }
+
+/* ---------- звёзды рейтинга ---------- */
+
+export function Stars({ count = 5 }: { count?: number }) {
+  return (
+    <span className="inline-flex text-[#d4af37]" aria-label={`Рейтинг ${count} из 5`}>
+      {"★".repeat(count)}
+    </span>
+  );
+}

@@ -18,11 +18,15 @@ import { QaFortress } from "./sections/QaFortress";
 import { IntroOverlay } from "./components/IntroOverlay";
 import { PRESET_ORDER, type IntroPreset } from "./lib/intro";
 import { initSmooth, destroySmooth, scrollToId } from "./lib/smooth";
+import { useRoute } from "./lib/router";
+import { PcpolimerApp } from "./co/PcpolimerApp";
+import BankiApp from "./co/BankiApp";
 
 const SEEN_KEY = "ceh-intro-seen";
 const IDX_KEY = "ceh-intro-preset";
 
 export default function App() {
+  const route = useRoute();
   const [intro, setIntro] = useState<{ preset: IntroPreset; token: number } | null>(null);
   const presetIdx = useRef(0);
 
@@ -40,6 +44,7 @@ export default function App() {
 
   /* первый визит в сессии: заставка; повторные — сразу студия (SK-06) */
   useEffect(() => {
+    if (route !== "ceh") return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let seen = false;
     try {
@@ -49,16 +54,16 @@ export default function App() {
       seen = false;
     }
     if (!reduced && !seen) playIntro();
-  }, [playIntro]);
+  }, [playIntro, route]);
 
   useEffect(() => {
+    if (route !== "ceh") return;
     initSmooth();
-    /* перехват якорных ссылок — плавный ход через Lenis */
     const onClick = (e: MouseEvent) => {
       const a = (e.target as HTMLElement).closest('a[href^="#"]');
       if (!a) return;
       const href = a.getAttribute("href");
-      if (!href || href.length < 2) return;
+      if (!href || href.length < 2 || href.startsWith("#/")) return;
       e.preventDefault();
       scrollToId(href);
     };
@@ -67,8 +72,19 @@ export default function App() {
       document.removeEventListener("click", onClick);
       destroySmooth();
     };
-  }, []);
+  }, [route]);
 
+  // Route 1: Боевой проект Порошковая покраска
+  if (route === "pcpolimer") {
+    return <PcpolimerApp />;
+  }
+
+  // Route 2: Боевой проект Финансовая витрина Все-Банки
+  if (route === "banki") {
+    return <BankiApp />;
+  }
+
+  // Default Route: Студия ЦЕХ
   return (
     <div className="bg-paper font-body text-ink">
       <NoiseLayer />
