@@ -1175,6 +1175,34 @@ html:not(.js) .intro { display: none; }
   }
   .steps-mini li::before { font-size: 15px; line-height: 1.55; }
   .steps-mini li b { display: inline; }
+  /* К-12: прайс LP — строки-ведомости вместо бокового скролла и sticky-плашки */
+  .lp-price .table-wrap { overflow-x: clip; border: 0; background: transparent; }
+  .lp-price .ledger { min-width: 0; }
+  .lp-price .ledger, .lp-price .ledger tbody, .lp-price .ledger tbody tr { display: block; }
+  .lp-price .ledger thead { display: none; }
+  .lp-price .ledger tbody tr { cursor: default; }
+  .lp-price .ledger td {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 44px;
+    padding: 10px 2px;
+    border-bottom: 1px dashed var(--line);
+    text-align: left;
+    background: transparent;
+  }
+  .lp-price .ledger td::before {
+    content: attr(data-room);
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--blue);
+  }
+  .lp-price .ledger td::after { content: " ₽"; }
+  .lp-price .ledger tbody tr:hover td { background: transparent; }
 }
 @media (max-width: 420px) {
   .crumb { padding: 12px 14px 0; }

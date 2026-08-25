@@ -40,7 +40,7 @@ function pageHtml(svc, it) {
   const minPrice = Math.min(...svc.price);
   const others = svc.items.filter((o) => o.slug !== it.slug);
   const url = `${DOMAIN}/lp/${it.slug}/`;
-  const priceCells = svc.price.map((p) => `<td>${p.toLocaleString("ru-RU").replace(/,/g, " ")}</td>`).join("");
+  const priceCells = svc.price.map((p, i) => `<td data-room="${ROOM_TYPES[i]}">${p.toLocaleString("ru-RU").replace(/,/g, " ")}</td>`).join("");
 
   const blocksHtml = it.blocks.map((b) => `
       <h2 class="lp-h2">${esc(b.h2)}</h2>
