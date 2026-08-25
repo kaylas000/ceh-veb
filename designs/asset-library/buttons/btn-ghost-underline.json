@@ -1,0 +1,19 @@
+{
+  "id": "btn-ghost-underline",
+  "name": "Ghost Underline",
+  "mood_tags": [
+    "минималистичный",
+    "премиальный"
+  ],
+  "dimensions": {
+    "shape": "underline",
+    "fill": "transparent",
+    "interaction": "line-grow"
+  },
+  "best_for_industries": [
+    "мода",
+    "архитектура",
+    "издательство"
+  ],
+  "note": "линия растёт под текстом"
+}

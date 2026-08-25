@@ -1,0 +1,16 @@
+{
+  "id": "grid-classic-12",
+  "name": "Classic 12-col",
+  "mood_tags": [
+    "традиционный"
+  ],
+  "dimensions": {
+    "columns": "12",
+    "symmetry": "symmetric",
+    "density": "medium"
+  },
+  "best_for_industries": [
+    "корпоративный"
+  ],
+  "note": "классическая модульная сетка"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "ico-outline-thin",
+  "name": "Outline Thin",
+  "mood_tags": [
+    "минималистичный",
+    "премиальный"
+  ],
+  "dimensions": {
+    "weight": "light",
+    "style": "outline"
+  },
+  "best_for_industries": [
+    "финансы",
+    "мода"
+  ],
+  "note": "волосная линия 1px"
+}

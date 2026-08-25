@@ -1,0 +1,18 @@
+{
+  "id": "btn-solid-sharp",
+  "name": "Solid Sharp",
+  "mood_tags": [
+    "дерзкий",
+    "технологичный"
+  ],
+  "dimensions": {
+    "shape": "sharp",
+    "fill": "solid",
+    "interaction": "offset-shadow"
+  },
+  "best_for_industries": [
+    "индустрия",
+    "строительство"
+  ],
+  "note": "жёсткая тень-смещение на hover"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "ill-line-engraving",
+  "name": "Line Engraving",
+  "mood_tags": [
+    "традиционный",
+    "премиальный"
+  ],
+  "dimensions": {
+    "technique": "line",
+    "complexity": "medium"
+  },
+  "best_for_industries": [
+    "издательство",
+    "финансы"
+  ],
+  "note": "гравюрная штриховка"
+}

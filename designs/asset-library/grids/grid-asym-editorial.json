@@ -1,0 +1,18 @@
+{
+  "id": "grid-asym-editorial",
+  "name": "Asymmetric Editorial",
+  "mood_tags": [
+    "минималистичный",
+    "премиальный"
+  ],
+  "dimensions": {
+    "columns": "12",
+    "symmetry": "asymmetric",
+    "density": "low"
+  },
+  "best_for_industries": [
+    "мода",
+    "издательство"
+  ],
+  "note": "ломаная редакторская сетка"
+}

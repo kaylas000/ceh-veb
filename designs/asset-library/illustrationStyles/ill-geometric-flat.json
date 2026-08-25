@@ -1,0 +1,17 @@
+{
+  "id": "ill-geometric-flat",
+  "name": "Geometric Flat",
+  "mood_tags": [
+    "современный",
+    "технологичный"
+  ],
+  "dimensions": {
+    "technique": "flat",
+    "complexity": "low"
+  },
+  "best_for_industries": [
+    "saas",
+    "стартапы"
+  ],
+  "note": "плоская геометрия"
+}

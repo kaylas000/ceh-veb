@@ -1,0 +1,17 @@
+{
+  "id": "anim-spring-bounce",
+  "name": "Spring Bounce",
+  "mood_tags": [
+    "игривый",
+    "дружелюбный"
+  ],
+  "dimensions": {
+    "personality": "bouncy",
+    "intensity": "high"
+  },
+  "best_for_industries": [
+    "кафе",
+    "детские"
+  ],
+  "note": "пружинный отскок"
+}

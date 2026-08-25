@@ -1,0 +1,17 @@
+{
+  "id": "ico-geometric-fill",
+  "name": "Geometric Fill",
+  "mood_tags": [
+    "технологичный",
+    "современный"
+  ],
+  "dimensions": {
+    "weight": "bold",
+    "style": "fill"
+  },
+  "best_for_industries": [
+    "стартапы",
+    "saas"
+  ],
+  "note": "заполненная геометрия"
+}

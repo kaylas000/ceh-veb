@@ -1,0 +1,17 @@
+{
+  "id": "ill-organic-handdrawn",
+  "name": "Organic Handdrawn",
+  "mood_tags": [
+    "дружелюбный",
+    "спокойный"
+  ],
+  "dimensions": {
+    "technique": "handdrawn",
+    "complexity": "medium"
+  },
+  "best_for_industries": [
+    "wellness",
+    "кафе"
+  ],
+  "note": "живые органичные формы"
+}

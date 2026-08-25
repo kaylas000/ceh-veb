@@ -1,0 +1,17 @@
+{
+  "id": "ico-handdrawn",
+  "name": "Handdrawn",
+  "mood_tags": [
+    "дружелюбный",
+    "игривый"
+  ],
+  "dimensions": {
+    "weight": "medium",
+    "style": "sketch"
+  },
+  "best_for_industries": [
+    "кафе",
+    "детские"
+  ],
+  "note": "рисованные от руки"
+}

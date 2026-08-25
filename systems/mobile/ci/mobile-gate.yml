@@ -1,0 +1,25 @@
+# Mobile Perfect Gate: sweep + тап-зоны + Lighthouse mobile + перф-бюджет.
+name: Mobile Perfect Gate
+on:
+  pull_request:
+    branches: [main, staging]
+jobs:
+  viewport-sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: npm install && npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run preview & npx wait-on http://localhost:4173
+      - run: node testing/device-sweep/run-viewport-sweep.js
+  mobile-performance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: npm install && npm run build
+      - run: npm i -g @lhci/cli
+      - run: lhci autorun --config=performance/lighthouse-mobile.config.js

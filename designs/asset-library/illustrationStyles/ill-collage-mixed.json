@@ -1,0 +1,17 @@
+{
+  "id": "ill-collage-mixed",
+  "name": "Collage Mixed",
+  "mood_tags": [
+    "дерзкий",
+    "игривый"
+  ],
+  "dimensions": {
+    "technique": "collage",
+    "complexity": "high"
+  },
+  "best_for_industries": [
+    "медиа",
+    "мода"
+  ],
+  "note": "фото + графика, коллаж"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "anim-precise-snap",
+  "name": "Precise Snap",
+  "mood_tags": [
+    "технологичный",
+    "современный"
+  ],
+  "dimensions": {
+    "personality": "precise",
+    "intensity": "medium"
+  },
+  "best_for_industries": [
+    "saas",
+    "стартапы"
+  ],
+  "note": "точный щелчок"
+}

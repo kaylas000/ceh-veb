@@ -1,0 +1,19 @@
+name: Production Deployment Gate
+on:
+  push: { branches: [main] }
+jobs:
+  full-qa-suite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: npm ci && npm run build
+      - run: node scripts/run-full-audit.js
+      - run: npm audit --audit-level=high
+  deploy-approval:
+    needs: full-qa-suite
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - run: echo "✅ Production Gate пройден"

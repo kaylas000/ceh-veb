@@ -1,0 +1,11 @@
+id: REF-01
+source: https://pudding.cool
+style: [scroll-story, editorial]
+techniques:
+  - sticky-сцена ≥70vh, шаги-абзацы справа
+  - один график — один инсайт на шаг
+  - активный шаг подсвечивается, сцена меняет одно состояние
+motion: [sticky-scene, mask-reveal]
+palette: ['#F6F1E7', '#1D3A5F', '#D64533']
+takeaway: «Закрепи сцену на весь экран и меняй в ней ровно одно состояние на шаг текста.»
+screenshot: pending

@@ -1,0 +1,67 @@
+[
+  {
+    "name": "iPhone SE",
+    "w": 375,
+    "h": 667,
+    "dpr": 2,
+    "os": "iOS",
+    "reason": "самый маленький актуальный экран iOS"
+  },
+  {
+    "name": "iPhone 14 Pro",
+    "w": 393,
+    "h": 852,
+    "dpr": 3,
+    "os": "iOS",
+    "notch": true,
+    "reason": "Dynamic Island + safe area"
+  },
+  {
+    "name": "Galaxy S21",
+    "w": 360,
+    "h": 800,
+    "dpr": 3,
+    "os": "Android",
+    "reason": "самый частый Android-профиль"
+  },
+  {
+    "name": "Galaxy A · бюджет",
+    "w": 360,
+    "h": 780,
+    "dpr": 2,
+    "os": "Android",
+    "reason": "слабое железо — перф-тест"
+  },
+  {
+    "name": "iPad Mini",
+    "w": 768,
+    "h": 1024,
+    "dpr": 2,
+    "os": "iPadOS",
+    "reason": "пограничная зона mobile/tablet"
+  },
+  {
+    "name": "iPad Pro 12.9",
+    "w": 1024,
+    "h": 1366,
+    "dpr": 2,
+    "os": "iPadOS",
+    "reason": "планшет ≠ растянутый mobile"
+  },
+  {
+    "name": "Xiaomi Redmi",
+    "w": 393,
+    "h": 851,
+    "dpr": 2.75,
+    "os": "Android",
+    "reason": "лидер бюджетного сегмента"
+  },
+  {
+    "name": "Z Fold · открыт",
+    "w": 717,
+    "h": 512,
+    "dpr": 2,
+    "os": "Android",
+    "reason": "складной, необычное соотношение"
+  }
+]

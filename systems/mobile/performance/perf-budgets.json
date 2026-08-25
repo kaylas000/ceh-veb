@@ -1,0 +1,25 @@
+{
+  "mobile": {
+    "network": "Slow 4G",
+    "cpu_throttle": 4,
+    "budgets": {
+      "lcp": 2500,
+      "cls": 0.1,
+      "tti": 3800,
+      "totalPageSize": 1500000,
+      "jsBundle": 300000,
+      "imageWeight": 800000,
+      "fontWeight": 150000,
+      "totalRequests": 50
+    }
+  },
+  "mobile_slow": {
+    "network": "Slow 3G",
+    "cpu_throttle": 6,
+    "budgets": {
+      "lcp": 4000,
+      "tti": 6000,
+      "totalPageSize": 1000000
+    }
+  }
+}

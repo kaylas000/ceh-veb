@@ -1,0 +1,11 @@
+id: REF-06
+source: https://fontsinuse.com
+style: [archive, ledger]
+techniques:
+  - реестр вместо витрины: фильтры важнее украшений
+  - каждая запись содержит живой образец набора
+  - моноширинные метаданные держат ритм страницы
+motion: [conveyor-marquee]
+palette: ['#F7F5F0', '#191919', '#0B66C3']
+takeaway: «Архив живёт плотностью записей, а не декором обложки.»
+screenshot: pending

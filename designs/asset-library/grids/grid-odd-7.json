@@ -1,0 +1,18 @@
+{
+  "id": "grid-odd-7",
+  "name": "Odd 7-col",
+  "mood_tags": [
+    "дерзкий",
+    "технологичный"
+  ],
+  "dimensions": {
+    "columns": "7",
+    "symmetry": "asymmetric",
+    "density": "high"
+  },
+  "best_for_industries": [
+    "медиа",
+    "стартапы"
+  ],
+  "note": "нечётные колонки — нестандартный ритм"
+}

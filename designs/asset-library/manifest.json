@@ -1,0 +1,51 @@
+{
+  "buttons": {
+    "count": 6,
+    "options": [
+      "btn-solid-sharp",
+      "btn-outline-round",
+      "btn-ghost-underline",
+      "btn-brutal-block",
+      "btn-soft-pill",
+      "btn-ticket-notch"
+    ]
+  },
+  "grids": {
+    "count": 4,
+    "options": [
+      "grid-classic-12",
+      "grid-asym-editorial",
+      "grid-odd-7",
+      "grid-split-2-1"
+    ]
+  },
+  "iconSets": {
+    "count": 5,
+    "options": [
+      "ico-outline-thin",
+      "ico-duotone-warm",
+      "ico-geometric-fill",
+      "ico-handdrawn",
+      "ico-industrial-stencil"
+    ]
+  },
+  "illustrationStyles": {
+    "count": 5,
+    "options": [
+      "ill-geometric-flat",
+      "ill-organic-handdrawn",
+      "ill-isometric",
+      "ill-collage-mixed",
+      "ill-line-engraving"
+    ]
+  },
+  "animationPresets": {
+    "count": 4,
+    "options": [
+      "anim-spring-bounce",
+      "anim-smooth-fade",
+      "anim-precise-snap",
+      "anim-heavy-drag"
+    ]
+  }
+}

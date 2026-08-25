@@ -1,0 +1,18 @@
+{
+  "id": "btn-outline-round",
+  "name": "Outline Round",
+  "mood_tags": [
+    "дружелюбный",
+    "игривый"
+  ],
+  "dimensions": {
+    "shape": "round",
+    "fill": "transparent",
+    "interaction": "fill-grow"
+  },
+  "best_for_industries": [
+    "образование",
+    "сервис"
+  ],
+  "note": "обводка заполняется на hover"
+}

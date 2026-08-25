@@ -1,0 +1,20 @@
+/* Fluid-типографика: плавно 320→1440px, без скачков на медиа-запросах */
+:root {
+  --fs-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --fs-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+  --fs-base: clamp(1rem, 0.925rem + 0.375vw, 1.125rem);
+  --fs-lg: clamp(1.125rem, 1rem + 0.625vw, 1.375rem);
+  --fs-xl: clamp(1.25rem, 1.05rem + 1vw, 1.75rem);
+  --fs-2xl: clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
+  --fs-3xl: clamp(1.875rem, 1.4rem + 2.375vw, 3rem);
+  --fs-4xl: clamp(2.25rem, 1.6rem + 3.25vw, 4rem);
+  --fs-hero: clamp(2.5rem, 1.5rem + 5vw, 5.5rem);
+}
+
+/* гарды против горизонтального скролла */
+img, video, iframe, svg, canvas { max-width: 100%; height: auto; display: block; }
+p, span, a, li { overflow-wrap: break-word; word-break: break-word; hyphens: auto; }
+table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* <16px = iOS зумит страницу при фокусе */
+input, select, textarea { font-size: max(16px, 1rem); }

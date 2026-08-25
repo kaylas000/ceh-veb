@@ -1,0 +1,11 @@
+name: counter-tick
+feel: цифры докручиваются, как барабан одометра
+timing:
+  duration: 1200ms
+  easing: ceh-drag
+  stagger: 120ms между разрядами
+use_when: Метрики с реальным источником цифры (иначе B-15).
+dont_combine_with: [count-up без источника]
+max_per_page: 4
+snippet: snippet.js
+demo: demo.html

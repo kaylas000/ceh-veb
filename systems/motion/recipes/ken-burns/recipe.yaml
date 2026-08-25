@@ -1,0 +1,11 @@
+name: ken-burns
+feel: фото медленно дышит: масштаб и сдвиг, камера наблюдает
+timing:
+  duration: 12–18s, alternate
+  easing: ceh-coast
+  stagger: —
+use_when: Единственное фото в секции; архивные сканы.
+dont_combine_with: [параллакс на том же фото]
+max_per_page: 2
+snippet: snippet.js
+demo: demo.html

@@ -1,0 +1,11 @@
+id: REF-02
+source: https://www.pentagram.com
+style: [editorial, index]
+techniques:
+  - проект — строка индекса, а не карточка
+  - превью разворачивается на всю ширину при hover
+  - чёрный/белый плюс один акцент на весь сайт
+motion: [mask-reveal]
+palette: ['#111111', '#F4F2ED', '#E03A24']
+takeaway: «Заменяй сетку карточек плотным индексом: имя проекта крупнее превью.»
+screenshot: pending

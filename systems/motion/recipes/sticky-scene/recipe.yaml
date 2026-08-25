@@ -1,0 +1,11 @@
+name: sticky-scene
+feel: сцена закреплена, мир прокручивается сквозь неё
+timing:
+  duration: по шагам скролла
+  easing: ceh-drag (смена состояний)
+  stagger: один шаг = одна смена состояния
+use_when: Нарратив ≥5 шагов: процесс, ворота, данные.
+dont_combine_with: [параллакс внутри сцены]
+max_per_page: 1
+snippet: snippet.js
+demo: demo.html

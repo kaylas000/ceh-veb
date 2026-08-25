@@ -1,0 +1,116 @@
+{
+  "spacing": {
+    "0": {
+      "value": "0px"
+    },
+    "1": {
+      "value": "4px"
+    },
+    "2": {
+      "value": "8px"
+    },
+    "3": {
+      "value": "12px"
+    },
+    "4": {
+      "value": "16px"
+    },
+    "5": {
+      "value": "20px"
+    },
+    "6": {
+      "value": "24px"
+    },
+    "8": {
+      "value": "32px"
+    },
+    "10": {
+      "value": "40px"
+    },
+    "12": {
+      "value": "48px"
+    },
+    "16": {
+      "value": "64px"
+    },
+    "20": {
+      "value": "80px"
+    },
+    "24": {
+      "value": "96px"
+    },
+    "32": {
+      "value": "128px"
+    },
+    "40": {
+      "value": "160px"
+    },
+    "48": {
+      "value": "192px"
+    },
+    "64": {
+      "value": "256px"
+    },
+    "0.5": {
+      "value": "2px"
+    },
+    "1.5": {
+      "value": "6px"
+    }
+  },
+  "semantic": {
+    "component-gap-xs": {
+      "value": "{spacing.2}"
+    },
+    "component-gap-sm": {
+      "value": "{spacing.4}"
+    },
+    "component-gap-md": {
+      "value": "{spacing.6}"
+    },
+    "component-gap-lg": {
+      "value": "{spacing.8}"
+    },
+    "section-gap-sm": {
+      "value": "{spacing.16}"
+    },
+    "section-gap-md": {
+      "value": "{spacing.24}"
+    },
+    "section-gap-lg": {
+      "value": "{spacing.32}"
+    },
+    "container-px-mobile": {
+      "value": "{spacing.4}"
+    },
+    "container-px-desktop": {
+      "value": "{spacing.8}"
+    }
+  },
+  "fluid": {
+    "fluid-section-py": {
+      "min": "48px",
+      "max": "128px",
+      "minViewport": "375px",
+      "maxViewport": "1440px"
+    },
+    "fluid-container-px": {
+      "min": "16px",
+      "max": "40px",
+      "minViewport": "375px",
+      "maxViewport": "1440px"
+    },
+    "fluid-card-gap": {
+      "min": "16px",
+      "max": "32px",
+      "minViewport": "375px",
+      "maxViewport": "1440px"
+    },
+    "fluid-heading-gap": {
+      "min": "24px",
+      "max": "48px",
+      "minViewport": "375px",
+      "maxViewport": "1440px"
+    }
+  }
+}

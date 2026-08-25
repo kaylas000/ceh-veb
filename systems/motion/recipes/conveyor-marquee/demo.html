@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>conveyor-marquee — demo</title>
+<style>
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#16150f;color:#e8e6de;font-family:sans-serif}
+[data-conveyor-marquee]{opacity:.25;transform:translateY(14px);transition:opacity .7s cubic-bezier(0.16,1,0.3,1),transform .7s cubic-bezier(0.16,1,0.3,1)}
+[data-conveyor-marquee].is-live{opacity:1;transform:none}
+</style></head>
+<body><h1 data-conveyor-marquee>Конвейер-marquee</h1>
+<script src="snippet.js"></script></body></html>

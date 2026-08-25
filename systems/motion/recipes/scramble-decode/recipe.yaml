@@ -1,0 +1,11 @@
+name: scramble-decode
+feel: надпись собирается из технического шума, как табло
+timing:
+  duration: 800–1000ms
+  easing: ceh-brake (огибающая)
+  stagger: 2 кадра на символ
+use_when: Один главный заголовок, коды, номера бросков.
+dont_combine_with: [mask-reveal на том же элементе]
+max_per_page: 3
+snippet: snippet.js
+demo: demo.html

@@ -1,0 +1,20 @@
+{
+  "id": "btn-brutal-block",
+  "name": "Brutal Block",
+  "mood_tags": [
+    "дерзкий"
+  ],
+  "dimensions": {
+    "shape": "sharp",
+    "fill": "solid",
+    "interaction": "press-down"
+  },
+  "best_for_industries": [
+    "медиа",
+    "ивенты"
+  ],
+  "avoid_for_industries": [
+    "финансы"
+  ],
+  "note": "плита, вдавливается при нажатии"
+}

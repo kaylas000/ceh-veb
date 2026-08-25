@@ -1,0 +1,11 @@
+name: mask-reveal
+feel: строка выезжает из-под невидимой кромки, как лист из лотка
+timing:
+  duration: 700ms
+  easing: ceh-brake
+  stagger: 80–120ms между строками
+use_when: Заголовки секций, плакатные строки, индексы.
+dont_combine_with: [scramble-decode на том же элементе]
+max_per_page: 6
+snippet: snippet.js
+demo: demo.html

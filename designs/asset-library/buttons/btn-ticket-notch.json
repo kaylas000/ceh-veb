@@ -1,0 +1,18 @@
+{
+  "id": "btn-ticket-notch",
+  "name": "Ticket Notch",
+  "mood_tags": [
+    "игривый",
+    "дерзкий"
+  ],
+  "dimensions": {
+    "shape": "notch",
+    "fill": "solid",
+    "interaction": "tear"
+  },
+  "best_for_industries": [
+    "ивенты",
+    "кино"
+  ],
+  "note": "билет с насечками"
+}

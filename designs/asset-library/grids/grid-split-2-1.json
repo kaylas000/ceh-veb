@@ -1,0 +1,17 @@
+{
+  "id": "grid-split-2-1",
+  "name": "Split 2:1",
+  "mood_tags": [
+    "современный"
+  ],
+  "dimensions": {
+    "columns": "9",
+    "symmetry": "asymmetric",
+    "density": "medium"
+  },
+  "best_for_industries": [
+    "saas",
+    "сервис"
+  ],
+  "note": "широкая + узкая колонка"
+}

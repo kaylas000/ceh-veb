@@ -1,0 +1,17 @@
+{
+  "id": "anim-smooth-fade",
+  "name": "Smooth Fade",
+  "mood_tags": [
+    "спокойный",
+    "премиальный"
+  ],
+  "dimensions": {
+    "personality": "calm",
+    "intensity": "low"
+  },
+  "best_for_industries": [
+    "wellness",
+    "финансы"
+  ],
+  "note": "мягкое растворение"
+}

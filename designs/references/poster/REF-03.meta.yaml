@@ -1,0 +1,11 @@
+id: REF-03
+source: https://basecamp.com
+style: [poster, illustration]
+techniques:
+  - манифест: один тезис на экран
+  - рисованная графика вместо стока
+  - красный — единственный акцент на белом
+motion: [mask-reveal, conveyor-marquee]
+palette: ['#F5F2EA', '#1E1E1E', '#D6362B', '#3E7C4F']
+takeaway: «Один тезис — один экран; иллюстрация продолжает фразу, а не украшает её.»
+screenshot: pending

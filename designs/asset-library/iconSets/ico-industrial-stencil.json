@@ -1,0 +1,17 @@
+{
+  "id": "ico-industrial-stencil",
+  "name": "Industrial Stencil",
+  "mood_tags": [
+    "дерзкий",
+    "традиционный"
+  ],
+  "dimensions": {
+    "weight": "bold",
+    "style": "stencil"
+  },
+  "best_for_industries": [
+    "индустрия",
+    "строительство"
+  ],
+  "note": "трафаретные, как на цехе"
+}

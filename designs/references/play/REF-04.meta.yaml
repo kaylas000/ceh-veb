@@ -1,0 +1,11 @@
+id: REF-04
+source: https://bruno-simon.com
+style: [play, canvas]
+techniques:
+  - навигация — игровая сцена, а не меню
+  - физика как feedback на курсор
+  - звуковые акценты только по действию пользователя
+motion: [sticky-scene]
+palette: ['#14120E', '#F2B705', '#E8E4DA']
+takeaway: «Интерактив оправдан, когда у курсора есть масса и инерция, а не когда всё прыгает.»
+screenshot: pending

@@ -1,0 +1,17 @@
+{
+  "id": "ico-duotone-warm",
+  "name": "Duotone Warm",
+  "mood_tags": [
+    "дружелюбный",
+    "игривый"
+  ],
+  "dimensions": {
+    "weight": "medium",
+    "style": "duotone"
+  },
+  "best_for_industries": [
+    "образование",
+    "сервис"
+  ],
+  "note": "два тона, тёплые"
+}

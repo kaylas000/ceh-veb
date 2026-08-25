@@ -1,0 +1,13 @@
+name: oven-telemetry
+feel: шкала греется до рабочей температуры, LED меняет статус
+timing:
+  duration: 2000–2600ms до уставки
+  easing: ceh-drag
+  stagger: таймер тикает 1 раз в секунду
+use_when: Прибор с реальной метрикой: температура, цикл, очередь.
+dont_combine_with: [counter-tick на той же шкале]
+max_per_page: 1
+snippet: snippet.js
+demo: demo.html
+mined_from: pcpolimer · боевой проект
+yield_note: Добыт из печи полимеризации: дуга 200 °C, LED «нагрев → полимеризация», дыхание тепла.

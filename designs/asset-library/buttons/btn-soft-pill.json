@@ -1,0 +1,18 @@
+{
+  "id": "btn-soft-pill",
+  "name": "Soft Pill",
+  "mood_tags": [
+    "спокойный",
+    "дружелюбный"
+  ],
+  "dimensions": {
+    "shape": "round",
+    "fill": "solid",
+    "interaction": "lift"
+  },
+  "best_for_industries": [
+    "здоровье",
+    "wellness"
+  ],
+  "note": "мягкий подъём с тенью"
+}

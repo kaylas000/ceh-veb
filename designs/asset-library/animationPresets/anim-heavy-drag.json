@@ -1,0 +1,16 @@
+{
+  "id": "anim-heavy-drag",
+  "name": "Heavy Drag",
+  "mood_tags": [
+    "дерзкий"
+  ],
+  "dimensions": {
+    "personality": "heavy",
+    "intensity": "high"
+  },
+  "best_for_industries": [
+    "медиа",
+    "ивенты"
+  ],
+  "note": "тяжёлый ход с инерцией"
+}

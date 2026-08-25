@@ -1,0 +1,18 @@
+/* Apple HIG: 44pt, Material: 48dp. Берём 44px минимум + 8px между зонами */
+:root {
+  --touch-target-min: 44px;
+  --touch-target-spacing-min: 8px;
+}
+button, a, [role="button"], input[type="checkbox"], input[type="radio"] {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+}
+/* невидимое расширение хитбокса для мелких иконок */
+.icon-button { position: relative; width: 24px; height: 24px; }
+.icon-button::before {
+  content: "";
+  position: absolute; top: 50%; left: 50%;
+  width: var(--touch-target-min); height: var(--touch-target-min);
+  transform: translate(-50%, -50%);
+}
+.button-group > * + * { margin-left: var(--touch-target-spacing-min); }

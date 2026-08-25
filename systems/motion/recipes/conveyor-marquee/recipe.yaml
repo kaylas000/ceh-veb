@@ -1,0 +1,11 @@
+name: conveyor-marquee
+feel: лента едет без остановки, пауза — по наведению
+timing:
+  duration: 22–30s на цикл
+  easing: ceh-drive
+  stagger: —
+use_when: Разделители, бегущие коды правил, списки техник.
+dont_combine_with: [две ленты навстречу в одном экране]
+max_per_page: 2
+snippet: snippet.js
+demo: demo.html

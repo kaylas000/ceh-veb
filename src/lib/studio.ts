@@ -115,6 +115,21 @@ const root = resolve(process.cwd());
 const project = process.argv[2] ?? "projects/demo";
 const dir = join(root, project);
 const read = (p) => { try { return readFileSync(join(root, p), "utf8"); } catch { return null; } };
+
+/* Библиотека студии: раскладка репо (designs/references, styles/motion, systems/scripts)
+   или пакета (references, motion, scripts) — работает в обеих. */
+const libPath = (p) => {
+  if (p === "references" || p.startsWith("references/")) return p.replace(/^references/, "designs/references");
+  if (p === "motion/easing-curves.json") return "styles/motion/easing-curves.json";
+  if (p === "scripts/diff-projects.mjs") return "systems/scripts/diff-projects.mjs";
+  return p;
+};
+const readLib = (p) => read(libPath(p));
+const listLib = (p) => {
+  const r = libPath(p);
+  return existsSync(join(root, r)) ? readdirSync(join(root, r), { recursive: true }) : [];
+};
+
 const rows = [];
 const add = (code, title, ok, detail, evidence = []) => rows.push({ code, title, ok, detail, evidence });
 
@@ -170,7 +185,7 @@ const review = read(join(project, "REVIEW.md"));
 }
 /* V-06 — easing из реестра */
 {
-  const curves = JSON.parse(read("motion/easing-curves.json") ?? "{}");
+  const curves = JSON.parse(readLib("motion/easing-curves.json") ?? "{}");
   const allowed = new Set(Object.values(curves).map((c) => c.replace(/\\s+/g, "")));
   const siteFiles = existsSync(join(dir, "site")) ? readdirSync(join(dir, "site")).map((f) => read(join(project, "site", f)) ?? "") : [];
   let bad = 0;
@@ -200,7 +215,7 @@ const review = read(join(project, "REVIEW.md"));
 {
   const { execSync } = await import("node:child_process");
   let pct = 0;
-  try { pct = Number(execSync(\`node scripts/diff-projects.mjs \${project}\`, { cwd: root }).toString().trim()); } catch { pct = 100; }
+  try { pct = Number(execSync(\`node \${libPath("scripts/diff-projects.mjs")} \${project}\`, { cwd: root }).toString().trim()); } catch { pct = 100; }
   add("V-09", "Сходство ≤10%", Number.isFinite(pct) && pct <= 10, \`максимальное сходство: \${pct}%\`);
 }
 /* V-10 — полнота meta.yaml */
@@ -208,10 +223,10 @@ const review = read(join(project, "REVIEW.md"));
   const cited = [...new Set(((direction ?? "") + (sources ?? "")).match(/REF-\\d{2}/g) ?? [])];
   let bad = 0; const ev = [];
   for (const id of cited) {
-    const meta = readdirSync(join(root, "references"), { recursive: true })
+    const meta = listLib("references")
       .map(String).find((p) => p.endsWith(id + ".meta.yaml"));
     if (!meta) { bad++; ev.push(id + ": meta не найден"); continue; }
-    const c = read(join("references", meta));
+    const c = readLib(join("references", meta));
     const techs = (c?.split("techniques:")[1]?.match(/^\\s+-\\s+/gm) ?? []).length;
     const pals = (c?.match(/#[0-9a-fA-F]{6}/g) ?? []).length;
     if (techs < 3 || pals < 3 || !/takeaway:\\s*\\S+/.test(c ?? "")) { bad++; ev.push(id + ": схема неполная"); }

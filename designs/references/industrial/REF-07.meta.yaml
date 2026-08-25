@@ -1,0 +1,14 @@
+id: REF-07
+source: #proekty
+style: [industrial, poster, ledger]
+techniques:
+  - открытие — наряд-заказ и живая печь вместо hero (SK-05)
+  - фирменный акцент — рабочая палитра RAL, не градиент
+  - прайс как наряд-строки + калькулятор с механическим пересчётом
+  - sticky-станции в технологии: номер + параметр закреплены
+  - RAL-лента и конвейер-крюки как живые элементы
+  - masonry-галерея с RAL-тегами на hover
+motion: [mask-reveal, sticky-scene, conveyor-hooks, counter-tick]
+palette: ['#17181C', '#FF6A2B', '#E7E7E2', '#FFB35C']
+takeaway: «Открывай промышленную тему её характерным артефактом (наряд, печь), акцент бери из рабочей палитры отрасли.»
+screenshot: pending

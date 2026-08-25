@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Page SEO Manifest",
+  "type": "object",
+  "required": [
+    "url_slug",
+    "title",
+    "meta_description",
+    "h1",
+    "primary_keyword",
+    "content_type",
+    "structured_data_type"
+  ],
+  "properties": {
+    "url_slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "maxLength": 60
+    },
+    "title": {
+      "type": "string",
+      "minLength": 30,
+      "maxLength": 60
+    },
+    "meta_description": {
+      "type": "string",
+      "minLength": 120,
+      "maxLength": 158
+    },
+    "h1": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 70
+    },
+    "primary_keyword": {
+      "type": "string",
+      "minLength": 2
+    },
+    "secondary_keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "content_type": {
+      "type": "string",
+      "enum": [
+        "article",
+        "product",
+        "landing",
+        "local-business",
+        "faq",
+        "category"
+      ]
+    },
+    "structured_data_type": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Article",
+          "Product",
+          "LocalBusiness",
+          "FAQPage",
+          "BreadcrumbList",
+          "Organization",
+          "WebSite",
+          "Service",
+          "Review"
+        ]
+      },
+      "minItems": 1
+    },
+    "internal_links_planned": {
+      "type": "array",
+      "minItems": 2
+    }
+  }
+}

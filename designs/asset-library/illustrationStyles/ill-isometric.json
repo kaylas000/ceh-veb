@@ -1,0 +1,16 @@
+{
+  "id": "ill-isometric",
+  "name": "Isometric 3D",
+  "mood_tags": [
+    "технологичный"
+  ],
+  "dimensions": {
+    "technique": "isometric",
+    "complexity": "high"
+  },
+  "best_for_industries": [
+    "стартапы",
+    "логистика"
+  ],
+  "note": "изометрические сцены"
+}
