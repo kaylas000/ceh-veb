@@ -13,7 +13,7 @@ export function PcpolimerApp() {
   const zip = useZipDownload();
 
   return (
-    <div className="min-h-screen bg-coal text-concrete">
+    <div className="pp-scope min-h-screen bg-coal text-concrete">
       {/* служебная планка студии */}
       <div className="fixed inset-x-0 top-0 z-[70] flex h-[34px] items-center justify-between gap-3 border-b border-steel bg-[#101114] px-3 sm:px-4">
         <a

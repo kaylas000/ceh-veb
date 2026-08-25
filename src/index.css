@@ -17,6 +17,23 @@
   --color-muted: #7a766a;
   --color-muted-2: #8a8578;
 
+  /* ============ Pcpolimer: промышленная палитра (графит / тепло / RAL) ============ */
+  --color-coal: #17181c;
+  --color-coal-2: #1e2026;
+  --color-coal-3: #262932;
+  --color-steel-2: #4b505c;
+  --color-fog: #9aa1ad;
+  --color-fog-2: #6d7480;
+  --color-concrete: #e7e7e2;
+  --color-concrete-2: #dcdcd4;
+  --color-card-l: #f1f1ea;
+  --color-ink-soft: #555963;
+  --color-line-l: #c6c6bc;
+  --color-heat: #ff6a2b;
+  --color-heat-2: #e04f12;
+  --color-amber: #ffb35c;
+  --color-ok: #4c9a63;
+
   --font-display: "Russo One", "Golos Text", sans-serif;
   --font-body: "Golos Text", "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", "Consolas", monospace;
@@ -165,12 +182,39 @@ button {
   background-size: 52px 52px;
 }
 
+/* промышленная сетка Pcpolimer (тёмная зона) */
+.bg-grid-dark {
+  background-image:
+    linear-gradient(to right, rgba(231, 231, 226, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(231, 231, 226, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* промышленная сетка Pcpolimer (светлая зона) */
+.bg-grid-light {
+  background-image:
+    linear-gradient(to right, rgba(26, 27, 31, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(26, 27, 31, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* свечение нагрева печи за конвейером */
+.heat-glow {
+  background:
+    radial-gradient(58% 46% at 78% 88%, rgba(255, 106, 43, 0.2), transparent 70%),
+    radial-gradient(40% 36% at 12% 6%, rgba(255, 106, 43, 0.07), transparent 70%);
+}
+
 .hazard {
   background-image: repeating-linear-gradient(-45deg, var(--color-yellow) 0 14px, var(--color-ink) 14px 28px);
 }
 
 .hazard-thin {
   background-image: repeating-linear-gradient(-45deg, var(--color-yellow) 0 8px, var(--color-ink) 8px 16px);
+}
+
+.hazard-amber {
+  background-image: repeating-linear-gradient(-45deg, var(--color-amber) 0 10px, transparent 10px 20px);
 }
 
 .hazard-red {
@@ -184,6 +228,26 @@ button {
 .rivets {
   background-image: radial-gradient(circle at center, rgba(22, 21, 15, 0.18) 1.6px, transparent 2px);
   background-size: 26px 26px;
+}
+
+/* «ожидающая» штриховка (архив, библиотека) */
+.hatch-pending {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(22, 21, 15, 0.12) 0 6px,
+    transparent 6px 12px
+  );
+}
+
+/* линейка-тикер (Plate) */
+.tick-ruler {
+  background-image: repeating-linear-gradient(
+    to right,
+    currentColor 0 1px,
+    transparent 1px 10px
+  );
+  background-size: 10px 100%;
+  background-repeat: repeat-x;
 }
 
 .noise-layer {
@@ -256,6 +320,18 @@ button {
   70% { box-shadow: 0 0 0 14px rgba(206, 44, 24, 0); }
 }
 
+/* оригинальная пульсация кнопки печи (оранжевое тепло) */
+@keyframes press-pulse-heat {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 106, 43, 0.55); }
+  70% { box-shadow: 0 0 0 16px rgba(255, 106, 43, 0); }
+}
+
+@keyframes splat-pop {
+  0% { transform: scale(0); opacity: 0.9; }
+  60% { transform: scale(1.15); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 0.5; }
+}
+
 @keyframes dash-flow {
   to { stroke-dashoffset: -28; }
 }
@@ -326,6 +402,10 @@ button {
   animation: press-pulse 1.8s var(--ease-drag) infinite;
 }
 
+.splat {
+  animation: splat-pop 0.5s var(--ease-snap) forwards;
+}
+
 .dash-line {
   stroke-dasharray: 12 16;
   animation: dash-flow 1.2s linear infinite;
@@ -383,6 +463,21 @@ button {
   transform: translateY(0);
 }
 
+/* маска-строки (motion-рецепт M-01) */
+.mask-line {
+  display: block;
+  overflow: hidden;
+}
+.mask-inner {
+  display: block;
+  transform: translateY(110%);
+  transition: transform 0.85s var(--ease-brake);
+  transition-delay: var(--m-delay, 0ms);
+}
+.mask-live .mask-inner {
+  transform: translateY(0);
+}
+
 /* ---------- компоненты ---------- */
 
 .rubber-stamp {
@@ -419,6 +514,51 @@ button {
 }
 .term-scroll::-webkit-scrollbar-corner {
   background: #14120c;
+}
+
+/* ============ Pcpolimer: оригинальная промышленная гамма ============
+   Восстановлено из исходной темы: графит #17181c, тепло #ff6a2b,
+   сталь #343842, Tektur-заголовки. Скоуп — только боевой проект,
+   палитра ЦЕХа (бумага/чернила/Russo One) не затрагивается. */
+.pp-scope {
+  --color-steel: #343842;
+  --font-display: "Tektur", "Golos Text", sans-serif;
+}
+.pp-scope ::selection {
+  background: var(--color-heat);
+  color: var(--color-coal);
+}
+.pp-scope .hazard {
+  background-image: repeating-linear-gradient(-45deg, var(--color-heat) 0 14px, var(--color-coal) 14px 28px);
+}
+.pp-scope .diag-steel {
+  background-image: repeating-linear-gradient(-45deg, rgba(231, 231, 226, 0.06) 0 1px, transparent 1px 10px);
+}
+.pp-scope .press-ready {
+  animation: press-pulse-heat 1.8s var(--ease-drag) infinite;
+}
+.pp-scope .pp-vignette {
+  background: radial-gradient(120% 95% at 50% 40%, transparent 62%, rgba(8, 8, 10, 0.28) 100%);
+}
+.pp-scope .rubber-stamp {
+  box-shadow: none;
+  padding: 0.3em 0.85em;
+}
+.pp-scope .term-scroll {
+  scrollbar-color: #3d414c #1a1b20;
+}
+.pp-scope .term-scroll::-webkit-scrollbar-track {
+  background: #1a1b20;
+}
+.pp-scope .term-scroll::-webkit-scrollbar-thumb {
+  background: #3d414c;
+  border: 2px solid #1a1b20;
+}
+.pp-scope .term-scroll::-webkit-scrollbar-corner {
+  background: #1a1b20;
+}
+.pp-scope .noise-layer {
+  opacity: 0.045;
 }
 
 html,
