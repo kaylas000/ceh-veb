@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://dez-obrabotka.pro/sitemap.xml

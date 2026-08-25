@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fog-telemetry · demo</title>
+<style>
+  :root{
+    --paper:#F6F1E7; --ink:#191919; --blue:#1D3A5F; --red:#D64533; --line:rgba(25,25,25,.22);
+    --cb-drag: cubic-bezier(0.65, 0, 0.15, 1);
+  }
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,sans-serif;padding:0 20px}
+  .wrap{display:grid;grid-template-columns:5fr 7fr;gap:40px;max-width:1100px;margin:0 auto}
+  .pin{position:sticky;top:60px;align-self:start;border:1px solid var(--ink);background:#FDFBF5;
+    padding:28px;display:flex;flex-direction:column;gap:10px;margin-top:60px}
+  .cap{font-size:11px;letter-spacing:.22em;color:rgba(25,25,25,.6);font-weight:700}
+  .num{font-size:96px;line-height:1;color:var(--blue);font-variant-numeric:tabular-nums;font-weight:700}
+  .lbl{font-size:22px;font-weight:700;text-transform:uppercase;min-height:2.2em}
+  .prm{font-size:13px;color:rgba(25,25,25,.64);min-height:1.4em}
+  .bar{display:block;height:4px;background:var(--line);margin-top:8px}
+  .fill{display:block;height:100%;width:25%;background:var(--red);transition:width .5s var(--cb-drag)}
+  .step{margin:60vh 0 30vh;padding-left:24px;border-left:3px solid transparent;opacity:.28;
+    transition:opacity .5s var(--cb-drag),border-color .5s var(--cb-drag)}
+  .step.on{opacity:1;border-left-color:var(--red)}
+  .step h3{margin:0 0 8px;font-size:22px;text-transform:uppercase}
+  .step p{margin:0;max-width:52ch;line-height:1.6;color:rgba(25,25,25,.75)}
+  .hint{max-width:1100px;margin:80px auto 40px;font-size:14px;color:rgba(25,25,25,.64)}
+</style>
+</head>
+<body>
+  <p class="hint">fog-telemetry: скроль — плита слева меняет ровно одно состояние на шаг текста. Прогресс-бар — 25% за шаг, ceh-drag.</p>
+  <div class="wrap">
+    <div class="pin">
+      <span class="cap">СОСТОЯНИЕ ОБЪЕКТА</span>
+      <b class="num" data-fog-num>01</b>
+      <span class="lbl" data-fog-label>ЗАЯВКА ПРИНЯТА</span>
+      <span class="prm" data-fog-param>диспетчер на связи</span>
+      <span class="bar"><span class="fill" data-fog-fill></span></span>
+    </div>
+    <div>
+      <article class="step" data-fog-step="1"><h3>Шаг 01</h3><p>Заявка и осмотр: диспетчер фиксирует заявку, специалист выезжает и называет финальную цену до начала работ.</p></article>
+      <article class="step" data-fog-step="2"><h3>Шаг 02</h3><p>Подготовка: мебель от стен на 15–20 см, продукты в шкафы — десять минут бытовых действий.</p></article>
+      <article class="step" data-fog-step="3"><h3>Шаг 03</h3><p>Обработка: генератор холодного тумана разбивает препарат на частицы 10–50 мкм, уходить из квартиры необязательно.</p></article>
+      <article class="step" data-fog-step="4"><h3>Шаг 04</h3><p>Контроль: на 21-й день — бесплатный контрольный визит; возврат вредителей в гарантийный срок — повторная обработка за счёт службы.</p></article>
+    </div>
+  </div>
+  <script src="snippet.js"></script>
+</body>
+</html>

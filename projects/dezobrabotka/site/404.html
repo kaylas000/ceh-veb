@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>404 — страница не найдена · Дез Обработка</title>
+  <meta name="robots" content="noindex">
+  <style>
+    :root{--paper:#F6F1E7;--ink:#191919;--blue:#1D3A5F;--red:#D64533;--line:rgba(25,25,25,.22);
+      --fd:"Russo One","Arial Narrow",sans-serif;--fb:"Golos Text","Segoe UI",Arial,sans-serif;
+      --cb-brake:cubic-bezier(0.16, 1, 0.3, 1)}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--fb);min-height:100vh;
+      display:flex;align-items:center;padding:32px 20px}
+    main{max-width:760px;margin:0 auto}
+    .cap{font-size:12px;letter-spacing:.22em;color:var(--red);font-weight:700}
+    h1{font-family:var(--fd);font-size:clamp(72px,14vw,160px);line-height:1;margin:16px 0 8px;color:var(--blue)}
+    p{font-size:17px;line-height:1.6;margin:0 0 28px;max-width:46ch}
+    .row{display:flex;gap:14px;flex-wrap:wrap}
+    a{min-height:48px;display:inline-flex;align-items:center;padding:12px 22px;text-decoration:none;
+      font-weight:600;border:2px solid var(--blue);color:var(--blue);
+      transition:background-color .25s var(--cb-brake),color .25s var(--cb-brake)}
+    a.primary{background:var(--blue);color:var(--paper)}
+    a.primary:hover{box-shadow:5px 5px 0 var(--red);transform:translate(-2px,-2px)}
+    a:not(.primary):hover{background:var(--blue);color:var(--paper)}
+    a{transition:background-color .25s var(--cb-brake),color .25s var(--cb-brake),
+      box-shadow .25s var(--cb-brake),transform .25s var(--cb-brake)}
+  </style>
+</head>
+<body>
+  <main>
+    <span class="cap">ЖУРНАЛ ДЕЗУЧЁТА · ЗАПИСЬ НЕ НАЙДЕНА</span>
+    <h1>404</h1>
+    <p>Такой страницы в ведомости нет. Вредителей, впрочем, здесь тоже нет — мы уже обработали.</p>
+    <div class="row">
+      <a class="primary" href="/">На главную</a>
+      <a href="tel:+79022030015">+7 (902) 203-00-15</a>
+    </div>
+  </main>
+</body>
+</html>
