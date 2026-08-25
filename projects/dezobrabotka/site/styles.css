@@ -1114,6 +1114,7 @@ html:not(.js) .intro { display: none; }
   line-height: 1.5;
 }
 .steps-mini li b { display: block; }
+.steps-mini .st-tx { min-width: 0; }
 
 .sib-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-top: 16px; }
 .sib {
@@ -1163,6 +1164,17 @@ html:not(.js) .intro { display: none; }
   .crumb { padding: 16px 18px 0; }
   .lp-price, .lp-body, .lp-faq, .lp-sibs { padding: 40px 18px; }
   .lpmap-grid { grid-template-columns: repeat(2, 1fr); }
+  /* К-12: шаги протокола — компактные строки-ведомости, без колонки текста */
+  .steps-mini { margin-top: 18px; }
+  .steps-mini li {
+    grid-template-columns: 30px 1fr;
+    gap: 2px 12px;
+    padding: 11px 2px;
+    font-size: 14.5px;
+    line-height: 1.45;
+  }
+  .steps-mini li::before { font-size: 15px; line-height: 1.55; }
+  .steps-mini li b { display: inline; }
 }
 @media (max-width: 420px) {
   .crumb { padding: 12px 14px 0; }
