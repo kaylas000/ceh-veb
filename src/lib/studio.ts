@@ -116,22 +116,10 @@ const project = process.argv[2] ?? "projects/demo";
 const dir = join(root, project);
 const read = (p) => { try { return readFileSync(join(root, p), "utf8"); } catch { return null; } };
 
-/* Библиотека студии: раскладка репо (designs/references, styles/motion, systems/scripts)
-   или пакета (references, motion, scripts) — работает в обеих. */
-const libPath = (p) => {
-  if (p === "references" || p.startsWith("references/")) return p.replace(/^references/, "designs/references");
-  if (p === "motion/easing-curves.json") return "styles/motion/easing-curves.json";
-  if (p.startsWith("motion/")) return p.replace(/^motion/, "systems/motion");
-  if (p.startsWith("assets/")) return p.replace(/^assets/, "styles");
-  if (p === "scripts/lint-slop.mjs") return "systems/anti-slop/lint-slop.mjs";
-  if (p === "scripts/diff-projects.mjs") return "systems/scripts/diff-projects.mjs";
-  return p;
-};
-const readLib = (p) => read(libPath(p));
-const listLib = (p) => {
-  const r = libPath(p);
-  return existsSync(join(root, r)) ? readdirSync(join(root, r), { recursive: true }) : [];
-};
+/* Каноническая раскладка студии: и репозиторий, и скачанный пакет
+   имеют одинаковые пути в корне (references/, skills/, motion/, …). */
+const readLib = (p) => read(p);
+const listLib = (p) => (existsSync(join(root, p)) ? readdirSync(join(root, p), { recursive: true }) : []);
 
 const rows = [];
 const add = (code, title, ok, detail, evidence = []) => rows.push({ code, title, ok, detail, evidence });
@@ -153,7 +141,7 @@ const review = read(join(project, "REVIEW.md"));
 /* V-02 */
 {
   const paths = [...new Set(sources?.match(/(?:references|skills|motion|assets)\\/[\\w./-]+\\.[a-z]{2,4}/g) ?? [])];
-  const missing = paths.filter((p) => !existsSync(join(root, libPath(p))));
+  const missing = paths.filter((p) => !existsSync(join(root, p)));
   add("V-02", "SOURCES: пути существуют", missing.length === 0 && paths.length > 0,
     missing.length ? "не найдено: " + missing.join(", ") : \`все \${paths.length} путей на месте\`);
 }
@@ -169,7 +157,7 @@ const review = read(join(project, "REVIEW.md"));
   let out = "";
   if (existsSync(siteDir)) {
     const { execSync } = await import("node:child_process");
-    try { out = execSync(\`node \${libPath("scripts/lint-slop.mjs")} \${project}\`, { cwd: root }).toString(); }
+    try { out = execSync(\`node scripts/lint-slop.mjs \${project}\`, { cwd: root }).toString(); }
     catch (e) { out = e.stdout?.toString() ?? "нарушения найдены"; }
   }
   /* считаем только строки отчёта «file:line B-XX», а не упоминание кодов в тексте */
@@ -219,7 +207,7 @@ const review = read(join(project, "REVIEW.md"));
 {
   const { execSync } = await import("node:child_process");
   let pct = 0;
-  try { pct = Number(execSync(\`node \${libPath("scripts/diff-projects.mjs")} \${project}\`, { cwd: root }).toString().trim()); } catch { pct = 100; }
+  try { pct = Number(execSync(\`node scripts/diff-projects.mjs \${project}\`, { cwd: root }).toString().trim()); } catch { pct = 100; }
   add("V-09", "Сходство ≤10%", Number.isFinite(pct) && pct <= 10, \`максимальное сходство: \${pct}%\`);
 }
 /* V-10 — полнота meta.yaml */

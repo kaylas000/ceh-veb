@@ -1,69 +1,45 @@
-# LIBRARY.md — библиотека ЦЕХа
+# LIBRARY.md — карта папок веб-студии ЦЕХ
 
-Библиотека для агентной разработки: системы, скилы, стили и дизайны.
-Сайт (`src/`) — только витрина этой библиотеки. Источник содержимого —
-пакет, который собирает `src/lib/studio.ts`, развёрнутый в реальные файлы.
+Это студия для агентной разработки: папки механизмов, скилов, скриптов
+и дизайнов — в корне репозитория. Сайт (`src/`) — только витрина этих папок.
 
-## Карта
+## Папки
+
+| папка | что внутри |
+|---|---|
+| `references/` | дизайны-референсы: 7 карточек (REF-01…REF-07) — стиль, техники, палитра, takeaway |
+| `skills/` | скилы (SK-01…SK-06): плакатная типографика, ломаная сетка, скролл-сторителлинг, обрезка фото, производственный паспорт, кинозаставка |
+| `motion/` | механизмы движения: easing-curves.json + 12 рецептов (recipe.yaml, snippet.js, demo.html) |
+| `anti-slop/` | защита от слопа: BANNED.md (16 запретов), QUOTAS.md (7 квот) |
+| `tokens/` | токены: spacing.tokens.json (шкала отступов) |
+| `assets/` | шрифты (PAIRS.md), текстуры (film/grain/paper) |
+| `gates/` | ворота приёмки G1–G4: вход, чек-лист, артефакт, отказ |
+| `scripts/` | скрипты: validate.mjs, lint-slop.mjs, roulette.mjs, diff-projects.mjs |
+| `qa-fortress/` | Zero-Bug: CI-гейты, pre-commit/pre-push, a11y, e2e, валидаторы |
+| `design-variance/` | генератор дизайн-генома, проверка уникальности, каталог активов |
+| `components/` | примитивы (Box/Stack/Spacer), мобильные и SEO-компоненты |
+| `validators/` | TouchTargetValidator, HorizontalScrollDetector |
+| `ci/` | гейты GitHub Actions (mobile, seo, spacing) |
+| `config/` | матрица устройств |
+| `css-architecture/` | fluid-система, safe-area, touch-targets |
+| `generators/` | JSON-LD, sitemap, robots, structured-data |
+| `linting/` | eslint-seo-плагин, stylelint-spacing-плагин |
+| `ai-agent-rules/` | SEO-правила агента + чек-лист-схема |
+| `projects/` | проекты: `_TEMPLATE` (каркас) и `pcpolimer` (PRJ-01, 10/10) |
+| `fixtures/` | негативная фикстура slop-site — валидатор обязан на ней падать |
+
+## Корневые документы
+
+- `AGENTS.md` — контракт агента-дизайнера (читать первым)
+- `CONSTITUTION.md` — закон цеха: правила К-01…К-15 с проверками
+- `ROLES.md` — роли (агент, артдиректор, куратор)
+- `BRIEF-TEMPLATE.md` — шаблон брифа
+- `README.md` — быстрый старт (5 минут)
+
+## Как работает агент
 
 ```
-ceh-veb/
-├── systems/          — 9 систем студии: движки, валидаторы, CI, ворота
-│   ├── motion/            анимации: 12 рецептов (recipe.yaml + snippet.js + demo.html)
-│   ├── anti-slop/         приём без источника — слоп: BANNED, QUOTAS, lint-slop.mjs
-│   ├── mobile/            Mobile-Perfect: матрица устройств, CSS-архитектура,
-│   │                      валидаторы, sweep 22 вьюпорта, перф-бюджеты, PLAYBOOK
-│   ├── spacing/           Spacing Control: шкала, stylelint-плагин, Box/Stack/Spacer,
-│   │                      SpacingOverlay, гейт, визуальные спеки, GUIDE
-│   ├── seo/               SEO-by-Design: контракты агента, анализаторы, генераторы
-│   │                      JSON-LD/sitemap/robots, eslint-плагин, гейт, PLAYBOOK
-│   ├── design-variance/   вариативность: StyleGenomeGenerator, уникальность
-│   │                      комбинаций, реестр отпечатков, VARIANCE_PLAYBOOK
-│   ├── qa-fortress/       Zero-Bug: pre-commit/pre-push, CI-гейты, a11y, e2e,
-│   │                      утечки памяти, секреты, размер бандла + фикстура slop-site
-│   ├── hollywood-intro/   IntroEngine.ts — кинозаставка (правила SK-06, ≤4с, skip)
-│   ├── gates/             G1–G4: как проект принимается и возвращается
-│   └── scripts/           validate.mjs, roulette.mjs, diff-projects.mjs (Node ≥18, 0 зависимостей)
-├── skills/           — скилы для агента-дизайнера
-│   ├── SKILL-INDEX.md      SK-01…SK-06: где и когда применять
-│   ├── <скил>/SKILL.md     плакатная типографика, ломаная сетка, скролл-сторителлинг,
-│   │                       редакционная обрезка, производственный паспорт, кинозаставка
-│   ├── AGENTS.md           контракт агента: порядок чтения, жёсткие правила
-│   ├── CONSTITUTION.md     К-01…К-15 — закон цеха (проверка + метод)
-│   ├── ROLES.md            роли и ответственность
-│   ├── BRIEF-TEMPLATE.md   шаблон брифа проекта
-│   └── ai-agent-rules/     SEO_AGENT_RULES.md + seo-checklist.schema.json
-├── styles/           — стили и токены (единственный источник правды)
-│   ├── palettes/          ceh.json (бумага/чернила) · pcpolimer.json (графит/тепло)
-│   ├── fonts/PAIRS.md     пары display+body с ролями
-│   ├── textures/          film.md · grain.md · paper.md
-│   ├── tokens/spacing.tokens.json   шкала отступов 0–256
-│   └── motion/easing-curves.json   5 кривых: brake, snap, drag, coast, drive
-├── designs/          — дизайны и референсы
-│   ├── references/        INDEX.md + 7 карточек REF-01…REF-07 (стиль, техники,
-│   │                      палитра, takeaway, grep по techniques)
-│   └── asset-library/     manifest.json + каталоги: buttons, grids, iconSets,
-│                          illustrationStyles, animationPresets
-├── projects/_TEMPLATE/    SEED → DIRECTION → STRUCTURE → SOURCES → REVIEW
-├── projects/pcpolimer/    PRJ-01 · боевой проект «Порошковая покраска» (Красногорск):
-│                          SEED, DIRECTION, STRUCTURE, SOURCES, REVIEW + site/ (статический
-│                          слепок, проверяемый validate.mjs) — 10/10, exit 0
-├── src/               — сайт студии (витрина библиотеки, работает на GitHub Pages)
-└── docs/              — продакшн-билд сайта
+cp -r projects/_TEMPLATE projects/<имя> → node scripts/roulette.mjs → SEED.md
+→ DIRECTION.md (≥3 референса из references/) → site/ по SOURCES.md
+→ node scripts/validate.mjs projects/<имя> (exit 0 обязателен) → REVIEW.md
 ```
-
-## Как пользоваться агенту
-
-1. Прочитать `skills/AGENTS.md` — контракт и порядок.
-2. Взять палитру из `styles/palettes/`, шрифты из `styles/fonts/`.
-3. Выбрать рецепт в `systems/motion/recipes/`, скил в `skills/`, референс в `designs/references/`.
-4. Собрать проект по `projects/_TEMPLATE/` и прогнать `systems/scripts/validate.mjs`.
-5. Фикстура-нарушитель (слоп) — `systems/qa-fortress/fixtures/slop-site/`: на ней и только на ней
-   валидатор обязан падать (exit 1).
-
-## Синхронизация
-
-Библиотека и сайт — один источник. Правки данных библиотеки делаются в `src/data/*`
-и `src/lib/studio.ts`, затем папки `systems/`, `skills/`, `styles/`, `designs/`
-пересобираются командой пакета `src/lib/studio.ts` — расхождений между сайтом
-и файлами библиотеки быть не должно.

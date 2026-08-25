@@ -1,27 +1,30 @@
-# ceh-veb — ЦЕХ: веб-студия дизайна
+# ЦЕХ (CEH) — веб-студия дизайна
 
-Библиотека для агентной разработки + сайт-витрина студии.
+Структурный архив + регламент принуждения: агент собирает сайты как студийный
+дизайнер — материалы только из архива, приёмка через ворота G1–G4 и валидатор.
 
-- **Библиотека** — `systems/` (9 систем), `skills/` (6 скилов), `styles/` (токены), `designs/` (референсы и активы). Начало чтения: [`LIBRARY.md`](./LIBRARY.md).
-- **Сайт** — студия (`#/`) и боевой проект Порошковая покраска (`#/pcpolimer`). Собран из тех же систем: архива, регламента, ворот и валидатора.
-- **Рабочий адрес:** https://kaylas000.github.io/ceh-veb/
+## Быстрый старт (≤5 минут)
 
-## Быстрый старт
+1. Скопируй шаблон: `cp -r projects/_TEMPLATE projects/<имя>`
+2. Раздай оси: `node scripts/roulette.mjs projects/<имя>` → SEED.md
+3. Заполни DIRECTION.md из references/ и skills/ (≥3 референса с цитатами takeaway)
+4. Собери site/ строго по SOURCES.md
+5. Прогони: `node scripts/validate.mjs projects/<имя>` — exit 0 обязателен
+6. Вердикт артдиректора — в REVIEW.md. Удачное верни в архив (К-11).
 
-```bash
-npm install
-npm run dev      # локально, порт 3000
-npm run build    # прод-сборка в dist/
-```
+## Структура
 
-## Принципы
+- AGENTS.md — контракт агента-дизайнера (читать первым)
+- CONSTITUTION.md — 11 проверяемых правил
+- references/ — референсы: скрин + meta.yaml (takeaway обязателен)
+- skills/ — скилы: frontmatter + нумерованные правила
+- motion/ — easing-curves.json + рецепты (snippet.js + demo.html)
+- anti-slop/ — BANNED.md (16 запретов с методами) + QUOTAS.md (7 лимитов)
+- gates/ — G1–G4: вход, чек-лист, артефакт, отказ
+- scripts/ — validate.mjs, lint-slop.mjs, roulette.mjs, diff-projects.mjs
+- projects/ — артефакты: SEED, DIRECTION, STRUCTURE, SOURCES, site/, REVIEW
 
-1. Приём без источника в `designs/references/` или `skills/` — слоп (К-04).
-2. Easing — только из `styles/motion/easing-curves.json` (К-05), браузерные дефолты запрещены.
-3. Мобильная адаптация архитектурна: нет горизонтального скролла с 320px, тап-зоны ≥44px (К-12).
-4. SEO вшивается до кода: page_seo_manifest, JSON-LD по типу, title 50–60 (К-13).
-5. Проект не принимается без зелёного `systems/scripts/validate.mjs` и REVIEW.md (К-09).
+## Требования
 
-## Деплой
-
-Пуш в `main` — GitHub Actions собирает и публикует на Pages (см. `.github/workflows/deploy.yml`).
+Node ≥18. **Ноль npm-зависимостей** — только встроенные модули.
+Скрипты: exit-code 0/1, человекочитаемый отчёт с кодами (V-01…, B-01…, Q-01…).
