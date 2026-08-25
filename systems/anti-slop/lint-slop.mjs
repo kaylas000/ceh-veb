@@ -47,5 +47,5 @@ for (const f of files) {
       .forEach((s) => fams.add(s));
 }
 if (fams.size === 1) { console.log(`site/* B-08 единственный шрифт «${[...fams][0]}» без пары`); found++; }
-if (found === 0) console.log("чисто: нарушений B-01…B-16 не найдено");
+if (found === 0) console.log("чисто: запрещённые паттерны BANNED не найдены");
 process.exit(found === 0 ? 0 : 1);

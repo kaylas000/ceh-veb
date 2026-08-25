@@ -45,6 +45,9 @@ ceh-veb/
 │   └── asset-library/     manifest.json + каталоги: buttons, grids, iconSets,
 │                          illustrationStyles, animationPresets
 ├── projects/_TEMPLATE/    SEED → DIRECTION → STRUCTURE → SOURCES → REVIEW
+├── projects/pcpolimer/    PRJ-01 · боевой проект «Порошковая покраска» (Красногорск):
+│                          SEED, DIRECTION, STRUCTURE, SOURCES, REVIEW + site/ (статический
+│                          слепок, проверяемый validate.mjs) — 10/10, exit 0
 ├── src/               — сайт студии (витрина библиотеки, работает на GitHub Pages)
 └── docs/              — продакшн-билд сайта
 ```

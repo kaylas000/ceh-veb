@@ -636,6 +636,9 @@ const read = (p) => { try { return readFileSync(join(root, p), "utf8"); } catch 
 const libPath = (p) => {
   if (p === "references" || p.startsWith("references/")) return p.replace(/^references/, "designs/references");
   if (p === "motion/easing-curves.json") return "styles/motion/easing-curves.json";
+  if (p.startsWith("motion/")) return p.replace(/^motion/, "systems/motion");
+  if (p.startsWith("assets/")) return p.replace(/^assets/, "styles");
+  if (p === "scripts/lint-slop.mjs") return "systems/anti-slop/lint-slop.mjs";
   if (p === "scripts/diff-projects.mjs") return "systems/scripts/diff-projects.mjs";
   return p;
 };
@@ -665,7 +668,7 @@ const review = read(join(project, "REVIEW.md"));
 /* V-02 */
 {
   const paths = [...new Set(sources?.match(/(?:references|skills|motion|assets)\\/[\\w./-]+\\.[a-z]{2,4}/g) ?? [])];
-  const missing = paths.filter((p) => !existsSync(join(root, p)));
+  const missing = paths.filter((p) => !existsSync(join(root, libPath(p))));
   add("V-02", "SOURCES: пути существуют", missing.length === 0 && paths.length > 0,
     missing.length ? "не найдено: " + missing.join(", ") : \`все \${paths.length} путей на месте\`);
 }
@@ -681,10 +684,11 @@ const review = read(join(project, "REVIEW.md"));
   let out = "";
   if (existsSync(siteDir)) {
     const { execSync } = await import("node:child_process");
-    try { out = execSync(\`node scripts/lint-slop.mjs \${project}\`, { cwd: root }).toString(); }
+    try { out = execSync(\`node \${libPath("scripts/lint-slop.mjs")} \${project}\`, { cwd: root }).toString(); }
     catch (e) { out = e.stdout?.toString() ?? "нарушения найдены"; }
   }
-  const hits = (out.match(/\\bB-\\d{2}\\b/g) ?? []).length;
+  /* считаем только строки отчёта «file:line B-XX», а не упоминание кодов в тексте */
+  const hits = (out.match(/[^ ]+[.](?:html|css|js):[0-9]+[ ]+B-[0-9]{2}(?![0-9])/gi) ?? []).length;
   add("V-04", "site/ чист от BANNED", existsSync(siteDir) && hits === 0, hits ? out.trim() : "нарушений не найдено");
 }
 /* V-05 — квоты (машинные) */
@@ -808,7 +812,7 @@ for (const f of files) {
       .forEach((s) => fams.add(s));
 }
 if (fams.size === 1) { console.log(\`site/* B-08 единственный шрифт «\${[...fams][0]}» без пары\`); found++; }
-if (found === 0) console.log("чисто: нарушений B-01…B-16 не найдено");
+if (found === 0) console.log("чисто: запрещённые паттерны BANNED не найдены");
 process.exit(found === 0 ? 0 : 1);
 `,Ix=`#!/usr/bin/env node
 /* ЦЕХ roulette.mjs — раздаёт оси SEED: композиция × движение × типографика.
