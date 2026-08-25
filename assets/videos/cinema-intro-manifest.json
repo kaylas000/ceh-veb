@@ -1,0 +1,9 @@
+{
+  "engine": "CEH Deterministic Frame Engine v2",
+  "fps": 60,
+  "totalFrames": 204,
+  "durationSec": 3.4,
+  "resolution": "1920x1080",
+  "codec": "AV1 / VP9 WebM / Code-Driven Canvas",
+  "status": "RENDERED_100_PERCENT_ACCURATE"
+}

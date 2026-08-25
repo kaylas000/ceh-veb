@@ -149,11 +149,11 @@ function pageHtml(svc, it) {
       <h1 class="lp-h1" data-reveal><span class="mega-in">${esc(it.h1)}</span></h1>
       <p class="lede">${esc(it.lead)}</p>
       <div class="hero-cta">
-        <a class="cta" href="tel:${CONTACTS.telRaw}">
+        <a class="cta" href="tel:${CONTACTS.telRaw}" data-analytics-event="lp_call_specialist">
           <span class="cta-cap">Вызвать специалиста</span>
           <span class="cta-tel">${CONTACTS.tel}</span>
         </a>
-        <a class="wa" href="${CONTACTS.wa}" rel="noopener">Написать в WhatsApp</a>
+        <a class="wa" href="${CONTACTS.wa}" rel="noopener" data-analytics-event="lp_whatsapp">Написать в WhatsApp</a>
       </div>
     </section>
 

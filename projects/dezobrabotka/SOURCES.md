@@ -20,13 +20,13 @@
 
 ## Motion-карта (G3, Q-01: 3 рецепта = допустимый максимум)
 
-- mask-reveal → все h2 и телефон-строка; не накладывается с другими рецептами
+— mask-reveal → все h2 и телефон-строка; не накладывается с другими рецептами
   на одном элементе (dont_combine_with соблюдён).
-- counter-tick → только окно итога калькулятора + 4 счётчика hero/протокола
+— counter-tick → только окно итога калькулятора + 4 счётчика hero/протокола
   (max_per_page: 4 соблюдено); каждая цифра имеет источник (прейскурант, FAQ).
-- conveyor-marquee → одна лента районов в контактах (max_per_page: 2, две ленты
+— conveyor-marquee → одна лента районов в контактах (max_per_page: 2, две ленты
   навстречу не используются).
-- Все cubic-bezier — из motion/easing-curves.json; prefers-reduced-motion
+— Все cubic-bezier — из motion/easing-curves.json; prefers-reduced-motion
   отключает проходы (переходы сводятся к мгновенным).
 | Семантическое ядро как данные: 45 ключей со slug/интентом/мета до вёрстки | templates/seo-brief/TEMPLATE.md |
 | Генератор страниц zero-dep с гейтом качества и exit-кодом | scripts/validate.mjs |

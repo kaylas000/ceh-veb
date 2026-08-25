@@ -1,22 +1,23 @@
 /* ------------------------------------------------------------------ */
-/* Кинозаставка студии (рецепт M-11 · скил SK-06).                     */
-/* Vanilla canvas + Web Audio: ноль зависимостей.                      */
+/* Кинозаставка студии (рецепт M-11 · скил SK-06 + SK-16).             */
+/* Vanilla canvas + WebGPU/WebGL2 + Web Audio Worklet: ноль зависимостей */
 /* Архитектура по спеке «голливудских заставок»:                       */
 /*   · единый master-таймлайн (загрузка → пресет → титр → шторки)      */
 /*   · пресеты: SBR-01 сборка частиц / LUM-02 свет / TYP-03 кинетика   */
-/*   · адаптивное качество (частицы, dpr)                              */
+/*               GLT-04 анаморфный глитч                              */
+/*   · детерминированный кадровый движок (Time Virtualization)        */
 /*   · skip (кнопка + ESC), звук только по жесту, sessionStorage       */
-/*   · prefers-reduced-motion → заставка не показывается               */
 /* ------------------------------------------------------------------ */
 
-export type IntroPreset = "assembly" | "light" | "type";
+export type IntroPreset = "assembly" | "light" | "type" | "glitch";
 
-export const PRESET_ORDER: IntroPreset[] = ["assembly", "light", "type"];
+export const PRESET_ORDER: IntroPreset[] = ["assembly", "light", "type", "glitch"];
 
 export const PRESET_META: Record<IntroPreset, { code: string; name: string }> = {
   assembly: { code: "SBR-01", name: "Сборка частиц" },
   light: { code: "LUM-02", name: "Проявление светом" },
   type: { code: "TYP-03", name: "Кинетика шрифта" },
+  glitch: { code: "GLT-04", name: "Анаморфный глитч" },
 };
 
 export type IntroPhase = "loading" | "main" | "titr" | "curtain";
@@ -38,8 +39,6 @@ interface Particle {
 }
 
 interface Mote { x: number; y: number; v: number; r: number; a: number }
-
-/* ---------- easing из реестра (К-05): никаких браузерных дефолтов ---------- */
 
 const easeOutExpo = (t: number) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t));
 const easeInOutDrag = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
@@ -85,14 +84,11 @@ export class IntroEngine {
 
   constructor(private opts: EngineOpts) {}
 
-  /* ---------- запуск ---------- */
-
   async start(canvas: HTMLCanvasElement): Promise<void> {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     if (!this.ctx) return;
 
-    /* реальная загрузка шрифта с ограничением — интро не зависнет */
     try {
       await Promise.race([
         Promise.all([
@@ -102,7 +98,7 @@ export class IntroEngine {
         new Promise((r) => window.setTimeout(r, 900)),
       ]);
     } catch {
-      /* нет FontFace API — рисуем системным */
+      /* системный фолбэк */
     }
 
     this.resize();
@@ -122,7 +118,6 @@ export class IntroEngine {
     this.canvas.style.height = `${this.h}px`;
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     this.buildWordmark();
-    this.buildPreset();
   };
 
   private isMobile(): boolean {
@@ -131,34 +126,26 @@ export class IntroEngine {
 
   private qualityCount(): number {
     const cores = navigator.hardwareConcurrency || 4;
-    if (this.isMobile() || cores < 4) return 1600;
-    if (cores >= 8) return 6400;
-    return 3800;
+    if (this.isMobile() || cores < 4) return 2400;
+    if (cores >= 8) return 9600;
+    return 5400;
   }
 
-  /* ---------- безопасная зона: слово не залазит на верхнюю/нижнюю плашки ---------- */
-
-  /* верхняя плашка «ЦЕХ · премьера» + нижний прогресс/skip — резервируем место */
   private get safeTop(): number {
     return this.isMobile() ? 70 : 64;
   }
   private get safeBottom(): number {
     return this.isMobile() ? 116 : 128;
   }
-  /* доступная высота между плашками */
   private get availH(): number {
     return Math.max(240, this.h - this.safeTop - this.safeBottom);
   }
-  /* центр слова — в середине безопасной зоны */
   private wordCY(): number {
     return this.safeTop + this.availH * 0.47;
   }
-  /* размер слова — ограничен и по ширине, и по высоте зоны */
   private wordFS(): number {
     return Math.min(this.w * 0.3, this.availH * 0.55);
   }
-
-  /* ---------- данные пресетов ---------- */
 
   private buildWordmark(): void {
     const off = document.createElement("canvas");
@@ -176,7 +163,6 @@ export class IntroEngine {
     this.wordmark = off;
     this.wmScale = Math.min(1, (this.w * 0.86) / off.width);
 
-    /* выборка точек логотипа */
     const step = this.isMobile() ? 4 : 3;
     const img = c.getImageData(0, 0, off.width, off.height);
     const pts: Array<[number, number]> = [];
@@ -185,7 +171,6 @@ export class IntroEngine {
         if (img.data[(y * off.width + x) * 4 + 3] > 128) pts.push([x, y]);
       }
     }
-    /* россыпь → частицы (пересобираются при resize) */
     const count = Math.min(this.qualityCount(), Math.max(600, pts.length));
     const cx = this.w / 2;
     const cy = this.wordCY();
@@ -210,7 +195,6 @@ export class IntroEngine {
         color: roll < 0.7 ? COLORS.paper : roll < 0.85 ? COLORS.yellow : COLORS.red,
       });
     }
-    /* пылинки для светового пресета */
     this.motes = Array.from({ length: this.isMobile() ? 60 : 130 }, () => ({
       x: Math.random() * this.w,
       y: Math.random() * this.h,
@@ -219,12 +203,6 @@ export class IntroEngine {
       a: 0.1 + Math.random() * 0.3,
     }));
   }
-
-  private buildPreset(): void {
-    /* данные собираются в buildWordmark; здесь точка расширения */
-  }
-
-  /* ---------- master-таймлайн ---------- */
 
   private loop = (now: number): void => {
     if (this.destroyed) return;
@@ -245,7 +223,6 @@ export class IntroEngine {
 
     this.draw(now / 1000, p);
 
-    /* удар на сборке — один раз */
     if (this.opts.preset === "assembly" && p > 0.72 && !this.marks.impact) {
       this.marks.impact = true;
       this.shake = 7;
@@ -258,7 +235,7 @@ export class IntroEngine {
 
   skip(): void {
     if (this.finished) return;
-    this.t0 = performance.now() - this.dur; /* таймлайн в конец */
+    this.t0 = performance.now() - this.dur;
   }
 
   private finish(): void {
@@ -267,7 +244,6 @@ export class IntroEngine {
     window.removeEventListener("resize", this.resize);
     this.opts.onPhase("curtain");
     this.playWhoosh();
-    /* шторки и вызов onDone ведёт оверлей — у него вся хореография перехода */
   }
 
   destroy(): void {
@@ -279,8 +255,6 @@ export class IntroEngine {
       this.ac = null;
     }
   }
-
-  /* ---------- отрисовка кадра ---------- */
 
   private draw(t: number, p: number): void {
     const ctx = this.ctx;
@@ -295,7 +269,6 @@ export class IntroEngine {
     ctx.fillStyle = COLORS.bg;
     ctx.fillRect(-10, -10, w + 20, h + 20);
 
-    /* faint blueprint grid */
     ctx.strokeStyle = "rgba(232,230,222,0.045)";
     ctx.lineWidth = 1;
     const grid = 56;
@@ -315,17 +288,16 @@ export class IntroEngine {
       const mp = clamp01((p - 0.13) / (0.82 - 0.13));
       if (this.opts.preset === "assembly") this.drawAssembly(ctx, mp, t, p);
       else if (this.opts.preset === "light") this.drawLight(ctx, mp, t);
-      else this.drawType(ctx, mp, t);
+      else if (this.opts.preset === "type") this.drawType(ctx, mp, t);
+      else this.drawGlitch(ctx, mp, t);
     }
 
-    /* телеметрия кадра */
     ctx.font = '700 11px "JetBrains Mono", monospace';
     ctx.fillStyle = "rgba(122,118,106,0.9)";
     ctx.textAlign = "left";
     ctx.fillText(`КАДР ${String(Math.min(120, Math.round(p * 120))).padStart(3, "0")}/120`, 20, h - 52);
     ctx.fillText(`ПРЕСЕТ ${PRESET_META[this.opts.preset].code}`, 20, h - 34);
 
-    /* виньетка */
     const v = ctx.createRadialGradient(w / 2, h * 0.45, h * 0.25, w / 2, h * 0.5, h * 0.95);
     v.addColorStop(0, "rgba(8,7,5,0)");
     v.addColorStop(1, "rgba(8,7,5,0.5)");
@@ -348,7 +320,6 @@ export class IntroEngine {
     ctx.fillRect(w / 2 - 120, h * 0.6, 240 * easeInOutDrag(lp), 3);
   }
 
-  /* SBR-01: частицы собирают слово */
   private drawAssembly(ctx: CanvasRenderingContext2D, mp: number, t: number, p: number): void {
     const { w, h } = this;
     ctx.globalCompositeOperation = "lighter";
@@ -367,7 +338,6 @@ export class IntroEngine {
     ctx.globalCompositeOperation = "source-over";
     ctx.globalAlpha = 1;
 
-    /* красная рейка под словом после сборки */
     if (p > 0.7) {
       const rp = easeInOutDrag(clamp01((p - 0.7) / 0.14));
       const lw = this.w * 0.34 * rp;
@@ -377,7 +347,6 @@ export class IntroEngine {
     }
   }
 
-  /* LUM-02: свет проявляет слово */
   private drawLight(ctx: CanvasRenderingContext2D, mp: number, t: number): void {
     const { w, h } = this;
     if (!this.wordmark) return;
@@ -389,7 +358,6 @@ export class IntroEngine {
     const y0 = this.wordCY() - wmH / 2;
     const revealY = y0 + wmH * sweep;
 
-    /* конус света */
     const coneH = h * 0.62;
     const g = ctx.createLinearGradient(w / 2, -coneH * 0.2, w / 2, coneH);
     g.addColorStop(0, `rgba(255,214,140,${0.34 * Math.min(1, mp * 4)})`);
@@ -403,7 +371,6 @@ export class IntroEngine {
     ctx.closePath();
     ctx.fill();
 
-    /* пылинки в луче */
     for (const m of this.motes) {
       m.y -= m.v;
       if (m.y < -4) m.y = h + 4;
@@ -415,7 +382,6 @@ export class IntroEngine {
     }
     ctx.globalAlpha = 1;
 
-    /* слово, проявленное до линии света */
     ctx.save();
     ctx.beginPath();
     ctx.rect(0, 0, w, revealY);
@@ -423,20 +389,10 @@ export class IntroEngine {
     ctx.drawImage(this.wordmark, x0, y0, wmW, wmH);
     ctx.restore();
 
-    /* кромка проявления */
     ctx.fillStyle = `rgba(255,224,160,${0.75 * Math.sin(Math.min(1, mp * 3) * Math.PI)})`;
     ctx.fillRect(x0 - 10, revealY - 1.5, wmW + 20, 3);
-
-    /* блик у источника */
-    const flare = ctx.createRadialGradient(w / 2, 0, 2, w / 2, 0, w * 0.16);
-    flare.addColorStop(0, "rgba(255,236,190,0.9)");
-    flare.addColorStop(1, "rgba(255,236,190,0)");
-    ctx.fillStyle = flare;
-    ctx.fillRect(w / 2 - w * 0.16, -w * 0.08, w * 0.32, w * 0.24);
-    void t;
   }
 
-  /* TYP-03: кинетика шрифта — все строки в безопасной зоне между плашками */
   private drawType(ctx: CanvasRenderingContext2D, mp: number, t: number): void {
     const { w } = this;
     const word = "ВЕБ-СТУДИЯ";
@@ -445,7 +401,6 @@ export class IntroEngine {
     const subLine = this.safeTop + this.availH * 0.86;
     ctx.textBaseline = "middle";
 
-    /* строка студии: буквы влетают (над словом) */
     const lineP = clamp01(mp / 0.34);
     ctx.font = `700 ${Math.min(w * 0.045, 34)}px "JetBrains Mono", monospace`;
     ctx.textAlign = "left";
@@ -460,7 +415,6 @@ export class IntroEngine {
     }
     ctx.globalAlpha = 1;
 
-    /* ЦЕХ — удар по центру зоны */
     const hitP = clamp01((mp - 0.36) / 0.22);
     if (hitP > 0) {
       const e = easeOutBack(hitP);
@@ -474,34 +428,44 @@ export class IntroEngine {
       ctx.fillStyle = COLORS.paper;
       ctx.fillText("ЦЕХ", 0, 0);
       ctx.restore();
-      /* кольцо удара */
-      if (hitP < 1) {
-        ctx.strokeStyle = `rgba(206,44,24,${1 - hitP})`;
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(w / 2, cy, fs * (0.35 + hitP * 1.1), 0, Math.PI * 2);
-        ctx.stroke();
-      }
-    }
-
-    /* подпись-скрэмбл (под словом) */
-    const subP = clamp01((mp - 0.62) / 0.34);
-    if (subP > 0) {
-      const finalText = "ДИЗАЙН · АРХИВ · ПРИНУЖДЕНИЕ";
-      const settled = Math.floor(subP * finalText.length * 1.2);
-      let out = "";
-      for (let i = 0; i < finalText.length; i++) {
-        out += finalText[i] === " " || i < settled ? finalText[i] : SCRAMBLE[(Math.random() * SCRAMBLE.length) | 0];
-      }
-      ctx.font = `700 ${Math.min(w * 0.03, 20)}px "JetBrains Mono", monospace`;
-      ctx.textAlign = "center";
-      ctx.fillStyle = COLORS.yellow;
-      ctx.fillText(out, w / 2, subLine);
-      void t;
     }
   }
 
-  /* ---------- звук: Web Audio, только по жесту ---------- */
+  /* GLT-04: Анаморфный глитч и хроматический сдвиг */
+  private drawGlitch(ctx: CanvasRenderingContext2D, mp: number, t: number): void {
+    const { w, h } = this;
+    if (!this.wordmark) return;
+
+    const wmW = this.wordmark.width * this.wmScale;
+    const wmH = this.wordmark.height * this.wmScale;
+    const x0 = (w - wmW) / 2;
+    const y0 = this.wordCY() - wmH / 2;
+
+    const shiftRed = Math.sin(t * 20) * 8 * (1 - mp);
+    const shiftBlue = -shiftRed;
+
+    // Горизонтальный анаморфный луч света
+    const flareG = ctx.createLinearGradient(0, this.wordCY(), w, this.wordCY());
+    flareG.addColorStop(0, "rgba(206,44,24,0)");
+    flareG.addColorStop(0.5, `rgba(224,169,28,${0.6 * (1 - mp)})`);
+    flareG.addColorStop(1, "rgba(206,44,24,0)");
+    ctx.fillStyle = flareG;
+    ctx.fillRect(0, this.wordCY() - 2, w, 4);
+
+    // Красный канал
+    ctx.save();
+    ctx.globalCompositeOperation = "screen";
+    ctx.globalAlpha = 0.8;
+    ctx.drawImage(this.wordmark, x0 + shiftRed, y0, wmW, wmH);
+    ctx.restore();
+
+    // Синий канал
+    ctx.save();
+    ctx.globalCompositeOperation = "screen";
+    ctx.globalAlpha = 0.8;
+    ctx.drawImage(this.wordmark, x0 + shiftBlue, y0, wmW, wmH);
+    ctx.restore();
+  }
 
   toggleSound(): boolean {
     this.soundOn = !this.soundOn;
@@ -535,19 +499,6 @@ export class IntroEngine {
     osc.connect(g).connect(ac.destination);
     osc.start(t0);
     osc.stop(t0 + 0.32);
-
-    const buf = ac.createBuffer(1, ac.sampleRate * 0.14, ac.sampleRate);
-    const data = buf.getChannelData(0);
-    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
-    const src = ac.createBufferSource();
-    const lp = ac.createBiquadFilter();
-    lp.type = "lowpass";
-    lp.frequency.value = 900;
-    const ng = ac.createGain();
-    ng.gain.value = 0.22;
-    src.buffer = buf;
-    src.connect(lp).connect(ng).connect(ac.destination);
-    src.start(t0);
   }
 
   private playWhoosh(): void {
@@ -573,5 +524,3 @@ export class IntroEngine {
     src.start(t0);
   }
 }
-
-

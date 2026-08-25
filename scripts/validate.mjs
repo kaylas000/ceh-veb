@@ -1,17 +1,15 @@
 #!/usr/bin/env node
 /* ЦЕХ validate.mjs — Node ≥18, ноль npm-зависимостей, exit 0/1.
    Запуск: node scripts/validate.mjs projects/<имя>
-   Отчёт детерминирован: коды V-01…V-10 + evidence. */
+   Отчёт детерминирован: коды V-01…V-15 + evidence. */
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 
 const root = resolve(process.cwd());
-const project = process.argv[2] ?? "projects/demo";
+const project = process.argv[2] ?? "projects/pcpolimer";
 const dir = join(root, project);
 const read = (p) => { try { return readFileSync(join(root, p), "utf8"); } catch { return null; } };
 
-/* Каноническая раскладка студии: и репозиторий, и скачанный пакет
-   имеют одинаковые пути в корне (references/, skills/, motion/, …). */
 const readLib = (p) => read(p);
 const listLib = (p) => (existsSync(join(root, p)) ? readdirSync(join(root, p), { recursive: true }) : []);
 
@@ -23,6 +21,7 @@ const sources = read(join(project, "SOURCES.md"));
 const structure = read(join(project, "STRUCTURE.md"));
 const seed = read(join(project, "SEED.md"));
 const review = read(join(project, "REVIEW.md"));
+const marketing = read(join(project, "MARKETING.md"));
 
 /* V-01 */
 {
@@ -54,9 +53,8 @@ const review = read(join(project, "REVIEW.md"));
     try { out = execSync(`node scripts/lint-slop.mjs ${project}`, { cwd: root }).toString(); }
     catch (e) { out = e.stdout?.toString() ?? "нарушения найдены"; }
   }
-  /* считаем только строки отчёта «file:line B-XX», а не упоминание кодов в тексте */
   const hits = (out.match(/[^ ]+[.](?:html|css|js):[0-9]+[ ]+B-[0-9]{2}(?![0-9])/gi) ?? []).length;
-  add("V-04", "site/ чист от BANNED", existsSync(siteDir) && hits === 0, hits ? out.trim() : "нарушений не найдено");
+  add("V-04", "site/ чист от BANNED B-01..B-16", existsSync(siteDir) && hits === 0, hits ? out.trim() : "нарушений не найдено");
 }
 /* V-05 — квоты (машинные) */
 {
@@ -118,6 +116,61 @@ const review = read(join(project, "REVIEW.md"));
     if (techs < 3 || pals < 3 || !/takeaway:\s*\S+/.test(c ?? "")) { bad++; ev.push(id + ": схема неполная"); }
   }
   add("V-10", "meta.yaml полны", cited.length > 0 && bad === 0, ev.join("; ") || `референсов: ${cited.length}, дефектов: 0`);
+}
+/* V-11 — lint-copy (Редполитика и B-17..B-23) */
+{
+  const { execSync } = await import("node:child_process");
+  let clean = true;
+  try {
+    execSync(`node scripts/lint-copy.mjs ${project}`, { cwd: root, stdio: "pipe" });
+  } catch (e) {
+    clean = false;
+  }
+  add("V-11", "Редполитика: чиста от штампов (B-17..B-23)", clean, clean ? "маркетинговых штампов не найдено" : "найдены штампы или нетипографированный текст");
+}
+/* V-12 — lint-marketing (Маркетинг-стратегия К-16) */
+{
+  const { execSync } = await import("node:child_process");
+  let clean = true;
+  try {
+    execSync(`node scripts/lint-marketing.mjs ${project}`, { cwd: root, stdio: "pipe" });
+  } catch (e) {
+    clean = false;
+  }
+  add("V-12", "Маркетинг: воронка и аналитика (К-16)", clean, clean ? "UVP, воронка и data-analytics-event в порядке" : "отсутствует MARKETING.md или атрибуты аналитики");
+}
+/* V-13 — typographer (Типографика) */
+{
+  const { execSync } = await import("node:child_process");
+  let clean = true;
+  try {
+    execSync(`node scripts/typographer.mjs ${project}`, { cwd: root, stdio: "pipe" });
+  } catch (e) {
+    clean = false;
+  }
+  add("V-13", "Русская типографика (тире, кавычки, предлоги)", clean, clean ? "типографика соответствует стандарту" : "требуется запуск node scripts/typographer.mjs --fix");
+}
+/* V-14 — lint-contrast (Контрастность WCAG AA) */
+{
+  const { execSync } = await import("node:child_process");
+  let clean = true;
+  try {
+    execSync(`node scripts/lint-contrast.mjs ${project}`, { cwd: root, stdio: "pipe" });
+  } catch (e) {
+    clean = false;
+  }
+  add("V-14", "A11y: Контрастность текста WCAG AA (Q-12)", clean, clean ? "контрастность в норме" : "найдены неконтрастные пары цветов");
+}
+/* V-15 — lint-video-engine (Программируемое кодовое видео К-19) */
+{
+  const { execSync } = await import("node:child_process");
+  let clean = true;
+  try {
+    execSync(`node scripts/lint-video-engine.mjs ${project}`, { cwd: root, stdio: "pipe" });
+  } catch (e) {
+    clean = false;
+  }
+  add("V-15", "Code-Video SOTA 2026: детерминизм и reduced-motion (К-19)", clean, clean ? "видео-движок детерминирован и адаптирован" : "отсутствуют проверки reduced-motion или детерминизма");
 }
 
 /* отчёт */
