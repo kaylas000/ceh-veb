@@ -1,29 +1,29 @@
 [
   {
-    "cluster": "tarakany",
-    "name": "Тараканы",
+    "cluster": "razrabotka-saytov",
+    "name": "Разработка сайтов",
     "keywords": [
-      { "kw": "уничтожение тараканов пенза", "slug": "unichtozhenie-tarakanov", "intent": "коммерческий", "city": "Пенза", "priceMin": 1200 },
-      { "kw": "травля тараканов пенза", "slug": "travlya-tarakanov", "intent": "коммерческий", "city": "Пенза", "priceMin": 1200 },
-      { "kw": "обработка от тараканов пенза", "slug": "obrabotka-ot-tarakanov", "intent": "коммерческий", "city": "Пенза", "priceMin": 1200 },
-      { "kw": "избавиться от тараканов в квартире", "slug": "vvesti-tarakanov", "intent": "информационный", "city": "Пенза", "priceMin": 1500 }
+      { "kw": "разработка сайтов под ключ", "slug": "razrabotka-saytov-pod-klyuch", "intent": "коммерческий", "city": "Москва", "priceMin": 100000 },
+      { "kw": "создание веб сайтов для бизнеса", "slug": "sozdanie-saytov-dlya-biznesa", "intent": "коммерческий", "city": "Москва", "priceMin": 100000 },
+      { "kw": "заказать сайт под ключ", "slug": "zakazat-sayt-pod-klyuch", "intent": "коммерческий", "city": "Москва", "priceMin": 100000 },
+      { "kw": "разработка b2b сайтов и производств", "slug": "razrabotka-b2b-saytov", "intent": "коммерческий", "city": "Москва", "priceMin": 150000 }
     ]
   },
   {
-    "cluster": "klopy",
-    "name": "Клопы",
+    "cluster": "web-design",
+    "name": "Дизайн сайтов",
     "keywords": [
-      { "kw": "уничтожение клопов пенза", "slug": "unichtozhenie-klopov", "intent": "коммерческий", "city": "Пенза", "priceMin": 1500 },
-      { "kw": "обработка от клопов пенза", "slug": "obrabotka-ot-klopov", "intent": "коммерческий", "city": "Пенза", "priceMin": 1500 },
-      { "kw": "избавиться от клопов в квартире", "slug": "izbavitsya-ot-klopov", "intent": "информационный", "city": "Пенза", "priceMin": 1800 }
+      { "kw": "дизайн веб сайтов", "slug": "disayn-web-saytov", "intent": "коммерческий", "city": "Москва", "priceMin": 80000 },
+      { "kw": "разработка ui ux дизайна", "slug": "razrabotka-ui-ux-disayna", "intent": "коммерческий", "city": "Москва", "priceMin": 90000 },
+      { "kw": "дизайн лендинга под ключ", "slug": "disayn-lendinga", "intent": "коммерческий", "city": "Москва", "priceMin": 60000 }
     ]
   },
   {
-    "cluster": "kleshchi",
-    "name": "Клещи",
+    "cluster": "agent-dev",
+    "name": "Агентная разработка",
     "keywords": [
-      { "kw": "обработка участка от клещей пенза", "slug": "obrabotka-ot-kleshchej", "intent": "коммерческий", "city": "Пенза", "priceMin": 2500 },
-      { "kw": "уничтожение клещей на участке", "slug": "unichtozhenie-kleshchej", "intent": "коммерческий", "city": "Пенза", "priceMin": 2500 }
+      { "kw": "студия агентной разработки сайтов", "slug": "studiya-agentnoy-razrabotki", "intent": "коммерческий", "city": "Москва", "priceMin": 120000 },
+      { "kw": "разработка сайтов без слопа с гарантией", "slug": "razrabotka-saytov-bez-slopa", "intent": "коммерческий", "city": "Москва", "priceMin": 100000 }
     ]
   }
 ]

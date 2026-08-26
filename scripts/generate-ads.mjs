@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-/* ЦЕХ generate-ads.mjs — Генератор кампаний Яндекс.Директ из semantic-core.json
+/* ЦЕХ generate-ads.mjs — Генератор кампаний Яндекс.Директ для веб-студии ЦЕХ.
    Node ≥18, ноль npm-зависимостей.
-   Формирует готовую таблицу CSV для Директ Коммандера с заголовками, текстами и UTM. */
+   Служба генерации объявлений из config/semantic-core.json. */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { join, resolve } from "node:path";
@@ -21,7 +21,7 @@ if (!existsSync(outputDir)) {
 
 const clusters = JSON.parse(readFileSync(corePath, "utf8"));
 const rows = [
-  ["Фраза (с минус-словами)", "Заголовок 1", "Заголовок 2", "Текст", "Ссылка", "Отображаемая ссылка", "Заголовок быстрой ссылки 1", "Ссылка быстрой ссылки 1"]
+  ["Фраза (с минус-словами)", "Заголовок 1", "Заголовок 2", "Текст", "Ссылка", "Отображаемая ссылка", "Быстрая ссылка 1", "Ссылка БС 1", "Быстрая ссылка 2", "Ссылка БС 2"]
 ];
 
 function capitalize(s) {
@@ -34,9 +34,9 @@ for (const cluster of clusters) {
   for (const item of cluster.keywords) {
     const kw = item.kw;
     const title1 = capitalize(kw).slice(0, 56);
-    const title2 = `Гарантия 12 мес по договору`;
-    const text = `Профессиональное уничтожение ${cluster.name.toLowerCase()} за 1 выезд. Холодный туман. Выезд по Пензе за 30 мин!`;
-    const utmUrl = `https://dez-obrabotka.pro/lp/${item.slug}/?utm_source=yandex&utm_medium=cpc&utm_campaign=${cluster.cluster}&utm_term=${encodeURIComponent(item.slug)}`;
+    const title2 = `Веб-студия ЦЕХ · 16 ворот QA`;
+    const text = `Сборка сайтов без слопа. Регламент К-01..К-20. Приёмка по 16 машинным проверкам. Узнайте смету!`;
+    const utmUrl = `https://ceh.studio/?utm_source=yandex&utm_medium=cpc&utm_campaign=${cluster.cluster}&utm_term=${encodeURIComponent(item.slug)}`;
     const displayUrl = item.slug.slice(0, 30);
 
     rows.push([
@@ -46,8 +46,10 @@ for (const cluster of clusters) {
       text,
       utmUrl,
       displayUrl,
-      "Цены и прайс",
-      `${utmUrl}#prays`
+      "Наши проекты",
+      `${utmUrl}#proekty`,
+      "Валидатор качества",
+      `${utmUrl}#validator`
     ]);
 
     totalAds++;
@@ -55,9 +57,9 @@ for (const cluster of clusters) {
 }
 
 const csvContent = rows.map((r) => r.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(";")).join("\n");
-const csvPath = join(outputDir, "direct_campaign.csv");
+const csvPath = join(outputDir, "ceh_web_studio_direct.csv");
 
 writeFileSync(csvPath, "\uFEFF" + csvContent, "utf8"); // UTF-8 с BOM для MS Excel
 
-console.log(`[generate-ads] Сформирована кампания на ${totalAds} объявлений: ${csvPath}`);
+console.log(`[generate-ads] Сформирована кампания для студии ЦЕХ на ${totalAds} объявлений: ${csvPath}`);
 process.exit(0);
