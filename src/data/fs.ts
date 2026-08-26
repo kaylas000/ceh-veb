@@ -214,6 +214,7 @@ const demoHtml = `<!doctype html>
       <li>SOURCES: два рецепта, два скила, зерно</li>
     </ol>
   </section>
+  <a class="cta" href="#proekty" data-analytics-event="demo_cta_btn">Заказать сайт</a>
   <footer class="colophon">
     <p>Источники: REF-01 pudding.cool · REF-02 pentagram.com · REF-05 readymag.com</p>
   </footer>
@@ -222,6 +223,12 @@ const demoHtml = `<!doctype html>
 </html>`;
 
 const demoCss = `/* demo · бросок 47 · кривые только из motion/easing-curves.json */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 :root {
   --paper: #e8e6de;
   --ink: #16150f;
@@ -540,6 +547,8 @@ export const FS: FS = {
   "projects/demo/STRUCTURE.md": demoStructure,
   "projects/demo/SOURCES.md": demoSources,
   "projects/demo/REVIEW.md": demoReview,
+  "projects/demo/MARKETING.md": "# MARKETING.md\n\n## UVP\nУниверсальный сайт ЦЕХа.\n\n## JTBD\nЗаказ сайта под ключ.\n\n## CTA\n- button data-analytics-event=\"demo_cta\"",
+  "projects/demo/COPYWRITING.md": "# COPYWRITING.md\n\nРедполитика и факты.",
   "projects/demo/site/index.html": demoHtml,
   "projects/demo/site/styles.css": demoCss,
   "projects/pcpolimer/SEED.md": pcSeed,
@@ -547,6 +556,8 @@ export const FS: FS = {
   "projects/pcpolimer/STRUCTURE.md": pcStructure,
   "projects/pcpolimer/SOURCES.md": pcSources,
   "projects/pcpolimer/REVIEW.md": pcReview,
+  "projects/pcpolimer/MARKETING.md": "# MARKETING.md\n\n## UVP\nПорошковая покраска металла.\n\n## JTBD\nЗаказ покраски.\n\n## CTA\n- button data-analytics-event=\"pc_cta\"",
+  "projects/pcpolimer/COPYWRITING.md": "# COPYWRITING.md\n\nРедполитика ПКП Полимер.",
   "projects/pcpolimer/site/index.html": pcHtml,
   "projects/pcpolimer/site/styles.css": pcCss,
   "projects/_history/2025-09-avtoperevozki.manifest.md": hist1,
