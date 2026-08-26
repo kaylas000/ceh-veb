@@ -20,6 +20,7 @@ import { PRESET_ORDER, type IntroPreset } from "./lib/intro";
 import { initSmooth, destroySmooth, scrollToId } from "./lib/smooth";
 import { useRoute } from "./lib/router";
 import { PcpolimerApp } from "./co/PcpolimerApp";
+import { MultiLandingEngine } from "./lib/multi-landing";
 
 const SEEN_KEY = "ceh-intro-seen";
 const IDX_KEY = "ceh-intro-preset";
@@ -39,6 +40,10 @@ export default function App() {
       /* приватный режим — просто показываем */
     }
     setIntro({ preset: next, token: Date.now() });
+  }, []);
+
+  useEffect(() => {
+    MultiLandingEngine.applyDynamicContext();
   }, []);
 
   /* первый визит в сессии: заставка; повторные — сразу студия (SK-06) */
