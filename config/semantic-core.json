@@ -1,0 +1,29 @@
+[
+  {
+    "cluster": "tarakany",
+    "name": "Тараканы",
+    "keywords": [
+      { "kw": "уничтожение тараканов пенза", "slug": "unichtozhenie-tarakanov", "intent": "коммерческий", "city": "Пенза", "priceMin": 1200 },
+      { "kw": "травля тараканов пенза", "slug": "travlya-tarakanov", "intent": "коммерческий", "city": "Пенза", "priceMin": 1200 },
+      { "kw": "обработка от тараканов пенза", "slug": "obrabotka-ot-tarakanov", "intent": "коммерческий", "city": "Пенза", "priceMin": 1200 },
+      { "kw": "избавиться от тараканов в квартире", "slug": "vvesti-tarakanov", "intent": "информационный", "city": "Пенза", "priceMin": 1500 }
+    ]
+  },
+  {
+    "cluster": "klopy",
+    "name": "Клопы",
+    "keywords": [
+      { "kw": "уничтожение клопов пенза", "slug": "unichtozhenie-klopov", "intent": "коммерческий", "city": "Пенза", "priceMin": 1500 },
+      { "kw": "обработка от клопов пенза", "slug": "obrabotka-ot-klopov", "intent": "коммерческий", "city": "Пенза", "priceMin": 1500 },
+      { "kw": "избавиться от клопов в квартире", "slug": "izbavitsya-ot-klopov", "intent": "информационный", "city": "Пенза", "priceMin": 1800 }
+    ]
+  },
+  {
+    "cluster": "kleshchi",
+    "name": "Клещи",
+    "keywords": [
+      { "kw": "обработка участка от клещей пенза", "slug": "obrabotka-ot-kleshchej", "intent": "коммерческий", "city": "Пенза", "priceMin": 2500 },
+      { "kw": "уничтожение клещей на участке", "slug": "unichtozhenie-kleshchej", "intent": "коммерческий", "city": "Пенза", "priceMin": 2500 }
+    ]
+  }
+]
