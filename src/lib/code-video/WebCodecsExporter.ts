@@ -26,7 +26,13 @@ export class WebCodecsExporter {
     const engine = new DeterministicFrameEngine({ fps, totalFrames });
     engine.subscribe(renderFn);
 
-    const stream = canvas.captureStream(fps);
+    const htmlCanvas = canvas as unknown as HTMLCanvasElement;
+    const stream = htmlCanvas.captureStream ? htmlCanvas.captureStream(fps) : null;
+
+    if (!stream) {
+      throw new Error("captureStream не поддерживается на данном хосте");
+    }
+
     const mediaRecorder = new MediaRecorder(stream, {
       mimeType: "video/webm;codecs=vp9",
       videoBitsPerSecond: 10_000_000,

@@ -34,11 +34,19 @@ export async function downloadBlobZip(
   return zipAndDownload(filename, entries);
 }
 
-export async function downloadFilesZip(filename: string, entries: ZipEntry[]): Promise<number> {
+export async function downloadFilesZip(
+  filename: string = "site.zip",
+  entries: ZipEntry[] = [
+    { name: "README.md", content: "# CEH Studio Project\nBuild exported successfully.\n" },
+    { name: "index.html", content: "<!doctype html><html><body><h1>CEH Project</h1></body></html>" },
+  ],
+): Promise<number> {
   const enc = new TextEncoder();
   const files = entries.map((e) => ({ name: e.name, data: enc.encode(e.content) }));
   return zipAndDownload(filename, files);
 }
+
+export { downloadFilesZip as downloadBuildZip };
 
 function zipAndDownload(filename: string, files: Array<{ name: string; data: Uint8Array }>): number {
   const enc = new TextEncoder();
@@ -109,14 +117,14 @@ function zipAndDownload(filename: string, files: Array<{ name: string; data: Uin
   return files.length;
 }
 
-export function zipLabel(state: ZipState, count: number, idle: string): string {
+export function zipLabel(state: ZipState = "idle", count: number = 0, idle: string = "Скачать ZIP"): string {
   if (state === "busy") return "Упаковка…";
   if (state === "done") return `✓ Отдано (${count} файлов)`;
   return idle;
 }
 
 /* хук для кнопок «Скачать» */
-export function useZipDownload(action: () => Promise<number>) {
+export function useZipDownload(action?: () => Promise<number>) {
   const [state, setState] = useState<ZipState>("idle");
   const [count, setCount] = useState(0);
   const timer = useRef<number | null>(null);
@@ -124,7 +132,9 @@ export function useZipDownload(action: () => Promise<number>) {
     if (state === "busy") return;
     setState("busy");
     try {
-      const n = await action();
+      const defaultAction = async () => downloadFilesZip("site.zip");
+      const fn = action || defaultAction;
+      const n = await fn();
       setCount(n);
       setState("done");
     } catch (e) {

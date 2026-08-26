@@ -202,10 +202,21 @@ export function Stamp({
 
 /* ---------- звёзды рейтинга ---------- */
 
-export function Stars({ count = 5 }: { count?: number }) {
+export function Stars({
+  count = 5,
+  value,
+  size,
+  className = "inline-flex text-[#d4af37]",
+}: {
+  count?: number;
+  value?: number;
+  size?: number;
+  className?: string;
+}) {
+  const num = Math.round(value ?? count ?? 5);
   return (
-    <span className="inline-flex text-[#d4af37]" aria-label={`Рейтинг ${count} из 5`}>
-      {"★".repeat(count)}
+    <span className={className} style={size ? { fontSize: size } : undefined} aria-label={`Рейтинг ${num} из 5`}>
+      {"★".repeat(Math.min(5, Math.max(1, num)))}
     </span>
   );
 }

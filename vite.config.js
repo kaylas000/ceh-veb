@@ -7,6 +7,16 @@ export default defineConfig({
      и на любой глубине URL (GitHub Pages, Netlify, Vercel, подпапки) */
   base: "./",
   plugins: [react(), tailwindcss()],
+  build: {
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom"],
+        },
+      },
+    },
+  },
   server: {
     host: "0.0.0.0",
     port: 3000,
