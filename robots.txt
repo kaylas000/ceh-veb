@@ -1,0 +1,39 @@
+# robots.txt — Правила индексации для поисковых ботов и AI-агентов (SOTA 2026)
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /*?*sort=
+
+# Разрешение индексации для AI-ботов и LLM-индексаторов
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Ссылки на карты сайта и AI-спецификацию
+Sitemap: https://kaylas000.github.io/ceh-veb/sitemap.xml
+Sitemap: https://kaylas000.github.io/ceh-veb/public/llms.txt
