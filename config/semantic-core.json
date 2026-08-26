@@ -6,16 +6,33 @@
       { "kw": "разработка сайтов под ключ", "slug": "razrabotka-saytov-pod-klyuch", "intent": "коммерческий", "city": "Москва", "priceMin": 100000 },
       { "kw": "создание веб сайтов для бизнеса", "slug": "sozdanie-saytov-dlya-biznesa", "intent": "коммерческий", "city": "Москва", "priceMin": 100000 },
       { "kw": "заказать сайт под ключ", "slug": "zakazat-sayt-pod-klyuch", "intent": "коммерческий", "city": "Москва", "priceMin": 100000 },
-      { "kw": "разработка b2b сайтов и производств", "slug": "razrabotka-b2b-saytov", "intent": "коммерческий", "city": "Москва", "priceMin": 150000 }
+      { "kw": "разработка b2b сайтов и производств", "slug": "razrabotka-b2b-saytov", "intent": "коммерческий", "city": "Москва", "priceMin": 150000 },
+      { "kw": "создание корпоративного сайта", "slug": "sozdanie-korporativnogo-sayta", "intent": "коммерческий", "city": "Москва", "priceMin": 140000 },
+      { "kw": "разработка веб сайта на заказ", "slug": "razrabotka-web-sayta-na-zakaz", "intent": "коммерческий", "city": "Москва", "priceMin": 100000 },
+      { "kw": "стоимость разработки сайта", "slug": "stoimost-razrabotki-sayta", "intent": "информационный", "city": "Москва", "priceMin": 100000 }
     ]
   },
   {
     "cluster": "web-design",
-    "name": "Дизайн сайтов",
+    "name": "Веб-дизайн и UI/UX",
     "keywords": [
       { "kw": "дизайн веб сайтов", "slug": "disayn-web-saytov", "intent": "коммерческий", "city": "Москва", "priceMin": 80000 },
       { "kw": "разработка ui ux дизайна", "slug": "razrabotka-ui-ux-disayna", "intent": "коммерческий", "city": "Москва", "priceMin": 90000 },
-      { "kw": "дизайн лендинга под ключ", "slug": "disayn-lendinga", "intent": "коммерческий", "city": "Москва", "priceMin": 60000 }
+      { "kw": "дизайн лендинга под ключ", "slug": "disayn-lendinga", "intent": "коммерческий", "city": "Москва", "priceMin": 60000 },
+      { "kw": "проектирование интерфейсов", "slug": "proektirovanie-interfeysov", "intent": "коммерческий", "city": "Москва", "priceMin": 110000 },
+      { "kw": "дизайн системы для веб сайтов", "slug": "disayn-systemy-dlya-saytov", "intent": "коммерческий", "city": "Москва", "priceMin": 120000 },
+      { "kw": "редизайн веб сайта", "slug": "redisayn-web-sayta", "intent": "коммерческий", "city": "Москва", "priceMin": 85000 }
+    ]
+  },
+  {
+    "cluster": "landings-promos",
+    "name": "Лендинги и Промо-сайты",
+    "keywords": [
+      { "kw": "разработка лендинга под ключ", "slug": "razrabotka-lendinga-pod-klyuch", "intent": "коммерческий", "city": "Москва", "priceMin": 70000 },
+      { "kw": "создание одностраничного сайта", "slug": "sozdanie-odnostranichnogo-sayta", "intent": "коммерческий", "city": "Москва", "priceMin": 65000 },
+      { "kw": "заказать промо сайт", "slug": "zakazat-promo-sayt", "intent": "коммерческий", "city": "Москва", "priceMin": 80000 },
+      { "kw": "лендинг пейдж с высокой конверсией", "slug": "lending-peyzh-s-konversiey", "intent": "коммерческий", "city": "Москва", "priceMin": 90000 },
+      { "kw": "разработка промо сайтов под запуск", "slug": "razrabotka-promo-saytov", "intent": "коммерческий", "city": "Москва", "priceMin": 85000 }
     ]
   },
   {
@@ -23,7 +40,29 @@
     "name": "Агентная разработка",
     "keywords": [
       { "kw": "студия агентной разработки сайтов", "slug": "studiya-agentnoy-razrabotki", "intent": "коммерческий", "city": "Москва", "priceMin": 120000 },
-      { "kw": "разработка сайтов без слопа с гарантией", "slug": "razrabotka-saytov-bez-slopa", "intent": "коммерческий", "city": "Москва", "priceMin": 100000 }
+      { "kw": "разработка сайтов без слопа с гарантией", "slug": "razrabotka-saytov-bez-slopa", "intent": "коммерческий", "city": "Москва", "priceMin": 100000 },
+      { "kw": "веб студия с контролем качества qa", "slug": "web-studiya-s-kontrolem-qa", "intent": "коммерческий", "city": "Москва", "priceMin": 130000 },
+      { "kw": "агентная веб студия дизайн инженерия", "slug": "agentnaya-studiya-disayn-inzheneriya", "intent": "коммерческий", "city": "Москва", "priceMin": 140000 },
+      { "kw": "заказать сайт с высокой скоростью загрузки", "slug": "sayt-s-vysokoy-skorostyu-zagruzki", "intent": "коммерческий", "city": "Москва", "priceMin": 110000 }
+    ]
+  },
+  {
+    "cluster": "e-commerce-catalogs",
+    "name": "Интернет-магазины и Каталоги",
+    "keywords": [
+      { "kw": "разработка интернет магазина", "slug": "razrabotka-internet-magazina", "intent": "коммерческий", "city": "Москва", "priceMin": 180000 },
+      { "kw": "создание сайта каталога продукции", "slug": "sozdanie-sayta-kataloga", "intent": "коммерческий", "city": "Москва", "priceMin": 140000 },
+      { "kw": "заказать оптовый интернет магазин", "slug": "zakazat-optovyy-internet-magazin", "intent": "коммерческий", "city": "Москва", "priceMin": 200000 },
+      { "kw": "разработка b2b каталога продукции", "slug": "razrabotka-b2b-kataloga", "intent": "коммерческий", "city": "Москва", "priceMin": 160000 }
+    ]
+  },
+  {
+    "cluster": "audit-redesign",
+    "name": "Аудит и Модернизация",
+    "keywords": [
+      { "kw": "аудит веб сайта и ux", "slug": "audit-web-sayta-i-ux", "intent": "коммерческий", "city": "Москва", "priceMin": 50000 },
+      { "kw": "модернизация корпоративного сайта", "slug": "modernizatsiya-korporativnogo-sayta", "intent": "коммерческий", "city": "Москва", "priceMin": 90000 },
+      { "kw": "оптимизация скорости сайта", "slug": "optimizatsiya-skorosti-sayta", "intent": "коммерческий", "city": "Москва", "priceMin": 45000 }
     ]
   }
 ]
