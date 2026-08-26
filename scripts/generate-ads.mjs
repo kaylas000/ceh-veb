@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* ЦЕХ generate-ads.mjs — Генератор кампаний Яндекс.Директ для веб-студии ЦЕХ.
    Node ≥18, ноль npm-зависимостей.
-   Служба генерации объявлений из config/semantic-core.json. */
+   Служба генерации объявлений из config/semantic-core.json под домен https://kaylas000.github.io/ceh-veb/ */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { join, resolve } from "node:path";
@@ -9,6 +9,8 @@ import { join, resolve } from "node:path";
 const root = resolve(process.cwd());
 const corePath = join(root, "config", "semantic-core.json");
 const outputDir = join(root, "assets", "campaigns");
+
+const DOMAIN = process.env.DOMAIN || "https://kaylas000.github.io/ceh-veb/";
 
 if (!existsSync(corePath)) {
   console.error(" Ошибка: config/semantic-core.json не найден");
@@ -36,7 +38,8 @@ for (const cluster of clusters) {
     const title1 = capitalize(kw).slice(0, 56);
     const title2 = `Веб-студия ЦЕХ · 16 ворот QA`;
     const text = `Сборка сайтов без слопа. Регламент К-01..К-20. Приёмка по 16 машинным проверкам. Узнайте смету!`;
-    const utmUrl = `https://ceh.studio/?utm_source=yandex&utm_medium=cpc&utm_campaign=${cluster.cluster}&utm_term=${encodeURIComponent(item.slug)}`;
+    const baseUrl = DOMAIN.endsWith("/") ? DOMAIN : DOMAIN + "/";
+    const utmUrl = `${baseUrl}?utm_source=yandex&utm_medium=cpc&utm_campaign=${cluster.cluster}&utm_term=${encodeURIComponent(item.slug)}`;
     const displayUrl = item.slug.slice(0, 30);
 
     rows.push([
@@ -59,7 +62,7 @@ for (const cluster of clusters) {
 const csvContent = rows.map((r) => r.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(";")).join("\n");
 const csvPath = join(outputDir, "ceh_web_studio_direct.csv");
 
-writeFileSync(csvPath, "\uFEFF" + csvContent, "utf8"); // UTF-8 с BOM для MS Excel
+writeFileSync(csvPath, "\uFEFF" + csvContent, "utf8");
 
-console.log(`[generate-ads] Сформирована кампания для студии ЦЕХ на ${totalAds} объявлений: ${csvPath}`);
+console.log(`[generate-ads] Сформирована кампания под домен ${DOMAIN} (${totalAds} объявлений): ${csvPath}`);
 process.exit(0);
