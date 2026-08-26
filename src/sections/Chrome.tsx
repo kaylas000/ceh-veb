@@ -51,7 +51,7 @@ export function Header({ onIntro }: { onIntro?: () => void }) {
         </nav>
         <div className="ml-auto hidden shrink-0 items-center gap-2 border border-line-dark px-2.5 py-1.5 lg:flex">
           <span className="led-dot h-2 w-2 rounded-full bg-green shadow-[0_0_8px_rgba(46,125,79,0.9)]" />
-          <span className="font-mono text-[10px] uppercase tracking-widest text-paper/80">архив: 7 реф · 6 скилов · 11 рецептов</span>
+          <span className="font-mono text-[10px] uppercase tracking-widest text-paper/80">архив: 7 реф · 16 скилов · 12 рецептов</span>
         </div>
         <a
           href={ORDER_MAX_URL}
@@ -133,7 +133,7 @@ export function Footer() {
               который не даёт агенту скатиться в однообразный AI-слоп.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
-              {["Node ≥18", "0 npm-зависимостей", "exit 0/1", "V-01…V-14", "B-01…B-16", "Q-01…Q-10"].map((t) => (
+              {["Node ≥18", "0 npm-зависимостей", "exit 0/1", "V-01…V-16", "B-01…B-25", "Q-01…Q-14"].map((t) => (
                 <span key={t} className="border border-line-dark px-2 py-1 font-mono text-[9px] uppercase tracking-[0.16em] text-paper/60">
                   {t}
                 </span>

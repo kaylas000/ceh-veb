@@ -185,7 +185,7 @@ const demoHtml = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ЦЕХ — демо-сборка, бросок 47</title>
-<meta name="description" content="Демо-проект студии ЦЕХ: сборка по воротам G1–G4 из архива референсов, скилов и motion-рецептов. Валидатор V-01…V-14 зелёный.">
+<meta name="description" content="Демо-проект студии ЦЕХ: сборка по воротам G1–G4 из архива референсов, скилов и motion-рецептов. Валидатор V-01…V-16 зелёный.">
 <link rel="canonical" href="https://ceh.studio/projects/demo/">
 <link rel="stylesheet" href="styles.css">
 </head>

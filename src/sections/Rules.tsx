@@ -202,7 +202,7 @@ export function Rules() {
                 Квота — не совет. <span className="text-red">Квота — допуск.</span>
               </p>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper/50">
-                проверяет validate.mjs · V-05 + V-12…V-14
+                проверяет validate.mjs · V-05 + V-12…V-16
               </p>
             </div>
           </Reveal>

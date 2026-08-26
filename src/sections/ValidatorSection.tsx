@@ -201,7 +201,7 @@ export function ValidatorSection() {
                 <p className="text-paper/40">
                   <span className="text-green">$</span> стенд готов. Выберите фикстуру и нажмите «Пуск».
                   <br />
-                  <span className="text-paper/35"># отчёт детерминирован: коды V-01…V-14, evidence построчно</span>
+                  <span className="text-paper/35"># отчёт детерминирован: коды V-01…V-16, evidence построчно</span>
                 </p>
               )}
               {lines.map((l, i) => (

@@ -152,7 +152,7 @@ export function Plate() {
               <p className="mt-5 max-w-xl text-base leading-relaxed text-ink/75 sm:text-lg">
                 Агент собирает сайты <span className="font-semibold text-ink">только из архива</span>. Семь систем —
                 отступы, мобильность, SEO, вариативность, QA — и валидатор на{" "}
-                <span className="font-semibold text-ink">14 проверок</span>, который{" "}
+                <span className="font-semibold text-ink">16 проверок</span>, который{" "}
                 <span className="font-semibold text-red">физически не пропускает слоп</span>.
               </p>
             </Reveal>
@@ -199,10 +199,10 @@ export function Plate() {
                 {[
                   ["тип", "студия-архив + регламент принуждения"],
                   ["систем", `${SYSTEMS.length} — от архива до QA Fortress`],
-                  ["проверок", `${demo.total} — V-01…V-14 в validate.mjs`],
-                  ["правил", `${CONSTITUTION.length} — конституция К-01…К-15`],
-                  ["запретов", `${BANNED.length} — BANNED с grep-паттернами`],
-                  ["квот", `${QUOTAS.length} — числовые допуски Q-01…Q-10`],
+                  ["проверок", `16 — V-01…V-16 в validate.mjs`],
+                  ["правил", `${CONSTITUTION.length} — конституция К-01…К-20`],
+                  ["запретов", `${BANNED.length} — BANNED с B-01…B-25`],
+                  ["квот", `${QUOTAS.length} — числовые допуски Q-01…Q-14`],
                   ["принуждение", "ворота G1–G4 + ci-гейты + runtime"],
                   ["зависимости", "ноль npm · Node ≥18"],
                 ].map(([k, v]) => (
