@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* ЦЕХ validate.mjs — Node ≥18, ноль npm-зависимостей, exit 0/1.
    Запуск: node scripts/validate.mjs projects/<имя>
-   Отчёт детерминирован: коды V-01…V-16 + evidence. */
+   Отчёт детерминирован: коды V-01…V-17 + evidence. */
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 
@@ -172,13 +172,24 @@ const marketing = read(join(project, "MARKETING.md"));
   }
   add("V-15", "Code-Video SOTA 2026: детерминизм и reduced-motion (К-19)", clean, clean ? "видео-движок детерминирован и адаптирован" : "отсутствуют проверки reduced-motion или детерминизма");
 }
-/* V-16 — Senior Architecture (OKLCH, Container Queries, Resource Budget К-20) */
+/* V-16 — Senior Architecture (OKLCH, Container Queries, SchemaFactory К-20) */
 {
   const hasOklch = existsSync(join(root, "tokens", "oklch.tokens.json"));
   const hasFluidCss = existsSync(join(root, "css-architecture", "layers-fluid.css"));
   const hasSchemaFactory = existsSync(join(root, "generators", "structured-data", "SchemaFactory.js"));
   const ok = hasOklch && hasFluidCss && hasSchemaFactory;
   add("V-16", "Senior Architecture: OKLCH, Container Queries, SchemaFactory (К-20)", ok, ok ? "все 5 подсистем Senior-архитектуры активны" : "отсутствуют токен-модули OKLCH или Container Queries");
+}
+/* V-17 — lint-style-archetype (Принудительная система вариантов стиля) */
+{
+  const { execSync } = await import("node:child_process");
+  let clean = true;
+  try {
+    execSync(`node scripts/lint-style-archetype.mjs ${project}`, { cwd: root, stdio: "pipe" });
+  } catch (e) {
+    clean = false;
+  }
+  add("V-17", "Style Variance Engine: фиксация Архетипа на G1", clean, clean ? "стилистический архетип зафиксирован на G1" : "отсутствует выбор Архетипа в DIRECTION.md");
 }
 
 /* отчёт */

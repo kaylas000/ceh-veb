@@ -1,0 +1,97 @@
+[
+  {
+    "id": "ARCH-01",
+    "slug": "swiss-minimal",
+    "name": "Swiss Minimal (Швейцарский Инженерный)",
+    "description": "Строгий, четкая 12-колоночная сетка, таблицы, чистые поверхности, моноширинные данные.",
+    "fonts": {
+      "display": "Tektur",
+      "body": "IBM Plex Sans"
+    },
+    "oklchPalette": {
+      "bgSurface": "oklch(0.98 0.005 80)",
+      "bgSubtle": "oklch(0.93 0.01 80)",
+      "textMain": "oklch(0.15 0.02 80)",
+      "brandPrimary": "oklch(0.20 0.02 240)",
+      "brandAccent": "oklch(0.60 0.22 36)"
+    },
+    "motionRecipes": ["scramble-decode", "timeline-scrub"],
+    "texture": "assets/textures/paper.png"
+  },
+  {
+    "id": "ARCH-02",
+    "slug": "luxury-editorial",
+    "name": "Luxury Editorial (Журнальный Премиум)",
+    "description": "Элегантный, заголовочная антиква, глубокий воздух, асимметрия, разворачивающиеся индексы.",
+    "fonts": {
+      "display": "Cormorant Garamond",
+      "body": "Golos Text"
+    },
+    "oklchPalette": {
+      "bgSurface": "oklch(0.97 0.01 60)",
+      "bgSubtle": "oklch(0.90 0.02 60)",
+      "textMain": "oklch(0.12 0.01 60)",
+      "brandPrimary": "oklch(0.25 0.03 60)",
+      "brandAccent": "oklch(0.72 0.14 85)"
+    },
+    "motionRecipes": ["ken-burns", "mask-reveal"],
+    "texture": "assets/textures/paper.png"
+  },
+  {
+    "id": "ARCH-03",
+    "slug": "neobrutalist-poster",
+    "name": "Neo-Brutalist Poster (Плакатный Брутализм)",
+    "description": "Мощный капс >8vw, жирные контуры, афишная подача, офсетные тени и высокая контрастность.",
+    "fonts": {
+      "display": "Russo One",
+      "body": "PT Sans"
+    },
+    "oklchPalette": {
+      "bgSurface": "oklch(0.96 0.01 80)",
+      "bgSubtle": "oklch(0.90 0.02 80)",
+      "textMain": "oklch(0.10 0.02 80)",
+      "brandPrimary": "oklch(0.15 0.02 80)",
+      "brandAccent": "oklch(0.62 0.25 25)"
+    },
+    "motionRecipes": ["intro-assembly", "cart-assembly"],
+    "texture": "assets/textures/grain.png"
+  },
+  {
+    "id": "ARCH-04",
+    "slug": "high-density-dashboard",
+    "name": "High-Density Dashboard (Приборная Консоль)",
+    "description": "Интерактивный приборный интерфейс, телеметрия, переключатели, калькуляторы и датчики.",
+    "fonts": {
+      "display": "Unbounded",
+      "body": "Jost"
+    },
+    "oklchPalette": {
+      "bgSurface": "oklch(0.14 0.02 260)",
+      "bgSubtle": "oklch(0.20 0.03 260)",
+      "textMain": "oklch(0.98 0.01 260)",
+      "brandPrimary": "oklch(0.70 0.20 140)",
+      "brandAccent": "oklch(0.80 0.22 80)"
+    },
+    "motionRecipes": ["oven-telemetry", "fog-telemetry"],
+    "texture": "assets/textures/film.png"
+  },
+  {
+    "id": "ARCH-05",
+    "slug": "warm-organic-tech",
+    "name": "Warm Organic Tech (Тёплый Эко-Инжиниринг)",
+    "description": "Тёплые природные тона, органическая эстетика, крафтовые текстуры, мягкий скролл.",
+    "fonts": {
+      "display": "Yeseva One",
+      "body": "Rubik"
+    },
+    "oklchPalette": {
+      "bgSurface": "oklch(0.95 0.02 100)",
+      "bgSubtle": "oklch(0.88 0.03 100)",
+      "textMain": "oklch(0.18 0.03 100)",
+      "brandPrimary": "oklch(0.35 0.08 120)",
+      "brandAccent": "oklch(0.68 0.14 75)"
+    },
+    "motionRecipes": ["sticky-scene", "conveyor-marquee"],
+    "texture": "assets/textures/paper.png"
+  }
+]

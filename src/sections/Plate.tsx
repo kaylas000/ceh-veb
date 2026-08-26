@@ -199,7 +199,7 @@ export function Plate() {
                 {[
                   ["тип", "студия-архив + регламент принуждения"],
                   ["систем", `${SYSTEMS.length} — от архива до QA Fortress`],
-                  ["проверок", `16 — V-01…V-16 в validate.mjs`],
+                  ["проверок", `17 — V-01…V-17 в validate.mjs`],
                   ["правил", `${CONSTITUTION.length} — конституция К-01…К-20`],
                   ["запретов", `${BANNED.length} — BANNED с B-01…B-25`],
                   ["квот", `${QUOTAS.length} — числовые допуски Q-01…Q-14`],
