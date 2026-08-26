@@ -1,0 +1,19 @@
+/* Автосгенерированная Fluid Clamp шкала ЦЕХ */
+@layer design-tokens {
+  :root {
+    /* Typographic Fluid Scale */
+    --font-sm: clamp(0.750rem, 0.714rem + 0.179vw, 0.875rem);
+    --font-base: clamp(0.875rem, 0.804rem + 0.357vw, 1.125rem);
+    --font-md: clamp(1.125rem, 1.018rem + 0.536vw, 1.500rem);
+    --font-lg: clamp(1.500rem, 1.286rem + 1.071vw, 2.250rem);
+    --font-xl: clamp(2.250rem, 1.750rem + 2.500vw, 4.000rem);
+    --font-mega: clamp(3.000rem, 1.893rem + 5.536vw, 6.875rem);
+
+    /* Spacing Fluid Scale */
+    --space-1: clamp(0.250rem, 0.179rem + 0.357vw, 0.500rem);
+    --space-2: clamp(0.500rem, 0.357rem + 0.714vw, 1.000rem);
+    --space-3: clamp(1.000rem, 0.714rem + 1.429vw, 2.000rem);
+    --space-4: clamp(2.000rem, 1.429rem + 2.857vw, 4.000rem);
+    --space-5: clamp(4.000rem, 2.857rem + 5.714vw, 8.000rem);
+  }
+}

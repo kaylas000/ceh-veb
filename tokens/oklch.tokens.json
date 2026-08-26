@@ -1,0 +1,24 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "brand": {
+      "primary": {
+        "$type": "color",
+        "$value": "oklch(0.55 0.18 210)",
+        "$description": "Перцептивно сбалансированный основной бренд-цвет в OKLCH"
+      },
+      "accent": {
+        "$type": "color",
+        "$value": "oklch(0.65 0.22 36)",
+        "$description": "Контрастный акцентный цвет в OKLCH"
+      }
+    },
+    "surface": {
+      "base": {
+        "$type": "color",
+        "$value": "oklch(0.99 0.005 80)",
+        "$description": "Фон поверхностей"
+      }
+    }
+  }
+}

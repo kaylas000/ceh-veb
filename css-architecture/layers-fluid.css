@@ -1,0 +1,67 @@
+/* ------------------------------------------------------------------ */
+/* ЦЕХ CSS Architecture 2026 — Cascade Layers & Container Queries     */
+/* ------------------------------------------------------------------ */
+
+/* Явное объявление приоритета слоев специфичности */
+@layer reset, design-tokens, layout, components, utilities;
+
+@layer reset {
+  *, ::before, ::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    color-scheme: light dark;
+    -webkit-text-size-adjust: none;
+  }
+}
+
+@layer layout {
+  /* Контейнерный контекст для 100% независимых компонентов */
+  .container-card-ctx {
+    container-type: inline-size;
+    container-name: card-container;
+  }
+
+  .container-section-ctx {
+    container-type: inline-size;
+    container-name: section-container;
+  }
+}
+
+@layer components {
+  /* Fluid Clamp Typography с ориентацией на ширину контейнера (cqw) */
+  @container card-container (min-width: 400px) {
+    .card-title {
+      font-size: clamp(1.2rem, 4cqw + 0.8rem, 2.2rem);
+    }
+  }
+
+  @container card-container (max-width: 399px) {
+    .card-title {
+      font-size: 1.1rem;
+    }
+  }
+
+  /* Native CSS Nesting & :has() для умных состояний */
+  .card {
+    background: var(--bg-subtle, #f5f5f5);
+    border: 1px solid var(--border-subtle, #ddd);
+    padding: clamp(1rem, 3cqw, 2rem);
+    border-radius: 8px;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+      border-color: var(--brand-accent, #ce2c18);
+      transform: translateY(-2px);
+    }
+
+    /* Умный селектор родителя: если внутри карточки есть радио/чекбокс */
+    &:has(input:checked) {
+      border-color: var(--brand-primary, #1d3a5f);
+      background: color-mix(in oklch, var(--brand-primary) 8%, var(--bg-surface));
+    }
+  }
+}
