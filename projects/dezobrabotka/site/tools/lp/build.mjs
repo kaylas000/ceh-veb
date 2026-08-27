@@ -20,6 +20,7 @@ const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, 
 const lpHref = (slug) => `${REL}lp/${slug}/`;
 
 /* ---- карта услуг для подвала (на LP — с префиксом, на главной — без) ---- */
+const TOTAL_LP = SERVICES.reduce((n, s) => n + s.items.length, 0);
 function sitemapHtml(prefix, currentSlug) {
   const groups = SERVICES.map((s) => {
     const links = s.items.map((it) =>
@@ -28,7 +29,7 @@ function sitemapHtml(prefix, currentSlug) {
     return `    <div class="lpg">\n      <b>${s.name}</b>\n      ${links}\n    </div>`;
   }).join("\n");
   return `<div class="lpmap">
-  <span class="cblock-cap">ПОСАДОЧНЫЕ СТРАНИЦЫ ПО ЗАПРОСАМ · 45</span>
+  <span class="cblock-cap">ПОСАДОЧНЫЕ СТРАНИЦЫ ПО ЗАПРОСАМ · ${TOTAL_LP}</span>
   <div class="lpmap-grid">
 ${groups}
   </div>
