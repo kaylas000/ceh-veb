@@ -1,0 +1,108 @@
+# ЦЕХ · Universal Loop Engine — декларативный конфиг цикла.
+#
+# Скопируй папку и правь под задачу:
+#   cp -r projects/_LOOP_TEMPLATE projects/<имя>
+#   cd projects/<имя> && node run.mjs "твоя задача" --dry-run
+#
+# Ключи принимаются и в snake_case, и в camelCase. Комментарии — только «#».
+# Проверить разбор:  node core/loop-engine/config.mjs projects/_LOOP_TEMPLATE/loop.config.yaml
+
+project_name: "_LOOP_TEMPLATE" # фабрика всё равно возьмёт имя из папки проекта
+
+# Задача по умолчанию (CLI --task переопределяет).
+task: "Выдай один ES-модуль main.mjs: именованный экспорт функции hello(name) без сторонних зависимостей."
+
+loop:
+  max_iterations: 3
+  temperature_schedule: [0.3, 0.1, 0.0]
+  stop_on_first_success: true
+  context_char_limit: 120000 # ~30k токенов: бюджет на весь контекст
+  history_window: 1 # сколько провалов показывать модели
+  max_total_seconds: 900 # общий бюджет прогона
+  persist_iterations: true # писать workspace/iterations/iter-NN/
+  throw_on_failure: false # true -> исключение вместо LoopResult{ok:false}
+
+generator:
+  # mock = офлайн-прогон без сети и ключей (проверка связки контекст->валидатор->фидбек)
+  type: "mock"
+  model: "mock-1"
+
+  # Боевой вариант: раскомментируй и убери type: "mock" выше.
+  # type: "llm"
+  # provider: "openai"              # openai-совместимый эндпоинт: OpenAI, OpenRouter, vLLM, Ollama
+  # model: "gpt-4o-mini"
+  # client:
+  #   type: "openai"
+  #   api_key_env: "OPENAI_API_KEY" # ключ берётся из окружения, никогда из файла
+  #   base_url: "https://api.openai.com/v1"
+  # max_tokens: 8192
+  # timeout_ms: 180000
+  # max_retries: 2
+  # response_format: "text"         # text | json | files (files = карта {"site/index.html": "…"}
+  # json_mode: false
+
+  # Anthropic Messages API:
+  # type: "llm"
+  # provider: "anthropic"
+  # model: "claude-3-5-sonnet-latest"
+  # client:
+  #   type: "anthropic"
+  #   api_key_env: "ANTHROPIC_API_KEY"
+
+validator:
+  # Универсальная проверка кода: node --check -> node --test tests/ -> smoke-запуск.
+  type: "node_code"
+  entry: "main.mjs"
+  test_dirs: ["tests"]
+  run_tests: true
+  run_smoke: true
+  timeout_ms: 60000
+  require_tests: false
+
+  # Вариант для сайтов: прогон НАСТОЯЩИХ ворот цеха (validate.mjs V-01…V-17 + линтеры).
+  # type: "ceh_project"
+  # checks: ["validate", "lint-slop", "lint-copy", "lint-marketing"]
+  # ignore_codes: []                # например ["V-15"] — то, что пока не требуется
+  # timeout_ms: 120000
+  # materialize: true               # записать артефакт перед проверкой
+  # materialize_target: "workspace" # workspace (безопасно) | project (в projects/<имя>/)
+  # materialize_file: "site/index.html"
+  # allow_project_writes: false     # ОБЯЗАТЕЛЬНО true, если materialize_target: "project"
+
+  # Вариант для структурированных артефактов (STRUCTURE.md -> JSON):
+  # type: "json_schema"
+  # schema: "schema.json"           # путь относительно папки проекта или корня студии
+
+  # Вариант «арт-директор» (вторая модель оценивает по рубрике):
+  # type: "llm_judge"
+  # pass_threshold: 0.8
+  # score_key: "score"
+  # judge_prompt_file: "prompts/judge.md"
+  # judge_generator:
+  #   type: "llm"
+  #   provider: "openai"
+  #   model: "gpt-4o-mini"
+  #   client:
+  #     type: "openai"
+  #     api_key_env: "OPENAI_API_KEY"
+
+context_builder:
+  type: "studio_default"
+  include:
+    mechanics: true # CONSTITUTION.md + anti-slop/BANNED.md + QUOTAS.md + AGENTS.md
+    gates: true # gates/G1…G4
+    skills: true # skills/
+    references: true # references/ (takeaway)
+    motion: true # motion/RECIPES.md + easing-curves.json
+    dossier: true # SEED/DIRECTION/STRUCTURE/SOURCES текущего проекта
+    docs: false # docs/ + config/ (тяжело, по умолчанию выключено)
+    examples: true # projects/_history/ + досье прошлых проектов (few-shot)
+  max_examples: 3
+  max_files_per_section: 24
+  max_chars_per_file: 4000
+  max_chars_per_section: 24000
+
+output:
+  file: "result.txt" # строковый артефакт -> workspace/result.txt
+  dir: "out" # карта файлов -> workspace/out/**
+  summary_file: "loop-result.json" # evidence прогона
