@@ -1,0 +1,41 @@
+name: Loop Gate (К-21)
+
+# Закон К-21: итерации «сборка → ворота» исполняет цикл, а не память агента.
+# Движок zero-dep (только встроенные модули Node), поэтому без npm ci и без кэша:
+# тесты, самопроверка и гейт проектов запускаются на чистом checkout.
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: loop-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    name: Цикл принуждения (К-21)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Тесты движка (node:test)
+        run: node --test core/loop-engine/tests/*.test.mjs
+
+      - name: Самопроверка цикла (офлайн, mock)
+        run: node core/loop-engine/cli.mjs --selftest
+
+      - name: Гейт К-21 по всем проектам
+        run: node core/loop-engine/gate.mjs

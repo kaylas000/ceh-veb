@@ -3,3 +3,5 @@ node_modules/
 build/
 *.log
 dist/
+# К-21: evidence прогонов цикла — рабочая зона движка, не часть проекта
+projects/*/workspace/

@@ -9,18 +9,19 @@
 2. Раздай оси: `node scripts/roulette.mjs projects/<имя>` → SEED.md
 3. Заполни DIRECTION.md из references/ и skills/ (≥3 референса с цитатами takeaway)
 4. Собери site/ строго по SOURCES.md
-5. Прогони: `node scripts/validate.mjs projects/<имя>` — exit 0 обязателен
+5. Прогони цикл (К-21): `node core/loop-engine/cli.mjs projects/<имя> --validator ceh_project` — exit 0 обязателен, evidence в `workspace/loop-result.json`
 6. Вердикт артдиректора — в REVIEW.md. Удачное верни в архив (К-11).
 
 ## Структура
 
 - AGENTS.md — контракт агента-дизайнера (читать первым)
-- CONSTITUTION.md — 11 проверяемых правил
+- CONSTITUTION.md — 21 проверяемое правило (К-01…К-21)
 - references/ — референсы: скрин + meta.yaml (takeaway обязателен)
 - skills/ — скилы: frontmatter + нумерованные правила
 - motion/ — easing-curves.json + рецепты (snippet.js + demo.html)
 - anti-slop/ — BANNED.md (16 запретов с методами) + QUOTAS.md (7 лимитов)
 - gates/ — G1–G4: вход, чек-лист, артефакт, отказ
+- core/loop-engine/ — цикл принуждения (К-21): `gate.mjs`, `cli.mjs`, валидаторы ворот
 - scripts/ — validate.mjs, lint-slop.mjs, roulette.mjs, diff-projects.mjs
 - projects/ — артефакты: SEED, DIRECTION, STRUCTURE, SOURCES, site/, REVIEW
 
