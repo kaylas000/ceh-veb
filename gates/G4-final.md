@@ -12,6 +12,7 @@
 3. diff-projects: сходство ≤10%
 4. REVIEW.md: вердикт со ссылками на правила
 5. Удачное изъято в архив (К-11)
+6. Цикл сошёлся (К-21): `node core/loop-engine/cli.mjs projects/<имя> --validator ceh_project` → exit 0, evidence в `workspace/loop-result.json`
 
 ## Выходной артефакт
 REVIEW.md + принятый проект

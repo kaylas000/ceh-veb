@@ -26,11 +26,18 @@ OPENAI_API_KEY=sk-… node core/loop-engine/cli.mjs projects/<имя> --provider
 # 4. автоприёмка сайта существующими воротами цеха (validate.mjs V-01…V-17 + линтеры)
 node core/loop-engine/cli.mjs projects/<имя> --validator ceh_project --checks validate,lint-slop,lint-copy
 
-# 5. тесты самого движка (115 проверок)
+# 5. гейт К-21: одна итерация цикла на каждый проект цеха (exit 0 — закон исполнен)
+node core/loop-engine/gate.mjs
+npm run gate                                # то же самое через npm
+node core/loop-engine/gate.mjs --json       # машиночитаемый отчёт {gate, ok, failed, entries[]}
+
+# 6. тесты самого движка (148 проверок)
 node --test core/loop-engine/tests/*.test.mjs
 ```
 
-Exit code: **0** — артефакт принят валидатором, **1** — цикл не сошёлся.
+Exit code: **0** — артефакт принят валидатором, **1** — цикл не сошёлся. Гейт тем же
+прогоном подтверждает закон **К-21**: «сборка → ворота» исполняет цикл, а не память агента
+(`CONSTITUTION.md` · К-21, `AGENTS.md` · Цикл принуждения, `gates/G4-final.md` · пункт 6).
 Отчёт идёт в stdout (коды `L-xx`, `V-xx`, `B-xx`, `E-xx`), служебный лог — в stderr
 (`LOOP_ENGINE_LOG=debug|info|warn|error|silent`).
 
@@ -48,6 +55,7 @@ core/loop-engine/
 ├── config.mjs             загрузка loop.config.yaml/json + свой парсер подмножества YAML
 ├── registry.mjs           REGISTRY + buildRunnerFromConfig (DI) + loadConfigAndRun + saveResult
 ├── cli.mjs                точка входа с отчётом в стиле цеха и --selftest
+├── gate.mjs               ★ гейт К-21: цикл принуждения по всем проектам (npm run gate)
 ├── logger.mjs             структурный логгер (уровни, stderr)
 ├── text.mjs               code-fences, извлечение JSON, безопасные пути, обрезка
 ├── subprocess.mjs         runCommand: shell:false, timeout+SIGKILL, обрезка вывода
@@ -63,7 +71,7 @@ core/loop-engine/
 │   ├── schema.mjs         подмножество JSON Schema (без pydantic/ajv)
 │   ├── llm-judge.mjs      вторая модель как арт-директор: {"score","reasoning","fixes"}
 │   └── index.mjs          реестр валидаторов
-└── tests/                 115 тестов на node:test (без зависимостей)
+└── tests/                 148 тестов на node:test (без зависимостей), из них 33 — на gate.mjs
 ```
 
 Шаблон проекта — `projects/_LOOP_TEMPLATE/` (копируй в `projects/<имя>/`).
