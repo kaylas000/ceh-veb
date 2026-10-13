@@ -9,7 +9,8 @@
     "gate": "node core/loop-engine/gate.mjs",
     "loop": "node core/loop-engine/cli.mjs",
     "loop:selftest": "node core/loop-engine/cli.mjs --selftest",
-    "test:engine": "node --test core/loop-engine/tests/*.test.mjs"
+    "test:engine": "node --test core/loop-engine/tests/*.test.mjs",
+    "seo:audit": "node scripts/seo-audit.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
